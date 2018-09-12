@@ -1,0 +1,24 @@
+﻿@mo@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+
+<h2>An error occurred while processing your request.</h2>
+
+@if (@Model != null)
+{
+    <div>
+        <div>
+            <b>Exception:</b> @Model.Exception.Message<br />
+            <b>Controller:</b> @Model.ControllerName<br />
+            <b>Action:</b> @Model.ActionName
+            <p><b id="link" class="blue-colour" onclick="ShowHideDetail()" style="cursor:pointer">Show Detail ></b></p>
+        </div>
+        <div id="detail" style="overflow:scroll;display:none">
+            <pre>
+                @Model.Exception.StackTrace
+            </pre>
+        </div>
+    </div>
+}

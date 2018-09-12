@@ -1,0 +1,11 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@if (!User.Identity.IsAuthenticated)
+{
+    Response.Redirect("Account/Login");
+}
+else
+{
+    Response.Redirect("Home/TimeSlot");
+}
