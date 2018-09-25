@@ -21,9 +21,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="icon-top-menu-item"><i class="far fa-calendar-alt"></i><a href="@Url.Action("TimeSlot", "Home")">TimeSlots</a></li>
                     @if (User.IsInRole("Administrator") || User.IsInRole("CustomerAdmin"))
                     {
+                        <li class="icon-top-menu-item"><i class="far fa-calendar-alt"></i><a href="@Url.Action("TimeSlot", "Home")">Book Time Slots</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
                             <ul class="dropdown-menu">
@@ -46,7 +46,7 @@
 
                                 @if (User.IsInRole("Administrator"))
                                 {
-                                    <li class="icon-menu-item"><i class="fas fa-clock"></i><a href="@Url.Action("TimeSlots", "Admin")">Time Slots</a></li>
+                                    <li class="icon-menu-item"><i class="fas fa-clock"></i><a href="@Url.Action("TimeSlots", "Admin")">Book Time Slots</a></li>
                                     <li class="icon-menu-item"><i class="fas fa-flag"></i><a href="@Url.Action("StatusTypes", "Admin")">Status Types</a></li>
                                 }
                                 <li class="icon-menu-item"><i class="fas fa-user-cog"></i><a href="@Url.Action("Users", "Admin")">Users</a></li>
@@ -55,12 +55,18 @@
                     }
                     else if (User.IsInRole("Customer"))
                     {
+                        <li class="icon-top-menu-item"><i class="far fa-calendar-alt"></i><a href="@Url.Action("TimeSlot", "Home")">Book Time Slots</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li class="icon-menu-item"><i class="fas fa-users"></i><a href="@Url.Action("Customers", "Admin")">Fleets</a></li>
                             </ul>
                         </li>
+                    }
+                    else if (User.IsInRole("Driver") || User.IsInRole("CustomerUser") || User.IsInRole("SiteUser"))
+                    { 
+                        <li class="icon-top-menu-item"><i class="far fa-calendar-alt"></i><a href="@Url.Action("TimeSlot", "Home")">Book Time Slots</a></li>
+
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")
