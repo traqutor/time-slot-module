@@ -29,6 +29,8 @@
 
     $scope.addSite = function () {
         $scope.modalError = "";
+        $scope.form.$setPristine();
+        $scope.form.$setUntouched();
 
         $scope.site = {
             Name: '',

@@ -117,9 +117,11 @@ namespace TimeSlotting.Controllers
             {
                 response = "Vehicle Not Found";
             }
-
-            vehicle.IsDeleted = true;
-            db.SaveChanges();
+            else
+            {
+                vehicle.IsDeleted = true;
+                db.SaveChanges();
+            }
 
             return Ok(response);
         }

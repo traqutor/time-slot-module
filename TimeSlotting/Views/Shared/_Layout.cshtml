@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Genius TSM - @ViewBag.Title</title>
+    <title>Genius TSM</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -21,7 +21,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @*<li class="icon-top-menu-item"><i class="far fa-calendar-alt"></i><a href="@Url.Action("TimeSlot", "Home")">TimeSlots</a></li>*@
+                    <li class="icon-top-menu-item"><i class="far fa-calendar-alt"></i><a href="@Url.Action("TimeSlot", "Home")">TimeSlots</a></li>
                     @if (User.IsInRole("Administrator") || User.IsInRole("CustomerAdmin"))
                     {
                         <li class="dropdown">
@@ -34,6 +34,16 @@
                                 <li class="icon-menu-item"><i class="fas fa-sitemap"></i><a href="@Url.Action("Sites", "Admin")">Sites</a></li>
                                 <li class="icon-menu-item"><i class="fas fa-car-side"></i><a href="@Url.Action("Fleets", "Admin")">Fleets</a></li>
                                 <li class="icon-menu-item"><i class="fas fa-car"></i><a href="@Url.Action("Vehicles", "Admin")">Vehicles</a></li>
+
+                                <li class="divider"></li>
+
+                                <li class="icon-menu-item"><i class="fas fa-money-check-alt"></i><a href="@Url.Action("Vendors", "Admin")">Vendors</a></li>
+                                <li class="icon-menu-item"><i class="fas fa-pallet"></i><a href="@Url.Action("Suppliers", "Admin")">Suppliers</a></li>
+                                <li class="icon-menu-item"><i class="fas fa-seedling"></i><a href="@Url.Action("Commodities", "Admin")">Commodities</a></li>
+                                <li class="icon-menu-item"><i class="fas fa-clipboard"></i><a href="@Url.Action("Contracts", "Admin")">Contracts</a></li>
+
+                                <li class="divider"></li>
+
                                 @if (User.IsInRole("Administrator"))
                                 {
                                     <li class="icon-menu-item"><i class="fas fa-clock"></i><a href="@Url.Action("TimeSlots", "Admin")">Time Slots</a></li>
@@ -61,14 +71,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <div class="row">
-                <div class="col-sm-6">
-                    <img src="../../Images/genius_timeslot_logo_large.png" width="150" class="left" />
-                </div>
-                <div class="col-sm-6">
-                    <div class="pull-right">&copy; @DateTime.Now.Year - Genius Time Slot Module</div>
-                </div>
-            </div>
+            <p>&copy; @DateTime.Now.Year - Genius Time Slot Module</p>
         </footer>
     </div>
 

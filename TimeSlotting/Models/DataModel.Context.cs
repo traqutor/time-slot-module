@@ -31,7 +31,6 @@ namespace TimeSlotting.Models
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
-        public virtual DbSet<DeliveryTimeSlot> DeliveryTimeSlots { get; set; }
         public virtual DbSet<EmailLog> EmailLogs { get; set; }
         public virtual DbSet<ErrorLog> ErrorLogs { get; set; }
         public virtual DbSet<Fleet> Fleets { get; set; }
@@ -41,5 +40,10 @@ namespace TimeSlotting.Models
         public virtual DbSet<VehicleDriver> VehicleDrivers { get; set; }
         public virtual DbSet<Vehicle> Vehicles { get; set; }
         public virtual DbSet<WebUser> WebUsers { get; set; }
+        public virtual DbSet<Contract> Contracts { get; set; }
+        public virtual DbSet<DeliveryTimeSlot> DeliveryTimeSlots { get; set; }
+        public virtual DbSet<Supplier> Suppliers { get; set; }
+        public virtual DbSet<Vendor> Vendors { get; set; }
+        public virtual DbSet<Commodity> Commodities { get; set; }
     }
 }

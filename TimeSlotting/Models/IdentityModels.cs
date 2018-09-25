@@ -51,5 +51,13 @@ namespace TimeSlotting.Models
         public System.Data.Entity.DbSet<TimeSlotting.Models.StatusType> StatusTypes { get; set; }
 
         public System.Data.Entity.DbSet<TimeSlotting.Models.DeliveryTimeSlot> DeliveryTimeSlots { get; set; }
+
+        public System.Data.Entity.DbSet<TimeSlotting.Models.Vendor> Vendors { get; set; }
+
+        public System.Data.Entity.DbSet<TimeSlotting.Models.Supplier> Suppliers { get; set; }
+
+        public System.Data.Entity.DbSet<TimeSlotting.Models.Contract> Contracts { get; set; }
+
+        public System.Data.Entity.DbSet<TimeSlotting.Models.Commodity> Commodities { get; set; }
     }
 }

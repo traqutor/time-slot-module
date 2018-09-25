@@ -18,10 +18,10 @@ namespace TimeSlotting.Models
         public Customer()
         {
             this.Sites = new HashSet<Site>();
-            this.DeliveryTimeSlots = new HashSet<DeliveryTimeSlot>();
             this.Fleets = new HashSet<Fleet>();
             this.Vehicles = new HashSet<Vehicle>();
             this.WebUsers = new HashSet<WebUser>();
+            this.DeliveryTimeSlots = new HashSet<DeliveryTimeSlot>();
         }
     
         public int Id { get; set; }
@@ -36,12 +36,12 @@ namespace TimeSlotting.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Site> Sites { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DeliveryTimeSlot> DeliveryTimeSlots { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Fleet> Fleets { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Vehicle> Vehicles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WebUser> WebUsers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DeliveryTimeSlot> DeliveryTimeSlots { get; set; }
     }
 }

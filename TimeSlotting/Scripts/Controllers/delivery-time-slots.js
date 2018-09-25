@@ -5,6 +5,12 @@
 
     getUserRole();
     getStatusTypes();
+    getContracts();
+    getVendors();
+    getSuppliers();
+    getCommodities();
+
+    AddDeletePopover();
 
     $scope.getTimeSlot = function (id) {
         $scope.modalError = "";
@@ -13,7 +19,7 @@
 
         $http.get(window.location.origin + $scope.common.url + '/api/deliverytimeslots/gettimeslot', {
             params: { id: id }
-        }).then(function (response) {            
+        }).then(function (response) {
             $scope.timeslot = response.data;
             $scope.getVehicles($scope.timeslot.DriverId);
 
@@ -39,18 +45,25 @@
         $scope.form.$setUntouched();
 
         $scope.timeslot = {
+            Id: 0,
             TimeSlotId: tid,
             CustomerId: $scope.cid,
             SiteId: $scope.site.Id,
             DriverId: '',
             VehicleId: '',
-            StatusTypeId: 2
+            ContractId: '',
+            VendorId: '',
+            SupplierId: '',
+            CommodityId: '',
+            StatusTypeId: 2,
+            Tons: 0
         };
 
         if ($scope.role === 'Driver') {
             $scope.timeslot.DriverId = $scope.uid;
         }
 
+        $scope.fleet = '';
         $scope.createdBy = '';
         $scope.modifiedBy = '';
 
@@ -67,6 +80,10 @@
             $scope.timeslot.Site = null;
             $scope.timeslot.WebUser = null;
             $scope.timeslot.Vehicle = null;
+            $scope.timeslot.Contract = null;
+            $scope.timeslot.Vendor = null;
+            $scope.timeslot.Supplier = null;
+            $scope.timeslot.Commodity = null;
             $scope.timeslot.StatusType = null;
             $scope.timeslot.DeliveryDate = $scope.day;
 
@@ -88,8 +105,24 @@
         }
     };
 
+    $scope.prepareInfo = function (id) {
+        $scope.modalError = "";
+
+        $http.get(window.location.origin + $scope.common.url + '/api/deliverytimeslots/gettimeslot', {
+            params: { id: id }
+        }).then(function (response) {
+            var data = $scope.common.rebuildJSON(JSON.stringify(response.data));
+            $scope.info = data;
+
+            $timeout(function () {
+                $('#btnInfo-' + id + '.timeslot-info').popover('show');
+            });            
+        });
+    };
+
     $scope.prepareDelete = function (id) {
         $scope.modalError = "";
+        $('.timeslot-delete').popover('show');
 
         $scope.deleteId = id;
     };
@@ -98,12 +131,13 @@
         $http.delete(window.location.origin + $scope.common.url + '/api/deliverytimeslots/deletetimeslot', {
             params: { id: $scope.deleteId }
         }).then(function (response) {
-            if (response.data === "OK") {
-                PopOverClose('.timeslot-delete');
+            PopOverClose('.timeslot-delete');
+            if (response.data === "OK") {                
+                $('#modalTimeSlot').modal('hide');
                 getData($scope.site.Id);
             }
             else {
-                $scope.modalError = "Problem deleting delivery - " + response.data;
+                $scope.modalError = "Problem deleting timeslot - " + response.data;
             }
         });
     };
@@ -125,7 +159,7 @@
                 $scope.tableParams = new NgTableParams({}, { dataset: data });
 
                 $timeout(function () {
-                    AddPopovers();
+                    AddInfoPopovers();
                 });
             });
         }       
@@ -170,6 +204,35 @@
         });
     }
 
+    function getContracts() {
+        $http.get(window.location.origin + $scope.common.url + '/api/contracts/getcontracts').then(function (response) {
+            var data = $scope.common.rebuildJSON(JSON.stringify(response.data));
+            $scope.contracts = data;
+        });
+    }
+
+    function getVendors() {
+        $http.get(window.location.origin + $scope.common.url + '/api/vendors/getvendors').then(function (response) {
+            var data = $scope.common.rebuildJSON(JSON.stringify(response.data));
+            $scope.vendors = data;
+        });
+    }
+
+    function getSuppliers() {
+        $http.get(window.location.origin + $scope.common.url + '/api/suppliers/getsuppliers').then(function (response) {
+            var data = $scope.common.rebuildJSON(JSON.stringify(response.data));
+            $scope.suppliers = data;
+        });
+    }
+
+    function getCommodities() {
+        $http.get(window.location.origin + $scope.common.url + '/api/commodities/getcommodities').then(function (response) {
+            var data = $scope.common.rebuildJSON(JSON.stringify(response.data));
+            $scope.commodities = data;
+        });
+    }
+
+
     $scope.getSites = function (id) {
         if (id !== null && id !== undefined && id !== '') {
             $http.get(window.location.origin + $scope.common.url + '/api/sites/getsites?id=' + id).then(function (response) {
@@ -197,15 +260,31 @@
         }
     };
 
-    function AddPopovers() {
+    function AddDeletePopover() {
         if ($('#popover-delete').length > 0) {
             $('.timeslot-delete').popover({
-                trigger: 'click',
+                trigger: 'manual',
                 placement: "bottom",
                 html: true,
-                template: $('#popover-delete').html().replace(/>\s+</g, '><'),
+                template: $('#popover-delete').html().replace(/\n/g, '').replace(/>\s+</g, '><'),
                 content: function () {
                     var html = $compile($('#popover-delete-body').html().replace(/\n/g, '').replace(/>\s+</g, '><').trim())($scope);
+                    return html;
+                }
+            });
+        }
+    }
+
+    function AddInfoPopovers() {
+        if ($('#popover-info').length > 0) {
+            $('.timeslot-info').popover({
+                trigger: 'manual',
+                placement: "bottom",
+                html: true,
+                title: $('#popover-title').html().replace(/\n/g, '').replace(/>\s+</g, '><'),
+                template: $('#popover-info').html().replace(/\n/g, '').replace(/>\s+</g, '><'),
+                content: function () {
+                    var html = $compile($('#popover-info-body').html().replace(/\n/g, '').replace(/>\s+</g, '><').trim())($scope);
                     return html;
                 }
             });

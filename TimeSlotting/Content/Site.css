@@ -7,6 +7,16 @@ h2 {
     text-transform: uppercase;
 }
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
 /*input.ng-invalid.ng-dirty {
     border-color: #db6b6b;
 }*/
@@ -14,8 +24,6 @@ h2 {
 /*input.ng-invalid.ng-pristine.ng-touched {
     border-color: #db6b6b;
 }*/
-
-
 
 
 .body-content {
@@ -181,18 +189,35 @@ h2 {
     font-size: 10px;
 }
 
-.timeslot-delete {
+.timeslot-info {
     float: right;
     width: 30px;
     height: 30px;
-    padding: 6px;
-    margin-top: -1px;
+    padding-left: 11px;
+    padding-top: 4px;
+    display: none;
+}
+
+.timeslot-info-close {
+    float: right;
+    margin-top: -5px;
+    margin-right: -10px;
+    width: 15px;
+    height: 15px;
+    padding: 0px;
+    background-color: #f7f7f7;
+}
+
+.delivery-details {
+    float: left;
+    display: flex;
+    margin-left: 10px;
+    margin-top: 15px;
 }
 
 .timeslot > table > thead > tr > th {
     display: none;
 }
-
 
 .timeslot-select-div {
     display: flex;
@@ -246,8 +271,14 @@ h2 {
     }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 980px) {
+    .timeslot-info {
+        display: block;
+    }
 
+    .delivery-details {
+        display: none;
+    }
 }
 
 /*AUDIT*/
@@ -288,8 +319,31 @@ h2 {
     cursor: pointer;
 }
 
-/* BUTTONS */
+.ng-table {
+    border-collapse: separate;
+    border-left-width: 0px;
+    border-bottom-width: 1px;
+}
 
+.ng-table thead > tr > th {
+    border-bottom-width: 0px;
+    border-right-width: 0px;
+}
+
+.ng-table tbody > tr > td {
+    border-right-width: 0px;
+    border-bottom-width: 0px;
+}
+
+.timeslot-table {
+    border-top-width: 0px !important;
+}
+
+/*.popover-title {
+    display:block !important;
+}*/
+
+/* BUTTONS */
 .add-button {
     float: right;
     margin-top: 20px;

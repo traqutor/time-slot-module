@@ -82,9 +82,11 @@ namespace TimeSlotting.Controllers
             {
                 response = "Customer Not Found";
             }
-
-            customer.IsDeleted = true;
-            db.SaveChanges();
+            else
+            {
+                customer.IsDeleted = true;
+                db.SaveChanges();
+            }
 
             return Ok(response);
         }

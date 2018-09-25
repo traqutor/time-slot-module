@@ -5,6 +5,8 @@
 
     $scope.getStatusType = function (id) {
         $scope.modalError = "";
+        $scope.form.$setPristine();
+        $scope.form.$setUntouched();
 
         $http.get(window.location.origin + $scope.common.url + '/api/statustypes/getstatustype', {
             params: { id: id }
@@ -25,6 +27,8 @@
 
     $scope.addStatusType = function () {
         $scope.modalError = "";
+        $scope.form.$setPristine();
+        $scope.form.$setUntouched();
 
         $scope.statusType = {
             Name: '',

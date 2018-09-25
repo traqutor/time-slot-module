@@ -94,9 +94,11 @@ namespace TimeSlotting.Controllers
             {
                 return NotFound();
             }
-
-            db.EmailLogs.Remove(emailLog);
-            db.SaveChanges();
+            else
+            {
+                db.EmailLogs.Remove(emailLog);
+                db.SaveChanges();
+            }
 
             return Ok(emailLog);
         }

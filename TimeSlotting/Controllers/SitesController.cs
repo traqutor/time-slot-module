@@ -102,9 +102,11 @@ namespace TimeSlotting.Controllers
             {
                 response = "Site Not Found";
             }
-
-            site.IsDeleted = true;
-            db.SaveChanges();
+            else
+            {
+                site.IsDeleted = true;
+                db.SaveChanges();
+            }
 
             return Ok(response);
         }

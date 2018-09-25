@@ -17,8 +17,8 @@ namespace TimeSlotting.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public WebUser()
         {
-            this.DeliveryTimeSlots = new HashSet<DeliveryTimeSlot>();
             this.VehicleDrivers = new HashSet<VehicleDriver>();
+            this.DeliveryTimeSlots = new HashSet<DeliveryTimeSlot>();
         }
     
         public int Id { get; set; }
@@ -36,11 +36,11 @@ namespace TimeSlotting.Models
         public int ModifiedBy { get; set; }
     
         public virtual Customer Customer { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DeliveryTimeSlot> DeliveryTimeSlots { get; set; }
         public virtual Fleet Fleet { get; set; }
         public virtual Site Site { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VehicleDriver> VehicleDrivers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DeliveryTimeSlot> DeliveryTimeSlots { get; set; }
     }
 }

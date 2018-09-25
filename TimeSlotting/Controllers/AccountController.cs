@@ -214,7 +214,7 @@ namespace TimeSlotting.Controllers
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                 var userId = Common.GetUserId(user.Id);
 
-                Task<string> error = Common.SendEmail(user.Email, "Reset Password", "Hello,<br/><br/>Please reset your Genius Time Slot application password by clicking <a href=\"" + callbackUrl + "\">here</a>.<br/><br/>DO NOT REPLY TO THIS EMAIL<br/><br/>Regards,<br/><br/>Genius Time Slot", "", "", "", userId, null, null, null);
+                Task<string> error = Common.SendEmail(user.Email, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>", "", "", "", userId, null, null, null);
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 

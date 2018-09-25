@@ -87,9 +87,11 @@ namespace TimeSlotting.Controllers
             {
                 response = "Time Slot Not Found";
             }
-
-            timeslot.IsDeleted = true;
-            db.SaveChanges();
+            else
+            {
+                timeslot.IsDeleted = true;
+                db.SaveChanges();
+            }
 
             return Ok(response);
         }

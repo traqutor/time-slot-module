@@ -93,9 +93,11 @@ namespace TimeSlotting.Controllers
             {
                 response = "Status Type Not Found";
             }
-
-            statusType.IsDeleted = true;
-            db.SaveChanges();
+            else
+            {
+                statusType.IsDeleted = true;
+                db.SaveChanges();
+            }
 
             return Ok(response);
         }

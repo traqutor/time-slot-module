@@ -41,6 +41,30 @@ namespace TimeSlotting.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
+        public ActionResult Vendors()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public ActionResult Suppliers()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public ActionResult Contracts()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public ActionResult Commodities()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Administrator")]
         public ActionResult StatusTypes()
         {
             return View();

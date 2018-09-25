@@ -21,18 +21,27 @@ namespace TimeSlotting.Models
         public int DriverId { get; set; }
         public int VehicleId { get; set; }
         public int StatusTypeId { get; set; }
+        public int ContractId { get; set; }
+        public int SupplierId { get; set; }
+        public int VendorId { get; set; }
+        public int CommodityId { get; set; }
         public System.DateTime DeliveryDate { get; set; }
+        public Nullable<int> Tons { get; set; }
         public bool IsDeleted { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public System.DateTime ModifiedDate { get; set; }
         public int CreatedBy { get; set; }
         public int ModifiedBy { get; set; }
     
+        public virtual Contract Contract { get; set; }
         public virtual Customer Customer { get; set; }
         public virtual Site Site { get; set; }
         public virtual StatusType StatusType { get; set; }
+        public virtual Supplier Supplier { get; set; }
         public virtual TimeSlot TimeSlot { get; set; }
         public virtual Vehicle Vehicle { get; set; }
+        public virtual Vendor Vendor { get; set; }
         public virtual WebUser WebUser { get; set; }
+        public virtual Commodity Commodity { get; set; }
     }
 }

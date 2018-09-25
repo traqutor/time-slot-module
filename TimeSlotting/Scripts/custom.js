@@ -8,6 +8,11 @@ function OpenDialog(name, elem) {
     $(name).modal('show');
 }
 
+function CloseDialog(name, elem) {
+    $(name).modal('hide');
+}
+
 function PopOverClose(name) {
     $(name).popover('hide');
+    $(name + '.fade').remove();
 }

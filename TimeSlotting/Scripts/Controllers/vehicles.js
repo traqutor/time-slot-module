@@ -30,6 +30,8 @@
 
     $scope.addVehicle = function () {
         $scope.modalError = "";
+        $scope.form.$setPristine();
+        $scope.form.$setUntouched();
 
         $scope.vehicle = {
             Rego: '',

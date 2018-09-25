@@ -81,7 +81,7 @@
                 getData();
             }
             else {
-                $scope.modalError = "Problem deleting time slot - " + response.data;
+                $scope.modalError = "Problem deleting timeslot - " + response.data;
             }
         });
     };

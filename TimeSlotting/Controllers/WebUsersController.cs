@@ -208,7 +208,7 @@ namespace TimeSlotting.Controllers
                     }
                 }
 
-                if (vehicles != "")
+                if (vehicles != "" && response == "OK")
                 {
                     db.VehicleDrivers.RemoveRange(db.VehicleDrivers.Where(x => x.WebUserId == user.Id));
                     db.SaveChanges();
@@ -249,9 +249,11 @@ namespace TimeSlotting.Controllers
             {
                 response = "User Not Found";
             }
-
-            user.IsDeleted = true;
-            db.SaveChanges();
+            else
+            {
+                user.IsDeleted = true;
+                db.SaveChanges();
+            }
 
             return Ok(response);
         }

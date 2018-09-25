@@ -95,9 +95,11 @@ namespace TimeSlotting.Controllers
             {
                 response = "Fleet Not Found";
             }
-
-            fleet.IsDeleted = true;
-            db.SaveChanges();
+            else
+            {
+                fleet.IsDeleted = true;
+                db.SaveChanges();
+            }
 
             return Ok(response);
         }

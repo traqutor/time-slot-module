@@ -29,6 +29,8 @@
 
     $scope.addFleet = function () {
         $scope.modalError = "";
+        $scope.form.$setPristine();
+        $scope.form.$setUntouched();
 
         $scope.fleet = {
             Name: '',
