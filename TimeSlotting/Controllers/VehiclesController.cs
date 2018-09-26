@@ -18,8 +18,8 @@ namespace TimeSlotting.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
-        [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin")]
+        [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
+        [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         public IHttpActionResult GetVehicles()
         {
             int? id = null;
@@ -33,8 +33,8 @@ namespace TimeSlotting.Controllers
             return Ok(new { data = vehicles, admin = User.IsInRole("Administrator"), cid = id });
         }
 
-        [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
-        [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin")]
+        [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
+        [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         public IHttpActionResult GetVehicles(int id)
         {
             return Ok(db.Vehicles.Where(x => x.FleetId == id && !x.IsDeleted).OrderBy(x => x.Rego).ToList());

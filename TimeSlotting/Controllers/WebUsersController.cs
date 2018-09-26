@@ -100,8 +100,8 @@ namespace TimeSlotting.Controllers
             return Ok(new { role = role, cid = cid, uid = Common.GetUserId(User.Identity.GetUserId()) });
         }
 
-        [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
-        [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin")]
+        [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
+        [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         public IHttpActionResult GetDrivers(int cid)
         {
             var users = (from m in db.WebUsers

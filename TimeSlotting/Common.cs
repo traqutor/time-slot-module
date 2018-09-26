@@ -181,7 +181,7 @@ namespace TimeSlotting
             var result = "";
             var sendTo = to;
 
-            MailMessage message = new MailMessage("bfarbas@***.com", sendTo, subject, body);
+            MailMessage message = new MailMessage(TimeSlotting.Properties.Settings.Default.SMTP_Username, sendTo, subject, body);
             message.IsBodyHtml = true;
 
             if (attachFilePath != "")
@@ -196,10 +196,11 @@ namespace TimeSlotting
                 smtp.SendCompleted += new SendCompletedEventHandler(SendCompletedCallback);
 
                 smtp.Host = TimeSlotting.Properties.Settings.Default.SMTP_Host;
-                smtp.EnableSsl = false;
+                smtp.TargetName = $"STARTTLS/{TimeSlotting.Properties.Settings.Default.SMTP_Host}";
+                smtp.EnableSsl = true;
                 smtp.UseDefaultCredentials = false;
                 smtp.Credentials = new NetworkCredential(TimeSlotting.Properties.Settings.Default.SMTP_Username, TimeSlotting.Properties.Settings.Default.SMTP_Password);
-                smtp.Port = 25;
+                smtp.Port = 587;
                 Task.Run(() => smtp.SendAsync(message, new { S = subject, M = message, E = sendTo, U = userId, R = url, F = filename, A = attachFilePath }));
 
                 result = "";

@@ -30,6 +30,20 @@
                                 @if (User.IsInRole("Administrator"))
                                 {
                                     <li class="icon-menu-item"><i class="fas fa-users"></i><a href="@Url.Action("Customers", "Admin")">Customers</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li class="icon-menu-item"><i class="fas fa-money-check-alt"></i><a href="@Url.Action("Vendors", "Admin")">Vendors</a></li>
+                                    <li class="icon-menu-item"><i class="fas fa-pallet"></i><a href="@Url.Action("Suppliers", "Admin")">Suppliers</a></li>
+                                    <li class="icon-menu-item"><i class="fas fa-seedling"></i><a href="@Url.Action("Commodities", "Admin")">Commodities</a></li>
+                                    <li class="icon-menu-item"><i class="fas fa-clipboard"></i><a href="@Url.Action("Contracts", "Admin")">Contracts</a></li>
+
+                                    <li class="divider"></li>
+
+                                    <li class="icon-menu-item"><i class="fas fa-clock"></i><a href="@Url.Action("TimeSlots", "Admin")">Time Slots</a></li>
+                                    <li class="icon-menu-item"><i class="fas fa-flag"></i><a href="@Url.Action("StatusTypes", "Admin")">Status Types</a></li>
+
+                                    <li class="divider"></li>
                                 }
                                 <li class="icon-menu-item"><i class="fas fa-sitemap"></i><a href="@Url.Action("Sites", "Admin")">Sites</a></li>
                                 <li class="icon-menu-item"><i class="fas fa-car-side"></i><a href="@Url.Action("Fleets", "Admin")">Fleets</a></li>
@@ -37,18 +51,6 @@
 
                                 <li class="divider"></li>
 
-                                <li class="icon-menu-item"><i class="fas fa-money-check-alt"></i><a href="@Url.Action("Vendors", "Admin")">Vendors</a></li>
-                                <li class="icon-menu-item"><i class="fas fa-pallet"></i><a href="@Url.Action("Suppliers", "Admin")">Suppliers</a></li>
-                                <li class="icon-menu-item"><i class="fas fa-seedling"></i><a href="@Url.Action("Commodities", "Admin")">Commodities</a></li>
-                                <li class="icon-menu-item"><i class="fas fa-clipboard"></i><a href="@Url.Action("Contracts", "Admin")">Contracts</a></li>
-
-                                <li class="divider"></li>
-
-                                @if (User.IsInRole("Administrator"))
-                                {
-                                    <li class="icon-menu-item"><i class="fas fa-clock"></i><a href="@Url.Action("TimeSlots", "Admin")">Book Time Slots</a></li>
-                                    <li class="icon-menu-item"><i class="fas fa-flag"></i><a href="@Url.Action("StatusTypes", "Admin")">Status Types</a></li>
-                                }
                                 <li class="icon-menu-item"><i class="fas fa-user-cog"></i><a href="@Url.Action("Users", "Admin")">Users</a></li>
                             </ul>
                         </li>

@@ -15,8 +15,8 @@ namespace TimeSlotting.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        [System.Web.Mvc.Authorize(Roles = "Administrator")]
-        [System.Web.Http.Authorize(Roles = "Administrator")]
+        [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
+        [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         public IHttpActionResult GetVendors()
         {
             return Ok(db.Vendors.Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToList());
