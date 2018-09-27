@@ -10,8 +10,6 @@
     getSuppliers();
     getCommodities();
 
-    AddDeletePopover();
-
     $scope.getTimeSlot = function (id) {
         $scope.modalError = "";
         $scope.form.$setPristine();
@@ -32,6 +30,8 @@
             });
 
             $scope.modalHeader = "Edit Delivery";
+
+            AddDeletePopover();
 
             if ($scope.role == "Administrator" || $scope.role == "CustomerAdmin" || $scope.role == "CustomerUser" || ($scope.role == "Driver" && $scope.uid == $scope.timeslot.DriverId && $scope.timeslot.StatusTypeId == 2)) {
                 $('#modalTimeSlot').modal('show');

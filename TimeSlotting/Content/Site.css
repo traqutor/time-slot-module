@@ -353,6 +353,10 @@ input[type="number"] {
     width: 30px;
 }
 
+.modal-footer .btn + .btn {
+    margin-left: 0px;
+}
+
 /* ICONS */
 
 .off-icon {
