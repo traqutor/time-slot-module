@@ -75,11 +75,12 @@
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container body-content top">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Genius Time Slot Module</p>
+            <div class="col-sm-3"><img src="../../Content/Images/genius_timeslot_logo_large.png" Width="150" class="img-responsive" /></div>
+            <div class="col-sm-9 text-right">&copy; @DateTime.Now.Year - Genius Time Slot Module</div>
         </footer>
     </div>
 
