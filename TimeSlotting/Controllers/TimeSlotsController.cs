@@ -21,7 +21,7 @@ namespace TimeSlotting.Controllers
     [System.Web.Http.Authorize(Roles = "Administrator")]
     public class TimeSlotsController : ApiController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private TimeSlottingDBContext db = new TimeSlottingDBContext();
 
         public IHttpActionResult GetTimeSlots()
         {

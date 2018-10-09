@@ -5,21 +5,21 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="3c988176d65e42db971acba686085419" Name="Diagram1" ZoomLevel="94">
-        <EntityTypeShape EntityType="DataModel.C__MigrationHistory" Width="1.5" PointX="5.75" PointY="1" />
-        <EntityTypeShape EntityType="DataModel.AspNetRole" Width="1.5" PointX="10.75" PointY="2.75" />
+        <EntityTypeShape EntityType="DataModel.C__MigrationHistory" Width="1.5" PointX="4.75" PointY="1.25" />
+        <EntityTypeShape EntityType="DataModel.AspNetRole" Width="1.5" PointX="10.125" PointY="1.75" />
         <EntityTypeShape EntityType="DataModel.AspNetUserClaim" Width="1.5" PointX="15.25" PointY="3.75" />
         <EntityTypeShape EntityType="DataModel.AspNetUserLogin" Width="1.5" PointX="15.25" PointY="1.25" />
-        <EntityTypeShape EntityType="DataModel.AspNetUser" Width="1.5" PointX="13" PointY="1.625" />
-        <EntityTypeShape EntityType="DataModel.Customer" Width="1.5" PointX="0.75" PointY="7.125" />
-        <EntityTypeShape EntityType="DataModel.EmailLog" Width="1.5" PointX="7.75" PointY="1" />
-        <EntityTypeShape EntityType="DataModel.ErrorLog" Width="1.5" PointX="7.75" PointY="12" />
-        <EntityTypeShape EntityType="DataModel.Fleet" Width="1.5" PointX="3" PointY="9.375" />
-        <EntityTypeShape EntityType="DataModel.Site" Width="1.5" PointX="3" PointY="5.25" />
-        <EntityTypeShape EntityType="DataModel.StatusType" Width="1.5" PointX="3" PointY="0.75" />
-        <EntityTypeShape EntityType="DataModel.TimeSlot" Width="1.5" PointX="3" PointY="14.25" />
-        <EntityTypeShape EntityType="DataModel.VehicleDriver" Width="1.5" PointX="10.5" PointY="9.75" />
-        <EntityTypeShape EntityType="DataModel.Vehicle" Width="1.5" PointX="5.25" PointY="11" />
-        <EntityTypeShape EntityType="DataModel.WebUser" Width="1.5" PointX="8.25" PointY="6.75" />
+        <EntityTypeShape EntityType="DataModel.AspNetUser" Width="1.5" PointX="12.25" PointY="1.375" />
+        <EntityTypeShape EntityType="DataModel.Customer" Width="1.5" PointX="0.5" PointY="5.75" />
+        <EntityTypeShape EntityType="DataModel.EmailLog" Width="1.5" PointX="8.25" PointY="2" />
+        <EntityTypeShape EntityType="DataModel.ErrorLog" Width="1.5" PointX="6.625" PointY="2" />
+        <EntityTypeShape EntityType="DataModel.Fleet" Width="1.5" PointX="3.25" PointY="9.25" />
+        <EntityTypeShape EntityType="DataModel.Site" Width="1.5" PointX="3.5" PointY="3" />
+        <EntityTypeShape EntityType="DataModel.StatusType" Width="1.5" PointX="16.375" PointY="6.625" />
+        <EntityTypeShape EntityType="DataModel.TimeSlot" Width="1.5" PointX="13" PointY="14.625" />
+        <EntityTypeShape EntityType="DataModel.VehicleDriver" Width="1.5" PointX="10.75" PointY="10" />
+        <EntityTypeShape EntityType="DataModel.Vehicle" Width="1.5" PointX="5.375" PointY="10.625" />
+        <EntityTypeShape EntityType="DataModel.WebUser" Width="1.5" PointX="8.5" PointY="6.875" />
         <AssociationConnector Association="DataModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="DataModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="DataModel.FK_CustomerSite_Customer" />
@@ -32,10 +32,10 @@
         <AssociationConnector Association="DataModel.FK_VehicleDrivers_Vehicles" />
         <AssociationConnector Association="DataModel.FK_VehicleDrivers_WebUsers" />
         <AssociationConnector Association="DataModel.AspNetUserRoles" />
-        <EntityTypeShape EntityType="DataModel.Contract" Width="1.5" PointX="11.25" PointY="16.875" />
-        <EntityTypeShape EntityType="DataModel.DeliveryTimeSlot" Width="1.5" PointX="13.5" PointY="6.75" />
-        <EntityTypeShape EntityType="DataModel.Supplier" Width="1.5" PointX="11.25" PointY="20.375" />
-        <EntityTypeShape EntityType="DataModel.Vendor" Width="1.5" PointX="11.25" PointY="23.875" />
+        <EntityTypeShape EntityType="DataModel.Contract" Width="1.5" PointX="16.625" PointY="9.75" />
+        <EntityTypeShape EntityType="DataModel.DeliveryTimeSlot" Width="2" PointX="13.625" PointY="7.625" />
+        <EntityTypeShape EntityType="DataModel.Supplier" Width="1.5" PointX="16.625" PointY="13.25" />
+        <EntityTypeShape EntityType="DataModel.Vendor" Width="1.5" PointX="14.875" PointY="14.625" />
         <AssociationConnector Association="DataModel.FK_DeliveryTimeSlots_Contracts" />
         <AssociationConnector Association="DataModel.FK_DeliveryTimeSlots_Customers" />
         <AssociationConnector Association="DataModel.FK_DeliveryTimeSlots_Sites" />
@@ -45,7 +45,7 @@
         <AssociationConnector Association="DataModel.FK_DeliveryTimeSlots_Vehicles" />
         <AssociationConnector Association="DataModel.FK_DeliveryTimeSlots_Vendors" />
         <AssociationConnector Association="DataModel.FK_DeliveryTimeSlots_WebUsers" />
-        <EntityTypeShape EntityType="DataModel.Commodity" Width="1.5" PointX="10.375" PointY="13" />
+        <EntityTypeShape EntityType="DataModel.Commodity" Width="1.5" PointX="10.5" PointY="12.75" />
         <AssociationConnector Association="DataModel.FK_DeliveryTimeSlots_Commoditys" />
       </Diagram>
     </edmx:Diagrams>

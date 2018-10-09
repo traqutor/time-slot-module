@@ -222,6 +222,26 @@
     <Compile Include="Controllers\VehiclesController.cs" />
     <Compile Include="Controllers\VendorsController.cs" />
     <Compile Include="Controllers\WebUsersController.cs" />
+    <Compile Include="Data\Entities\Customers\Customer.cs" />
+    <Compile Include="Data\Entities\Customers\Fleets\Fleet.cs" />
+    <Compile Include="Data\Entities\Customers\Fleets\Vehicle.cs" />
+    <Compile Include="Data\Entities\Customers\Fleets\VehicleDriver.cs" />
+    <Compile Include="Data\Entities\Customers\Site.cs" />
+    <Compile Include="Data\Entities\Deliveries\Commodity.cs" />
+    <Compile Include="Data\Entities\Deliveries\Contract.cs" />
+    <Compile Include="Data\Entities\Deliveries\DeliveryTimeSlot.cs" />
+    <Compile Include="Data\Entities\Deliveries\StatusType.cs" />
+    <Compile Include="Data\Entities\Deliveries\Supplier.cs" />
+    <Compile Include="Data\Entities\Deliveries\TimeSlot.cs" />
+    <Compile Include="Data\Entities\Deliveries\Vendor.cs" />
+    <Compile Include="Data\Entities\EntityStatus.cs" />
+    <Compile Include="Data\Entities\Logs\EmailLog.cs" />
+    <Compile Include="Data\Entities\Logs\ErrorLog.cs" />
+    <Compile Include="Data\Entities\User.cs" />
+    <Compile Include="Data\Entities\UserSystemRoles.cs" />
+    <Compile Include="Data\Entities\WebUser.cs" />
+    <Compile Include="Data\Initializers\TimeSlottingDBContextInitializer.cs" />
+    <Compile Include="Data\TimeSlottingDBContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -278,7 +298,6 @@
     <Compile Include="Models\Fleet.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Site.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
@@ -1232,9 +1251,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Data\Entities\" />
-    <Folder Include="Data\Initializers\" />
-    <Folder Include="NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

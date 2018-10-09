@@ -16,7 +16,7 @@ namespace TimeSlotting.Controllers
     [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin")]
     public class FleetsController : ApiController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private TimeSlottingDBContext db = new TimeSlottingDBContext();
 
         public IHttpActionResult GetFleets()
         {

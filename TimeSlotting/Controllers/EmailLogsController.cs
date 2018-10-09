@@ -14,7 +14,7 @@ namespace TimeSlotting.Controllers
     [System.Web.Http.Authorize(Roles = "Administrator")]
     public class EmailLogsController : ApiController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private TimeSlottingDBContext db = new TimeSlottingDBContext();
 
         // GET: api/EmailLogs
         public IQueryable<EmailLog> GetEmailLogs()

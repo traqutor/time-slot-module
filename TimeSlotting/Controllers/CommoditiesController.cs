@@ -13,7 +13,7 @@ namespace TimeSlotting.Controllers
 {
     public class CommoditiesController : ApiController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private TimeSlottingDBContext db = new TimeSlottingDBContext();
 
         //[System.Web.Mvc.Authorize(Roles = "Administrator")]
         //[System.Web.Http.Authorize(Roles = "Administrator")]

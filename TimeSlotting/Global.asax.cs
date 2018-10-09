@@ -50,7 +50,7 @@ namespace TimeSlotting
                 newError.StackTrace = exceptionMessage;
             }
 
-            ApplicationDbContext db = new ApplicationDbContext();
+            TimeSlottingDBContext db = new TimeSlottingDBContext();
             db.ErrorLogs.Add(newError);
             db.SaveChanges();
             db.Dispose();

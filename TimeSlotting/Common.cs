@@ -9,6 +9,7 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using TimeSlotting.Models;
+using TimeSlotting.Data.Entities;
 
 namespace TimeSlotting
 {
@@ -16,10 +17,10 @@ namespace TimeSlotting
     public class Common
     {
 
-        public static UserManager<ApplicationUser> GetUserManager()
+        public static UserManager<User> GetUserManager()
         {
-            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(ApplicationDbContext.Create()));
-            userManager.UserValidator = new UserValidator<ApplicationUser>(userManager)
+            var userManager = new UserManager<User>(new UserStore<User>(TimeSlottingDBContext.Create()));
+            userManager.UserValidator = new UserValidator<User>(userManager)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
@@ -30,7 +31,7 @@ namespace TimeSlotting
 
         public static WebUser GetUser(string id)
         {
-            var db = new ApplicationDbContext();
+            var db = new TimeSlottingDBContext();
 
             var result = (from m in db.WebUsers
                           where m.ASPId == id
@@ -49,7 +50,7 @@ namespace TimeSlotting
 
         public static int GetUserId(string id)
         {
-            var db = new ApplicationDbContext();
+            var db = new TimeSlottingDBContext();
 
             var result = (from m in db.WebUsers
                           where m.ASPId == id
@@ -68,7 +69,7 @@ namespace TimeSlotting
 
         public static string GetUserRoleName(string id)
         {
-            var db = new ApplicationDbContext();
+            var db = new TimeSlottingDBContext();
 
             var name = GetRoleName(db.Users.Find(id).Roles.First().RoleId);
 
@@ -79,7 +80,7 @@ namespace TimeSlotting
 
         public static string GetFirstName(string id)
         {
-            var db = new ApplicationDbContext();
+            var db = new TimeSlottingDBContext();
 
             var result = (from m in db.WebUsers
                           where m.ASPId == id
@@ -98,7 +99,7 @@ namespace TimeSlotting
 
         public static string GetUserName(int id)
         {
-            var db = new ApplicationDbContext();
+            var db = new TimeSlottingDBContext();
 
             var result = (from m in db.WebUsers
                           where m.Id == id
@@ -117,7 +118,7 @@ namespace TimeSlotting
 
         public static string GetRoleName(string id)
         {
-            var db = new ApplicationDbContext();
+            var db = new TimeSlottingDBContext();
 
             var result = (from m in db.Roles
                           where m.Id == id
@@ -136,7 +137,7 @@ namespace TimeSlotting
 
         public static int GetCustomerId(string id)
         {
-            var db = new ApplicationDbContext();
+            var db = new TimeSlottingDBContext();
 
             var result = (from m in db.WebUsers
                           where m.ASPId == id
@@ -155,7 +156,7 @@ namespace TimeSlotting
 
         public static string GetUserEmail(int id)
         {
-            var db = new ApplicationDbContext();
+            var db = new TimeSlottingDBContext();
 
             var result = (from m in db.Users
                           join u in db.WebUsers on m.Id equals u.ASPId
@@ -260,7 +261,7 @@ namespace TimeSlotting
 
             log.SendError = error;
 
-            ApplicationDbContext db = new ApplicationDbContext();
+            TimeSlottingDBContext db = new TimeSlottingDBContext();
             db.EmailLogs.Add(log);
             db.SaveChanges();
             db.Dispose();

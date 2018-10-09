@@ -14,7 +14,7 @@ namespace TimeSlotting.Controllers
 {
     public class VehicleDriversController : ApiController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();        
+        private TimeSlottingDBContext db = new TimeSlottingDBContext();        
 
         protected override void Dispose(bool disposing)
         {

@@ -13,7 +13,7 @@ namespace TimeSlotting.Controllers
     [HandleError]
     public class SitesController : ApiController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private TimeSlottingDBContext db = new TimeSlottingDBContext();
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin")]

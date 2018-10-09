@@ -12,17 +12,18 @@ using Newtonsoft.Json;
 using Microsoft.Owin.Security.DataProtection;
 using System.Web.Mvc;
 using System.Text.RegularExpressions;
+using TimeSlotting.Data.Entities;
+using TimeSlotting.Data;
 
 namespace TimeSlotting.Controllers
 {
     [HandleError]
     public class WebUsersController : ApiController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private TimeSlottingDBContext db = new TimeSlottingDBContext();
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
-
         public IHttpActionResult GetRoleName(string id)
         {
             return Ok(Common.GetRoleName(id));
@@ -30,7 +31,6 @@ namespace TimeSlotting.Controllers
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
-
         public IHttpActionResult GetUserName(int id)
         {
             return Ok(Common.GetUserName(id));
@@ -38,10 +38,9 @@ namespace TimeSlotting.Controllers
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin")]
-
         public IHttpActionResult GetUsers()
         {
-            var userList = new List<Tuple<WebUser, ApplicationUser, String>>();
+            var userList = new List<Tuple<WebUser, User, String>>();
             var users = (from m in db.WebUsers
                          join u in db.Users on m.ASPId equals u.Id
                          where m.IsDeleted == false
@@ -56,8 +55,8 @@ namespace TimeSlotting.Controllers
 
             foreach (dynamic user in users)
             {
-                var role = Common.GetRoleName(((ApplicationUser)user.u).Roles.First().RoleId);
-                Tuple<WebUser, ApplicationUser, String> tuple = new Tuple<WebUser, ApplicationUser, String>(user.m, user.u, role);
+                var role = Common.GetRoleName(((User)user.u).Roles.First().RoleId);
+                Tuple<WebUser, User, String> tuple = new Tuple<WebUser, User, String>(user.m, user.u, role);
                 userList.Add(tuple);
             }
 
@@ -140,7 +139,7 @@ namespace TimeSlotting.Controllers
                 var userManager = Common.GetUserManager();
                 if (user.Id == 0)
                 {                    
-                    var applicationUser = new ApplicationUser();
+                    var applicationUser = new User();
                     applicationUser.Email = email;
                     applicationUser.UserName = email;
 
@@ -196,7 +195,7 @@ namespace TimeSlotting.Controllers
                         if (password != "")
                         {
                             var provider = new DpapiDataProtectionProvider("Sample");
-                            userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("PasswordReset"));
+                            userManager.UserTokenProvider = new DataProtectorTokenProvider<User>(provider.Create("PasswordReset"));
 
                             var token = userManager.GeneratePasswordResetToken(userASP.Id);
                             var reset = userManager.ResetPassword(userASP.Id, token, password);
