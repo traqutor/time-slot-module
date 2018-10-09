@@ -14,6 +14,7 @@ using System.Web.Mvc;
 using System.Text.RegularExpressions;
 using TimeSlotting.Data.Entities;
 using TimeSlotting.Data;
+using TimeSlotting.Data.Entities.Customers.Fleets;
 
 namespace TimeSlotting.Controllers
 {
@@ -43,7 +44,7 @@ namespace TimeSlotting.Controllers
             var userList = new List<Tuple<WebUser, User, String>>();
             var users = (from m in db.WebUsers
                          join u in db.Users on m.ASPId equals u.Id
-                         where m.IsDeleted == false
+                         where m.EntityStatus != EntityStatus.DELETED
                          select new { m, u }).OrderBy(m => m.m.LastName).ToList();
 
             int? id = null;
@@ -105,7 +106,7 @@ namespace TimeSlotting.Controllers
         {
             var users = (from m in db.WebUsers
                          join u in db.Users on m.ASPId equals u.Id
-                         where m.IsDeleted == false && m.CustomerId == cid
+                         where m.EntityStatus != EntityStatus.DELETED && m.CustomerId == cid
                          select new { m, u }).OrderBy(x => x.m.LastName).ToList();
 
             List<WebUser> drivers = new List<WebUser>();
@@ -149,9 +150,9 @@ namespace TimeSlotting.Controllers
                         userManager.AddToRole(applicationUser.Id, role);
 
                         user.ASPId = applicationUser.Id;
-                        user.IsDeleted = false;
-                        user.CreatedDate = DateTime.Now;
-                        user.ModifiedDate = DateTime.Now;
+                        user.EntityStatus = EntityStatus.NORMAL;
+                        user.CreationDate = DateTime.UtcNow;
+                        user.ModificationDate = DateTime.UtcNow;
                         user.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
                         user.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
@@ -183,12 +184,12 @@ namespace TimeSlotting.Controllers
 
                     if (result.Result.Succeeded)
                     {
-                        user.ModifiedDate = DateTime.Now;
+                        user.ModificationDate = DateTime.UtcNow;
                         user.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
                         db.Entry(user).State = EntityState.Modified;
                         db.Entry(user).Property(x => x.ASPId).IsModified = false;
-                        db.Entry(user).Property(x => x.CreatedDate).IsModified = false;
+                        db.Entry(user).Property(x => x.CreationDate).IsModified = false;
                         db.Entry(user).Property(x => x.CreatedBy).IsModified = false;
                         db.SaveChanges();
 
@@ -250,7 +251,7 @@ namespace TimeSlotting.Controllers
             }
             else
             {
-                user.IsDeleted = true;
+                user.EntityStatus = EntityStatus.DELETED;
                 db.SaveChanges();
             }
 

@@ -13,6 +13,9 @@ using Microsoft.AspNet.Identity;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Web.Mvc;
+using TimeSlotting.Data;
+using TimeSlotting.Data.Entities;
+using TimeSlotting.Data.Entities.Deliveries;
 
 namespace TimeSlotting.Controllers
 {
@@ -25,7 +28,7 @@ namespace TimeSlotting.Controllers
 
         public IHttpActionResult GetTimeSlots()
         {
-            return Ok(db.TimeSlots.Where(x => !x.IsDeleted).OrderBy(x => x.StartTime).ToList());
+            return Ok(db.TimeSlots.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.StartTime).ToList());
         }
 
         public IHttpActionResult GetTimeSlot(int id)
@@ -50,9 +53,9 @@ namespace TimeSlotting.Controllers
 
                 if (timeslot.Id == 0)
                 {
-                    timeslot.IsDeleted = false;
-                    timeslot.CreatedDate = DateTime.Now;
-                    timeslot.ModifiedDate = DateTime.Now;
+                    timeslot.EntityStatus = EntityStatus.NORMAL;
+                    timeslot.CreationDate = DateTime.UtcNow;
+                    timeslot.ModificationDate = DateTime.UtcNow;
                     timeslot.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
                     timeslot.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
@@ -60,11 +63,11 @@ namespace TimeSlotting.Controllers
                 }
                 else
                 {
-                    timeslot.ModifiedDate = DateTime.Now;
+                    timeslot.ModificationDate = DateTime.UtcNow;
                     timeslot.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
                     db.Entry(timeslot).State = EntityState.Modified;
-                    db.Entry(timeslot).Property(x => x.CreatedDate).IsModified = false;
+                    db.Entry(timeslot).Property(x => x.CreationDate).IsModified = false;
                     db.Entry(timeslot).Property(x => x.CreatedBy).IsModified = false;
                 }
 
@@ -89,7 +92,7 @@ namespace TimeSlotting.Controllers
             }
             else
             {
-                timeslot.IsDeleted = true;
+                timeslot.EntityStatus = EntityStatus.DELETED;
                 db.SaveChanges();
             }
 

@@ -8,6 +8,9 @@ using TimeSlotting.Models;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
+using TimeSlotting.Data.Entities.Deliveries;
+using TimeSlotting.Data;
+using TimeSlotting.Data.Entities;
 
 namespace TimeSlotting.Controllers
 {
@@ -19,14 +22,14 @@ namespace TimeSlotting.Controllers
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         public IHttpActionResult GetSuppliers()
         {
-            return Ok(db.Suppliers.Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToList());
+            return Ok(db.Suppliers.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList());
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         public IHttpActionResult GetSupplierList()
         {
-            return Ok(db.Suppliers.Where(x => !x.IsDeleted && x.IsEnabled).OrderBy(x => x.Name).ToList());
+            return Ok(db.Suppliers.Where(x => x.EntityStatus == EntityStatus.NORMAL).OrderBy(x => x.Name).ToList());
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator")]
@@ -56,9 +59,9 @@ namespace TimeSlotting.Controllers
 
                 if (supplier.Id == 0)
                 {
-                    supplier.IsDeleted = false;
-                    supplier.CreatedDate = DateTime.Now;
-                    supplier.ModifiedDate = DateTime.Now;
+                    supplier.EntityStatus = EntityStatus.NORMAL;
+                    supplier.CreationDate = DateTime.UtcNow;
+                    supplier.ModificationDate = DateTime.UtcNow;
                     supplier.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
                     supplier.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
@@ -66,11 +69,11 @@ namespace TimeSlotting.Controllers
                 }
                 else
                 {
-                    supplier.ModifiedDate = DateTime.Now;
+                    supplier.ModificationDate = DateTime.UtcNow;
                     supplier.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
                     db.Entry(supplier).State = EntityState.Modified;
-                    db.Entry(supplier).Property(x => x.CreatedDate).IsModified = false;
+                    db.Entry(supplier).Property(x => x.CreationDate).IsModified = false;
                     db.Entry(supplier).Property(x => x.CreatedBy).IsModified = false;
                 }
 
@@ -97,7 +100,7 @@ namespace TimeSlotting.Controllers
             }
             else
             {
-                supplier.IsDeleted = true;
+                supplier.EntityStatus = EntityStatus.DELETED;
                 db.SaveChanges();
             }
 

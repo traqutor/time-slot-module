@@ -31,8 +31,8 @@ namespace TimeSlotting.Data.Entities.Customers.Fleets
 
 
         public EntityStatus EntityStatus { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime ModificationDate { get; set; }
         public int CreatedBy { get; set; }
         public int ModifiedBy { get; set; }
     }

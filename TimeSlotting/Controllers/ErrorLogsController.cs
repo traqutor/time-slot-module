@@ -6,6 +6,8 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using TimeSlotting.Models;
 using System.Web.Mvc;
+using TimeSlotting.Data;
+using TimeSlotting.Data.Entities.Logs;
 
 namespace TimeSlotting.Controllers
 {

@@ -4,10 +4,12 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
-using TimeSlotting.Models;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
+using TimeSlotting.Data;
+using TimeSlotting.Data.Entities;
+using TimeSlotting.Data.Entities.Deliveries;
 
 namespace TimeSlotting.Controllers
 {
@@ -21,14 +23,14 @@ namespace TimeSlotting.Controllers
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         public IHttpActionResult GetCommodities()
         {
-            return Ok(db.Commodities.Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToList());
+            return Ok(db.Commodities.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList());
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         public IHttpActionResult GetCommodityList()
         {
-            return Ok(db.Commodities.Where(x => !x.IsDeleted && x.IsEnabled).OrderBy(x => x.Name).ToList());
+            return Ok(db.Commodities.Where(x => x.EntityStatus == EntityStatus.NORMAL).OrderBy(x => x.Name).ToList());
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator")]
@@ -58,9 +60,9 @@ namespace TimeSlotting.Controllers
 
                 if (commodity.Id == 0)
                 {
-                    commodity.IsDeleted = false;
-                    commodity.CreatedDate = DateTime.Now;
-                    commodity.ModifiedDate = DateTime.Now;
+                    commodity.EntityStatus = 0;
+                    commodity.CreationDate = DateTime.UtcNow;
+                    commodity.ModificationDate = DateTime.UtcNow;
                     commodity.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
                     commodity.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
@@ -68,11 +70,11 @@ namespace TimeSlotting.Controllers
                 }
                 else
                 {
-                    commodity.ModifiedDate = DateTime.Now;
+                    commodity.ModificationDate = DateTime.UtcNow;
                     commodity.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
                     db.Entry(commodity).State = EntityState.Modified;
-                    db.Entry(commodity).Property(x => x.CreatedDate).IsModified = false;
+                    db.Entry(commodity).Property(x => x.CreationDate).IsModified = false;
                     db.Entry(commodity).Property(x => x.CreatedBy).IsModified = false;
                 }
 
@@ -99,7 +101,7 @@ namespace TimeSlotting.Controllers
             }
             else
             {
-                commodity.IsDeleted = true;
+                commodity.EntityStatus = EntityStatus.DELETED;
                 db.SaveChanges();
             }
 

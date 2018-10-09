@@ -8,6 +8,9 @@ using System.Web.Mvc;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
+using TimeSlotting.Data;
+using TimeSlotting.Data.Entities;
+using TimeSlotting.Data.Entities.Customers.Fleets;
 
 namespace TimeSlotting.Controllers
 {
@@ -21,7 +24,7 @@ namespace TimeSlotting.Controllers
         public IHttpActionResult GetFleets()
         {
             int? id = null;
-            var fleets = db.Fleets.Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToList();
+            var fleets = db.Fleets.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList();
             if (!User.IsInRole("Administrator"))
             {
                 id = Common.GetCustomerId(User.Identity.GetUserId());
@@ -33,7 +36,7 @@ namespace TimeSlotting.Controllers
 
         public IHttpActionResult GetFleets(int id)
         {
-            return Ok(db.Fleets.Where(x => x.CustomerId ==  id && !x.IsDeleted).OrderBy(x => x.Name).ToList());
+            return Ok(db.Fleets.Where(x => x.CustomerId ==  id && x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList());
         }
 
         public IHttpActionResult GetFleet(int id)
@@ -58,9 +61,9 @@ namespace TimeSlotting.Controllers
 
                 if (fleet.Id == 0)
                 {
-                    fleet.IsDeleted = false;
-                    fleet.CreatedDate = DateTime.Now;
-                    fleet.ModifiedDate = DateTime.Now;
+                    fleet.EntityStatus = EntityStatus.NORMAL;
+                    fleet.CreationDate = DateTime.UtcNow;
+                    fleet.ModificationDate = DateTime.UtcNow;
                     fleet.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
                     fleet.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
@@ -68,11 +71,11 @@ namespace TimeSlotting.Controllers
                 }
                 else
                 {
-                    fleet.ModifiedDate = DateTime.Now;
+                    fleet.ModificationDate = DateTime.UtcNow;
                     fleet.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
                     db.Entry(fleet).State = EntityState.Modified;
-                    db.Entry(fleet).Property(x => x.CreatedDate).IsModified = false;
+                    db.Entry(fleet).Property(x => x.CreationDate).IsModified = false;
                     db.Entry(fleet).Property(x => x.CreatedBy).IsModified = false;
                 }
 
@@ -97,7 +100,7 @@ namespace TimeSlotting.Controllers
             }
             else
             {
-                fleet.IsDeleted = true;
+                fleet.EntityStatus = EntityStatus.NORMAL;
                 db.SaveChanges();
             }
 

@@ -13,6 +13,9 @@ using Microsoft.AspNet.Identity;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Web.Mvc;
+using TimeSlotting.Data;
+using TimeSlotting.Data.Entities;
+using TimeSlotting.Data.Entities.Deliveries;
 
 namespace TimeSlotting.Controllers
 {
@@ -25,14 +28,13 @@ namespace TimeSlotting.Controllers
 
         public IHttpActionResult GetTimeSlots()
         {
-            var timeslots = db.DeliveryTimeSlots.Where(x => !x.IsDeleted).OrderBy(x => x.TimeSlot.StartTime).ToList();
+            var timeslots = db.DeliveryTimeSlots.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.TimeSlot.StartTime).ToList();
 
             return Ok(timeslots);
         }
 
         public IHttpActionResult GetTimeSlotData(int sid, string day)
         {
-            //int sid = 0;
             DateTime dayDate = DateTime.Parse(day);
 
             var site = db.Sites.Find(sid);
@@ -46,14 +48,14 @@ namespace TimeSlotting.Controllers
             //                    .Select(c => Tuple.Create(c.m, (c.dj == null ? new DeliveryTimeSlot() : c.dj))).ToList();
 
             var timeslots = (from m in db.TimeSlots
-                             where !m.IsDeleted && m.IsEnabled
+                             where m.EntityStatus == EntityStatus.NORMAL
                              select m).OrderBy(x => x.StartTime).ToList();
 
             List<Tuple<TimeSlot, DeliveryTimeSlot>> list = new List<Tuple<TimeSlot, DeliveryTimeSlot>>();
             foreach (TimeSlot item in timeslots)
             {
                 var timeslot = (from m in db.DeliveryTimeSlots
-                                where !m.IsDeleted && m.TimeSlotId == item.Id
+                                where m.EntityStatus != EntityStatus.DELETED && m.TimeSlotId == item.Id
                                 && m.SiteId == sid && m.DeliveryDate == DbFunctions.TruncateTime(dayDate.Date)
                                 select m).ToList();
 
@@ -77,7 +79,7 @@ namespace TimeSlotting.Controllers
 
         public IHttpActionResult GetTimeSlot(int tid, int sid, DateTime day)
         {
-            var timeslot = db.DeliveryTimeSlots.Where(x => !x.IsDeleted && x.TimeSlotId == tid && x.SiteId == sid && x.DeliveryDate == day.Date).ToList();
+            var timeslot = db.DeliveryTimeSlots.Where(x => x.EntityStatus != EntityStatus.DELETED && x.TimeSlotId == tid && x.SiteId == sid && x.DeliveryDate == day.Date).ToList();
             if (timeslot.Count > 0)
             {
                 return NotFound();
@@ -97,9 +99,9 @@ namespace TimeSlotting.Controllers
 
                 if (timeslot.Id == 0)
                 {
-                    timeslot.IsDeleted = false;
-                    timeslot.CreatedDate = DateTime.Now;
-                    timeslot.ModifiedDate = DateTime.Now;
+                    timeslot.EntityStatus = EntityStatus.NORMAL;
+                    timeslot.CreationDate = DateTime.UtcNow;
+                    timeslot.ModificationDate = DateTime.UtcNow;
                     timeslot.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
                     timeslot.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
@@ -107,11 +109,11 @@ namespace TimeSlotting.Controllers
                 }
                 else
                 {
-                    timeslot.ModifiedDate = DateTime.Now;
+                    timeslot.ModificationDate = DateTime.UtcNow;
                     timeslot.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
                     db.Entry(timeslot).State = EntityState.Modified;
-                    db.Entry(timeslot).Property(x => x.CreatedDate).IsModified = false;
+                    db.Entry(timeslot).Property(x => x.CreationDate).IsModified = false;
                     db.Entry(timeslot).Property(x => x.CreatedBy).IsModified = false;
                 }
 
@@ -136,7 +138,7 @@ namespace TimeSlotting.Controllers
             }
             else
             {
-                timeslot.IsDeleted = true;
+                timeslot.EntityStatus = EntityStatus.DELETED;
                 db.SaveChanges();
             }
 

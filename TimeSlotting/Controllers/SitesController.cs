@@ -7,6 +7,9 @@ using TimeSlotting.Models;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
+using TimeSlotting.Data;
+using TimeSlotting.Data.Entities;
+using TimeSlotting.Data.Entities.Customers;
 
 namespace TimeSlotting.Controllers
 {
@@ -20,7 +23,7 @@ namespace TimeSlotting.Controllers
         public IHttpActionResult GetSites()
         {
             int? id = null;
-            var sites = db.Sites.Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToList();
+            var sites = db.Sites.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList();
             if (!User.IsInRole("Administrator"))
             {
                 id = Common.GetCustomerId(User.Identity.GetUserId());
@@ -34,7 +37,7 @@ namespace TimeSlotting.Controllers
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         public IHttpActionResult GetSites(int id)
         {
-            return Ok(db.Sites.Where(x => x.CustomerId == id && !x.IsDeleted).OrderBy(x => x.Name).ToList());
+            return Ok(db.Sites.Where(x => x.CustomerId == id && x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList());
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
@@ -63,9 +66,9 @@ namespace TimeSlotting.Controllers
 
                 if (site.Id == 0)
                 {
-                    site.IsDeleted = false;
-                    site.CreatedDate = DateTime.Now;
-                    site.ModifiedDate = DateTime.Now;
+                    site.EntityStatus = EntityStatus.NORMAL;
+                    site.CreationDate = DateTime.UtcNow;
+                    site.ModificationDate = DateTime.UtcNow;
                     site.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
                     site.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
@@ -73,11 +76,11 @@ namespace TimeSlotting.Controllers
                 }
                 else
                 {
-                    site.ModifiedDate = DateTime.Now;
+                    site.ModificationDate = DateTime.UtcNow;
                     site.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
                     db.Entry(site).State = EntityState.Modified;
-                    db.Entry(site).Property(x => x.CreatedDate).IsModified = false;
+                    db.Entry(site).Property(x => x.CreationDate).IsModified = false;
                     db.Entry(site).Property(x => x.CreatedBy).IsModified = false;
                 }
 
@@ -104,7 +107,7 @@ namespace TimeSlotting.Controllers
             }
             else
             {
-                site.IsDeleted = true;
+                site.EntityStatus = EntityStatus.DELETED;
                 db.SaveChanges();
             }
 

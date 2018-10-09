@@ -10,13 +10,14 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using TimeSlotting.Models;
 using TimeSlotting.Data.Entities;
+using TimeSlotting.Data;
+using TimeSlotting.Data.Entities.Logs;
 
 namespace TimeSlotting
 {
     [HandleError]
     public class Common
     {
-
         public static UserManager<User> GetUserManager()
         {
             var userManager = new UserManager<User>(new UserStore<User>(TimeSlottingDBContext.Create()));

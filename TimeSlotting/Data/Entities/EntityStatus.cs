@@ -8,6 +8,8 @@ namespace TimeSlotting.Data.Entities
     public enum EntityStatus
     {
         NORMAL,
-        DELETED
+        DELETED,
+        DISABLED
+
     }
 }

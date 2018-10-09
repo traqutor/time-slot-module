@@ -5,6 +5,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
+using TimeSlotting.Data;
 using TimeSlotting.Data.Entities;
 using TimeSlotting.Models;
 

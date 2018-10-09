@@ -10,6 +10,9 @@ using System.Web.Mvc;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
+using TimeSlotting.Data;
+using TimeSlotting.Data.Entities;
+using TimeSlotting.Data.Entities.Customers.Fleets;
 
 namespace TimeSlotting.Controllers
 {
@@ -23,7 +26,7 @@ namespace TimeSlotting.Controllers
         public IHttpActionResult GetVehicles()
         {
             int? id = null;
-            var vehicles = db.Vehicles.Where(x => !x.IsDeleted).OrderBy(x => x.Rego).ToList();
+            var vehicles = db.Vehicles.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Rego).ToList();
             if (!User.IsInRole("Administrator"))
             {
                 id = Common.GetCustomerId(User.Identity.GetUserId());
@@ -37,7 +40,7 @@ namespace TimeSlotting.Controllers
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         public IHttpActionResult GetVehicles(int id)
         {
-            return Ok(db.Vehicles.Where(x => x.FleetId == id && !x.IsDeleted).OrderBy(x => x.Rego).ToList());
+            return Ok(db.Vehicles.Where(x => x.FleetId == id && x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Rego).ToList());
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
@@ -46,7 +49,7 @@ namespace TimeSlotting.Controllers
         {
             var vehicles = (from m in db.Vehicles
                          join d in db.VehicleDrivers on m.Id equals d.VehicleId
-                         where !m.IsDeleted && m.IsEnabled && d.WebUserId == uid
+                         where m.EntityStatus == EntityStatus.NORMAL && d.WebUserId == uid
                          select m).OrderBy(m => m.Rego).ToList();
 
             return Ok(vehicles);
@@ -78,9 +81,9 @@ namespace TimeSlotting.Controllers
 
                 if (vehicle.Id == 0)
                 {
-                    vehicle.IsDeleted = false;
-                    vehicle.CreatedDate = DateTime.Now;
-                    vehicle.ModifiedDate = DateTime.Now;
+                    vehicle.EntityStatus = EntityStatus.NORMAL;
+                    vehicle.CreationDate = DateTime.UtcNow;
+                    vehicle.ModificationDate = DateTime.UtcNow;
                     vehicle.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
                     vehicle.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
@@ -88,11 +91,11 @@ namespace TimeSlotting.Controllers
                 }
                 else
                 {
-                    vehicle.ModifiedDate = DateTime.Now;
+                    vehicle.ModificationDate = DateTime.UtcNow;
                     vehicle.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
                     db.Entry(vehicle).State = EntityState.Modified;
-                    db.Entry(vehicle).Property(x => x.CreatedDate).IsModified = false;
+                    db.Entry(vehicle).Property(x => x.CreationDate).IsModified = false;
                     db.Entry(vehicle).Property(x => x.CreatedBy).IsModified = false;
                 }
 
@@ -119,7 +122,7 @@ namespace TimeSlotting.Controllers
             }
             else
             {
-                vehicle.IsDeleted = true;
+                vehicle.EntityStatus = EntityStatus.DELETED;
                 db.SaveChanges();
             }
 

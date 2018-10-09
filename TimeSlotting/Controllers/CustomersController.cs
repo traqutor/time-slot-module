@@ -8,6 +8,9 @@ using Microsoft.AspNet.Identity;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Web.Mvc;
+using TimeSlotting.Data;
+using TimeSlotting.Data.Entities.Customers;
+using TimeSlotting.Data.Entities;
 
 namespace TimeSlotting.Controllers
 {
@@ -20,7 +23,7 @@ namespace TimeSlotting.Controllers
 
         public IHttpActionResult GetCustomers()
         {
-            return Ok(db.Customers.Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToList());
+            return Ok(db.Customers.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList());
         }
 
         public IHttpActionResult GetCustomer(int id)
@@ -45,9 +48,9 @@ namespace TimeSlotting.Controllers
 
                 if (customer.Id == 0)
                 {
-                    customer.IsDeleted = false;
-                    customer.CreatedDate = DateTime.Now;
-                    customer.ModifiedDate = DateTime.Now;
+                    customer.EntityStatus = EntityStatus.NORMAL;
+                    customer.CreationDate = DateTime.UtcNow;
+                    customer.ModificationDate = DateTime.UtcNow;
                     customer.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
                     customer.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
@@ -55,11 +58,11 @@ namespace TimeSlotting.Controllers
                 }
                 else
                 {
-                    customer.ModifiedDate = DateTime.Now;
+                    customer.ModificationDate = DateTime.UtcNow;
                     customer.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
                     db.Entry(customer).State = EntityState.Modified;
-                    db.Entry(customer).Property(x => x.CreatedDate).IsModified = false;
+                    db.Entry(customer).Property(x => x.CreationDate).IsModified = false;
                     db.Entry(customer).Property(x => x.CreatedBy).IsModified = false;
                 }
 
@@ -84,7 +87,7 @@ namespace TimeSlotting.Controllers
             }
             else
             {
-                customer.IsDeleted = true;
+                customer.EntityStatus = EntityStatus.NORMAL;
                 db.SaveChanges();
             }
 

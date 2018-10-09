@@ -9,6 +9,8 @@ using System.Data.Entity.Validation;
 using Microsoft.AspNet.Identity;
 using System.Web.Routing;
 using TimeSlotting.Models;
+using TimeSlotting.Data.Entities.Logs;
+using TimeSlotting.Data;
 
 namespace TimeSlotting
 {

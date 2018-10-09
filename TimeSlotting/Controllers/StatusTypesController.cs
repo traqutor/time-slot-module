@@ -7,6 +7,9 @@ using TimeSlotting.Models;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
+using TimeSlotting.Data;
+using TimeSlotting.Data.Entities;
+using TimeSlotting.Data.Entities.Deliveries;
 
 namespace TimeSlotting.Controllers
 {
@@ -18,14 +21,14 @@ namespace TimeSlotting.Controllers
         [System.Web.Http.Authorize(Roles = "Administrator")]
         public IHttpActionResult GetStatusTypes()
         {
-            return Ok(db.StatusTypes.Where(x => !x.IsDeleted).OrderBy(x => x.Name).ToList());
+            return Ok(db.StatusTypes.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList());
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         public IHttpActionResult GetStatusTypeList()
         {
-            return Ok(db.StatusTypes.Where(x => !x.IsDeleted && x.IsEnabled).OrderBy(x => x.Name).ToList());
+            return Ok(db.StatusTypes.Where(x => x.EntityStatus == EntityStatus.NORMAL).OrderBy(x => x.Name).ToList());
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator")]
@@ -54,9 +57,9 @@ namespace TimeSlotting.Controllers
 
                 if (statusType.Id == 0)
                 {
-                    statusType.IsDeleted = false;
-                    statusType.CreatedDate = DateTime.Now;
-                    statusType.ModifiedDate = DateTime.Now;
+                    statusType.EntityStatus = EntityStatus.NORMAL;
+                    statusType.CreationDate = DateTime.UtcNow;
+                    statusType.ModificationDate = DateTime.UtcNow;
                     statusType.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
                     statusType.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
@@ -64,11 +67,11 @@ namespace TimeSlotting.Controllers
                 }
                 else
                 {
-                    statusType.ModifiedDate = DateTime.Now;
+                    statusType.ModificationDate = DateTime.UtcNow;
                     statusType.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
                     db.Entry(statusType).State = EntityState.Modified;
-                    db.Entry(statusType).Property(x => x.CreatedDate).IsModified = false;
+                    db.Entry(statusType).Property(x => x.CreationDate).IsModified = false;
                     db.Entry(statusType).Property(x => x.CreatedBy).IsModified = false;
                 }
 
@@ -95,7 +98,7 @@ namespace TimeSlotting.Controllers
             }
             else
             {
-                statusType.IsDeleted = true;
+                statusType.EntityStatus = EntityStatus.DELETED;
                 db.SaveChanges();
             }
 
