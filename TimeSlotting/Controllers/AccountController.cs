@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -6,22 +7,32 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using TimeSlotting.Data;
 using TimeSlotting.Data.Entities;
 using TimeSlotting.Models;
+using TimeSlotting.Models.Users;
 
 namespace TimeSlotting.Controllers
 {
+    /// <summary>
+    /// User info etc
+    /// </summary>
     [Authorize]
     [HandleError]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private TimeSlottingDBContext _context;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public AccountController()
         {
+            _context = TimeSlottingDBContext.Create();
+            _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(_context));
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -231,6 +242,15 @@ namespace TimeSlotting.Controllers
         public ActionResult ForgotPasswordConfirmation()
         {
             return View();
+        }
+
+        [Route("UserInfo")]
+        public UserListEntryViewModel GetUserInfo()
+        {
+            string loggedUserId = User.Identity.GetUserId();
+            var userToReturn = _context.WebUsers.Include(u => u.Customer).SingleOrDefault(u => u.ASPId == loggedUserId);
+            var possibleRoles = _roleManager.Roles.ToList();
+            return new UserListEntryViewModel(userToReturn, possibleRoles);
         }
 
         //

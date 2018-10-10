@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TimeSlotting</name>
+    </assembly>
+    <members>
+        <member name="T:TimeSlotting.Controllers.AccountController">
+            <summary>
+            User info etc
+            </summary>
+        </member>
+        <member name="F:TimeSlotting.Data.Entities.UserSystemRoles.PossibleRoles">
+            <summary>
+            used for database initialization, if adding new roles, please assign it here so the initializer will create all roles properly
+            </summary>
+        </member>
+    </members>
+</doc>
