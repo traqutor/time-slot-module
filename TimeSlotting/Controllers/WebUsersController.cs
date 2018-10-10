@@ -15,6 +15,8 @@ using System.Text.RegularExpressions;
 using TimeSlotting.Data.Entities;
 using TimeSlotting.Data;
 using TimeSlotting.Data.Entities.Customers.Fleets;
+using TimeSlotting.Models.Users;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace TimeSlotting.Controllers
 {
@@ -22,6 +24,12 @@ namespace TimeSlotting.Controllers
     public class WebUsersController : ApiController
     {
         private TimeSlottingDBContext db = new TimeSlottingDBContext();
+        private readonly RoleManager<IdentityRole> _roleManager;
+        
+        public WebUsersController()
+        {
+            _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
+        }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
@@ -256,6 +264,15 @@ namespace TimeSlotting.Controllers
             }
 
             return Ok(response);
+        }
+
+
+        public UserListEntryViewModel GetUserInfo()
+        {
+            string loggedUserId = User.Identity.GetUserId();
+            var userToReturn = db.WebUsers.Include(u => u.Customer).SingleOrDefault(u => u.ASPId == loggedUserId);
+            var possibleRoles = _roleManager.Roles.ToList();
+            return new UserListEntryViewModel(userToReturn, possibleRoles);
         }
 
         protected override void Dispose(bool disposing)
