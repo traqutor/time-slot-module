@@ -6,20 +6,17 @@ using TimeSlotting.Data.Entities.Customers;
 
 namespace TimeSlotting.Models.Customers
 {
-    public class CustomerListEntryViewModel
+    public class SiteListEntryViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public DateTime CreationDate { get; set; }
-        public DateTime ModificationDate { get; set; }
-
-        public CustomerListEntryViewModel()
+        public SiteListEntryViewModel()
         {
 
         }
 
-        public CustomerListEntryViewModel(Customer entity)
+        public SiteListEntryViewModel(Site entity)
         {
             Id = entity.Id;
             Name = entity.Name;

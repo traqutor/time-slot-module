@@ -17,6 +17,9 @@ using TimeSlotting.Models.Users;
 
 namespace TimeSlotting.Controllers
 {
+    /// <summary>
+    /// User info etc
+    /// </summary>
     [Authorize]
     [HandleError]
     public class AccountController : Controller

@@ -216,6 +216,7 @@
     <Compile Include="Controllers\ContractsController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\DeliveryTimeSlotsController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SitesController.cs" />
     <Compile Include="Controllers\StatusTypesController.cs" />
     <Compile Include="Controllers\EmailLogsController.cs" />
@@ -260,7 +261,10 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Customers\CustomerListEntryViewModel.cs" />
+    <Compile Include="Models\Customers\Fleets\FleetListEntryViewModel.cs" />
+    <Compile Include="Models\Customers\SiteListEntryViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\SearchResults.cs" />
     <Compile Include="Models\Users\RoleListEntryViewModel.cs" />
     <Compile Include="Models\Users\UserListEntryViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -270,6 +274,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
+    <Compile Include="Services\RoleService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
