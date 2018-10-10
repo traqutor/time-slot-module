@@ -18,10 +18,12 @@ namespace TimeSlotting.Models.Users
         public string Name { get; set; }
         public string Surname { get; set; }
 
-        public string Role { get; set; }
+        public RoleListEntryViewModel Role { get; set; }
 
         public CustomerListEntryViewModel Customer { get; set; }
         public SiteListEntryViewModel Site { get; set; }
+
+        public EntityStatus EntityStatus { get; set; }
 
         public UserListEntryViewModel()
         {
@@ -33,6 +35,9 @@ namespace TimeSlotting.Models.Users
             Id = entity.Id;
             Email = entity.User.UserName;
 
+            Name = entity.FirstName;
+            Surname = entity.LastName;
+
             if (entity.Customer != null)
             {
                 Customer = new CustomerListEntryViewModel(entity.Customer);
@@ -43,10 +48,9 @@ namespace TimeSlotting.Models.Users
                 Site = new SiteListEntryViewModel(entity.Site);
             }
 
-            //if (entity.FarmUsers != null)
-            //  Farms = entity.FarmUsers.Select(fu => new FarmListEntryViewModel(fu.Farm)).ToList();
+            Role = new RoleListEntryViewModel(roles.SingleOrDefault(r => r.Id == entity.User.Roles.FirstOrDefault().RoleId));
 
-            //Role = new RoleListEntryViewModel(roles.SingleOrDefault(r => r.Id == entity.Roles.FirstOrDefault().RoleId));
+            EntityStatus = entity.EntityStatus;
         }
     }
 }

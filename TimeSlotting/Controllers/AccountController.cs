@@ -244,14 +244,7 @@ namespace TimeSlotting.Controllers
             return View();
         }
 
-        [Route("UserInfo")]
-        public UserListEntryViewModel GetUserInfo()
-        {
-            string loggedUserId = User.Identity.GetUserId();
-            var userToReturn = _context.WebUsers.Include(u => u.Customer).SingleOrDefault(u => u.ASPId == loggedUserId);
-            var possibleRoles = _roleManager.Roles.ToList();
-            return new UserListEntryViewModel(userToReturn, possibleRoles);
-        }
+        
 
         //
         // GET: /Account/ResetPassword
