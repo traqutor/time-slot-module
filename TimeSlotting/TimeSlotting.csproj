@@ -274,6 +274,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Customers\CustomerListEntryViewModel.cs" />
     <Compile Include="Models\Customers\Fleets\FleetListEntryViewModel.cs" />
+    <Compile Include="Models\Customers\Fleets\VehicleListEntryViewModel.cs" />
     <Compile Include="Models\Customers\SiteListEntryViewModel.cs" />
     <Compile Include="Models\Deliveries\CommodityListEntryViewModel.cs" />
     <Compile Include="Models\Deliveries\ContractListEntryViewModel.cs" />

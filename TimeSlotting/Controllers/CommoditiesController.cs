@@ -21,6 +21,10 @@ namespace TimeSlotting.Controllers
 
         //[System.Web.Mvc.Authorize(Roles = "Administrator")]
         //[System.Web.Http.Authorize(Roles = "Administrator")]
+        /// <summary>
+        /// doesnt display deleted
+        /// </summary>
+        /// <returns></returns>
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [ResponseType(typeof(List<CommodityListEntryViewModel>))]
@@ -29,6 +33,10 @@ namespace TimeSlotting.Controllers
             return Ok(db.Commodities.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList().Select(el => new CommodityListEntryViewModel(el)).ToList());
         }
 
+        /// <summary>
+        /// displays only normal (no deleted and disabled)
+        /// </summary>
+        /// <returns></returns>
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [ResponseType(typeof(List<CommodityListEntryViewModel>))]
