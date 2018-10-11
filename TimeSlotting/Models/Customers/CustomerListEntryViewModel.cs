@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using TimeSlotting.Data.Entities;
 using TimeSlotting.Data.Entities.Customers;
 using TimeSlotting.Models.Users;
 
@@ -18,6 +19,8 @@ namespace TimeSlotting.Models.Customers
         public DateTime CreationDate { get; set; }
         public DateTime ModificationDate { get; set; }
 
+        public EntityStatus EntityStatus { get; set; }
+
         public CustomerListEntryViewModel()
         {
 
@@ -27,6 +30,8 @@ namespace TimeSlotting.Models.Customers
         {
             Id = entity.Id;
             Name = entity.Name;
+
+            EntityStatus = entity.EntityStatus;
 
             CreatedBy = entity.CreatedBy;
             ModifiedBy = entity.ModifiedBy;

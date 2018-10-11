@@ -45,7 +45,7 @@ namespace TimeSlotting.Controllers
         /// <summary>
         /// Creation and modification of the customer
         /// </summary>
-        /// <param name="model">Set model id to 0 if creating new. When creating/modfying only Name is take into account, rest is auto completed.</param>
+        /// <param name="model">Set model id to 0 if creating new. When creating/modfying only Name and EntityStatus is take into account, rest is auto completed.</param>
         /// <returns></returns>
         [ResponseType(typeof(CustomerListEntryViewModel))]
         public IHttpActionResult PutCustomer(CustomerListEntryViewModel model)
@@ -54,7 +54,7 @@ namespace TimeSlotting.Controllers
             if (model.Id == 0)
             {
                 customer.Name = model.Name;
-                customer.EntityStatus = EntityStatus.NORMAL;
+                customer.EntityStatus = model.EntityStatus;
                 customer.CreationDate = DateTime.UtcNow;
                 customer.ModificationDate = DateTime.UtcNow;
                 customer.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
@@ -65,7 +65,7 @@ namespace TimeSlotting.Controllers
             else
             {
                 customer = db.Customers.Find(model.Id);
-
+                customer.EntityStatus = model.EntityStatus;
                 customer.ModificationDate = DateTime.UtcNow;
                 customer.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
                 customer.Name = model.Name;
