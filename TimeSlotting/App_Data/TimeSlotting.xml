@@ -13,7 +13,7 @@
             <summary>
             Creation and modification of the customer
             </summary>
-            <param name="model">Set model id to 0 if creating new. When creating/modfying only Name is take into account, rest is auto completed.</param>
+            <param name="model">Set model id to 0 if creating new. When creating/modfying only Name and EntityStatus is take into account, rest is auto completed.</param>
             <returns></returns>
         </member>
         <member name="F:TimeSlotting.Data.Entities.UserSystemRoles.PossibleRoles">

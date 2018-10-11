@@ -33,7 +33,7 @@ export class CustomerService {
   putCustomer(customer: ICustomer, index: number): boolean {
     this.http.put(`${this.url}/api/Customers/PutCustomer`, customer)
       .subscribe((res: ICustomer) => {
-        if (index) {
+        if (index>=0) {
           this.customers[index] = res;
         } else {
           this.customers.push(res);

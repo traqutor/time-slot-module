@@ -7,11 +7,13 @@
       {{customer.name}}
 
       <button mat-icon-button
+              matTooltip="Edit Customer"
               (click)="editCustomer(customer, i)">
         <mat-icon>edit</mat-icon>
       </button>
 
       <button mat-icon-button
+              matTooltip="Delete customer"
       (click)="deleteCustomer(customer, i)">
         <mat-icon>delete</mat-icon>
       </button>

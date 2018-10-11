@@ -19,7 +19,7 @@ export class CustmerComponent implements OnInit {
 
   addCustomer() {
 
-    if (this.customerService.putCustomer(this.voidCustomer, null)) {
+    if (this.customerService.putCustomer(this.voidCustomer, -1)) {
 
     }
 
