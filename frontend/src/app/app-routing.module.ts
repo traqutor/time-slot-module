@@ -6,6 +6,7 @@ import {LoginComponent} from "./auth/login/login.component";
 import {FrameComponent} from "./common/frame/frame.component";
 import {CustmerComponent} from "./custmer/custmer.component";
 import {VendorsComponent} from "./vendors/vendors.component";
+import {SitesComponent} from "./sites/sites.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -14,6 +15,7 @@ const routes: Routes = [
     path: 'frame', component: FrameComponent, children: [
       {path: 'customers', component: CustmerComponent},
       {path: 'vendors', component: VendorsComponent},
+      {path: 'sites', component: SitesComponent},
     ]
   },
 ];

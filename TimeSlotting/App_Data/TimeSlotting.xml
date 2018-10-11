@@ -9,6 +9,18 @@
             User info etc
             </summary>
         </member>
+        <member name="M:TimeSlotting.Controllers.CommoditiesController.GetCommodities">
+            <summary>
+            doesnt display deleted
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.CommoditiesController.GetCommodityList">
+            <summary>
+            displays only normal (no deleted and disabled)
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:TimeSlotting.Controllers.CustomersController.PutCustomer(TimeSlotting.Models.Customers.CustomerListEntryViewModel)">
             <summary>
             Creation and modification of the customer
@@ -16,11 +28,96 @@
             <param name="model">Set model id to 0 if creating new. When creating/modfying only Name and EntityStatus is take into account, rest is auto completed.</param>
             <returns></returns>
         </member>
+        <member name="M:TimeSlotting.Controllers.SitesController.GetSites">
+            <summary>
+            gets site with customer id based on the logged user
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.SitesController.GetSites(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id">customer id</param>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.FleetsController.GetFleets">
+            <summary>
+            gets fleets with customer id based on the logged user
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.FleetsController.GetFleets(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id">customer id</param>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.FleetsController.PutFleet(TimeSlotting.Models.Customers.Fleets.FleetListEntryViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="model"> provide Name, Customer.Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.SuppliersController.GetSuppliers">
+            <summary>
+            doesnt display deleted
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.SuppliersController.GetSupplierList">
+            <summary>
+            displays only normal (no deleted and disabled)
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:TimeSlotting.Controllers.SuppliersController.PutSupplier(TimeSlotting.Models.Deliveries.SupplierListEntryViewModel)">
             <summary>
             Creation and modification of the supplier
             </summary>
             <param name="model">Set model id to 0 if creating new. When creating/modfying only Name and EntityStatus is take into account, rest is auto completed.</param>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.VehiclesController.GetVehicles">
+            <summary>
+            gets vehicles from all fleets with customer id based on the logged user
+            gets all vehicles for admin
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.VehiclesController.GetVehicles(System.Int32)">
+            <summary>
+            get vehicles from specific fleet
+            </summary>
+            <param name="id">fleet id</param>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.VehiclesController.GetDriverVehicles(System.Int32)">
+            <summary>
+            gets vehicles for a specific driver
+            </summary>
+            <param name="uid">driver id</param>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.VehiclesController.PutVehicle(TimeSlotting.Models.Customers.Fleets.VehicleListEntryViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="model">when creating/edidit, provide Rego, Fleet.id, Fleet.Customer.Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.VendorsController.GetVendors">
+            <summary>
+            doesnt display deleted
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.VendorsController.GetVendorList">
+            <summary>
+            displays only normal (no deleted and disabled)
+            </summary>
             <returns></returns>
         </member>
         <member name="M:TimeSlotting.Controllers.VendorsController.PutVendor(TimeSlotting.Models.Deliveries.VendorListEntryViewModel)">

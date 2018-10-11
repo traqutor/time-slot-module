@@ -10,6 +10,7 @@ import {IVendor} from "./vendor.model";
   providedIn: 'root'
 })
 export class VendorService {
+
   private vendors: Array<IVendor> = [];
   public vendorsChanged: BehaviorSubject<Array<IVendor>> = new BehaviorSubject<Array<IVendor>>([]);
 
@@ -43,9 +44,6 @@ export class VendorService {
 
   putVendor(vendor: IVendor, index: number)  {
 
-    console.log('vendor', vendor);
-    console.log('index', index);
-
     this.http.put(`${this.url}/api/Vendors/PutVendor`, vendor)
       .subscribe((res: IVendor) => {
 
@@ -72,7 +70,7 @@ export class VendorService {
       });
   }
 
-  deleteOrder(vendorId: number, index: number) {
+  deleteVendor(vendorId: number, index: number) {
     this.http.delete(`${this.url}/api/Vendors/DeleteVendor/${vendorId}`)
       .subscribe(() => {
         this.vendors.splice(index, 1);
@@ -82,4 +80,5 @@ export class VendorService {
         });
       });
   }
+
 }

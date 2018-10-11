@@ -1,10 +1,8 @@
 import {MatDialog} from "@angular/material";
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
-import {EntityStatusEnum, ICustomer} from "../user/user.model";
-import {CustomerService} from "../custmer/customer.service";
+import {EntityStatusEnum} from "../user/user.model";
 import {ConfirmDialogService} from "../common/confirm-dialog/confirm-dialog.service";
-import {CustomerDialogComponent} from "../custmer/customer-dialog/customer-dialog.component";
 import {IVendor} from "./vendor.model";
 import {VendorDialogComponent} from "./vendor-dialog/vendor-dialog.component";
 import {VendorService} from "./vendor.service";
@@ -60,7 +58,7 @@ export class VendorsComponent implements OnInit, OnDestroy {
     this.confirm.confirm('Delete Vendor', 'Are you sure you would like to delete the Vendor?')
       .subscribe((res: boolean) => {
         if (res) {
-          this.vendorService.deleteOrder(vendor.id, index);
+          this.vendorService.deleteVendor(vendor.id, index);
         }
       });
   }

@@ -1,3 +1,5 @@
+import {ISite} from "../sites/site.model";
+
 export interface AuthResponse {
   '.expires': string;
   '.issued': string;
@@ -36,10 +38,6 @@ export interface ICustomer {
   entityStatus: EntityStatusEnum
 }
 
-export interface ISite {
-  id: 0;
-  name: string;
-}
 
 
 export enum EntityStatusEnum {

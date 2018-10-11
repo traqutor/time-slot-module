@@ -1,3 +1,32 @@
-<p>
-  sites works!
-</p>
+<mat-toolbar color="primary">
+</mat-toolbar>
+
+<div class="app-padding-default">
+  <mat-list>
+
+    <h3 mat-subheader>SITES</h3>
+
+    <mat-list-item *ngFor="let site of sites; let i = index">
+      {{site.name}}
+
+      <button mat-icon-button
+              matTooltip="Edit site"
+              (click)="editSite(site, i)">
+        <mat-icon>edit</mat-icon>
+      </button>
+
+      <button mat-icon-button
+              matTooltip="Delete site"
+              (click)="deleteSite(site, i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+
+    </mat-list-item>
+  </mat-list>
+
+  <button mat-icon-button
+          matTooltip="Add site"
+          (click)="addSite()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
