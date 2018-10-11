@@ -1,0 +1,47 @@
+<mat-toolbar color="primary">
+</mat-toolbar>
+
+<div class="app-container">
+  <div fxFlexFill fxLayout="column" fxLayoutAlign="center center">
+
+    <mat-card class="mat-elevation-z4 app-padding-default">
+
+      <img src="./assets/genius_timeslot_logo_large.png" class="logo-large">
+
+      <form (ngSubmit)="onSignIn(f)"
+            #f="ngForm"
+            fxLayout="column"
+            fxLayoutAlign="center center">
+
+        <mat-form-field class="app-full-width">
+          <input matInput
+                 placeholder="Login"
+                 type="text"
+                 name="login"
+                 ngModel>
+        </mat-form-field>
+
+        <mat-form-field class="app-full-width">
+          <input matInput
+                 placeholder="Password"
+                 type="password"
+                 name="password"
+                 ngModel>
+        </mat-form-field>
+
+
+        <button mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="!f.valid">
+          Sign In
+        </button>
+
+
+      </form>
+
+      <mat-progress-bar *ngIf="isLogging" color="primary" [mode]="'indeterminate'">
+      </mat-progress-bar>
+    </mat-card>
+  </div>
+</div>

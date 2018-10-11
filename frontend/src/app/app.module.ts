@@ -1,10 +1,11 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {OverlayModule} from "@angular/cdk/overlay";
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {OverlayModule} from '@angular/cdk/overlay';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
+import {FlexLayoutModule} from "@angular/flex-layout";
 
 
 import {AppComponent} from './app.component';
@@ -20,13 +21,13 @@ import { FrameComponent } from './common/frame/frame.component';
     FrameComponent
   ],
   imports: [
-
     BrowserModule,
     AppRoutingModule,
     AppMaterialModule,
     FormsModule,
     HttpClientModule,
     HttpModule,
+    FlexLayoutModule,
     ReactiveFormsModule,
     OverlayModule,
     AppMaterialModule,
