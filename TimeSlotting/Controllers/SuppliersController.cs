@@ -11,6 +11,8 @@ using Microsoft.AspNet.Identity;
 using TimeSlotting.Data.Entities.Deliveries;
 using TimeSlotting.Data;
 using TimeSlotting.Data.Entities;
+using System.Collections.Generic;
+using TimeSlotting.Models.Deliveries;
 
 namespace TimeSlotting.Controllers
 {
@@ -20,21 +22,23 @@ namespace TimeSlotting.Controllers
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
+        [ResponseType(typeof(List<SupplierListEntryViewModel>))]
         public IHttpActionResult GetSuppliers()
         {
-            return Ok(db.Suppliers.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList());
+            return Ok(db.Suppliers.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList().Select(el => new SupplierListEntryViewModel(el)).ToList());
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
+        [ResponseType(typeof(List<SupplierListEntryViewModel>))]
         public IHttpActionResult GetSupplierList()
         {
-            return Ok(db.Suppliers.Where(x => x.EntityStatus == EntityStatus.NORMAL).OrderBy(x => x.Name).ToList());
+            return Ok(db.Suppliers.Where(x => x.EntityStatus == EntityStatus.NORMAL).OrderBy(x => x.Name).ToList().Select(el => new SupplierListEntryViewModel(el)).ToList());
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator")]
         [System.Web.Http.Authorize(Roles = "Administrator")]
-        [ResponseType(typeof(Supplier))]
+        [ResponseType(typeof(SupplierListEntryViewModel))]
         public IHttpActionResult GetSupplier(int id)
         {
             Supplier supplier = db.Suppliers.Find(id);
@@ -43,48 +47,47 @@ namespace TimeSlotting.Controllers
                 return NotFound();
             }
 
-            return Ok(supplier);
+            return Ok(new SupplierListEntryViewModel(supplier));
         }
 
+        /// <summary>
+        /// Creation and modification of the supplier
+        /// </summary>
+        /// <param name="model">Set model id to 0 if creating new. When creating/modfying only Name and EntityStatus is take into account, rest is auto completed.</param>
+        /// <returns></returns>
         [System.Web.Mvc.Authorize(Roles = "Administrator")]
         [System.Web.Http.Authorize(Roles = "Administrator")]
-        public IHttpActionResult PutSupplier(JObject jsonResult)
+        public IHttpActionResult PutSupplier(SupplierListEntryViewModel model)
         {
-            var response = "OK";
-
-            if (jsonResult != null)
+            Supplier supplier = new Supplier();
+         
+              
+            if (supplier.Id == 0)
             {
-                JsonSerializer serializer = new JsonSerializer();
-                Supplier supplier = (Supplier)serializer.Deserialize(new JTokenReader(jsonResult.First.First), typeof(Supplier));
+                supplier.Name = model.Name;
+                supplier.EntityStatus = model.EntityStatus;
+                supplier.CreationDate = DateTime.UtcNow;
+                supplier.ModificationDate = DateTime.UtcNow;
+                supplier.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
+                supplier.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
-                if (supplier.Id == 0)
-                {
-                    supplier.EntityStatus = EntityStatus.NORMAL;
-                    supplier.CreationDate = DateTime.UtcNow;
-                    supplier.ModificationDate = DateTime.UtcNow;
-                    supplier.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                    supplier.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
-
-                    db.Suppliers.Add(supplier);
-                }
-                else
-                {
-                    supplier.ModificationDate = DateTime.UtcNow;
-                    supplier.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
-
-                    db.Entry(supplier).State = EntityState.Modified;
-                    db.Entry(supplier).Property(x => x.CreationDate).IsModified = false;
-                    db.Entry(supplier).Property(x => x.CreatedBy).IsModified = false;
-                }
-
-                db.SaveChanges();
+                db.Suppliers.Add(supplier);
             }
             else
             {
-                response = "No Supplier Data";
+                supplier = db.Suppliers.Find(model.Id);
+
+                supplier.Name = model.Name;
+                supplier.EntityStatus = model.EntityStatus;
+
+                supplier.ModificationDate = DateTime.UtcNow;
+                supplier.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
             }
 
-            return Ok(response);
+            db.SaveChanges();
+        
+
+            return Ok(supplier);
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator")]
