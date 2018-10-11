@@ -11,6 +11,9 @@ using System.Web.Mvc;
 using TimeSlotting.Data;
 using TimeSlotting.Data.Entities.Customers;
 using TimeSlotting.Data.Entities;
+using System.Web.Http.Description;
+using TimeSlotting.Models.Customers;
+using System.Collections.Generic;
 
 namespace TimeSlotting.Controllers
 {
@@ -21,11 +24,13 @@ namespace TimeSlotting.Controllers
     {
         private TimeSlottingDBContext db = new TimeSlottingDBContext();
 
+        [ResponseType(typeof(List<CustomerListEntryViewModel>))]
         public IHttpActionResult GetCustomers()
         {
-            return Ok(db.Customers.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList());
+            return Ok(db.Customers.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList().Select(c => new CustomerListEntryViewModel(c)).ToList());
         }
 
+        [ResponseType(typeof(CustomerListEntryViewModel))]
         public IHttpActionResult GetCustomer(int id)
         {
             Customer customer = db.Customers.Find(id);
@@ -34,46 +39,41 @@ namespace TimeSlotting.Controllers
                 return NotFound();
             }
 
-            return Ok(customer);
+            return Ok(new CustomerListEntryViewModel(customer));
         }
 
-        public IHttpActionResult PutCustomer(JObject jsonResult)
+        /// <summary>
+        /// Creation and modification of the customer
+        /// </summary>
+        /// <param name="model">Set model id to 0 if creating new. When creating/modfying only Name and EntityStatus is take into account, rest is auto completed.</param>
+        /// <returns></returns>
+        [ResponseType(typeof(CustomerListEntryViewModel))]
+        public IHttpActionResult PutCustomer(CustomerListEntryViewModel model)
         {
-            var response = "OK";
-
-            if (jsonResult != null)
+            Customer customer = new Customer();
+            if (model.Id == 0)
             {
-                JsonSerializer serializer = new JsonSerializer();
-                Customer customer = (Customer)serializer.Deserialize(new JTokenReader(jsonResult.First.First), typeof(Customer));
+                customer.Name = model.Name;
+                customer.EntityStatus = model.EntityStatus;
+                customer.CreationDate = DateTime.UtcNow;
+                customer.ModificationDate = DateTime.UtcNow;
+                customer.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
+                customer.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
-                if (customer.Id == 0)
-                {
-                    customer.EntityStatus = EntityStatus.NORMAL;
-                    customer.CreationDate = DateTime.UtcNow;
-                    customer.ModificationDate = DateTime.UtcNow;
-                    customer.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                    customer.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
-
-                    db.Customers.Add(customer);
-                }
-                else
-                {
-                    customer.ModificationDate = DateTime.UtcNow;
-                    customer.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
-
-                    db.Entry(customer).State = EntityState.Modified;
-                    db.Entry(customer).Property(x => x.CreationDate).IsModified = false;
-                    db.Entry(customer).Property(x => x.CreatedBy).IsModified = false;
-                }
-
-                db.SaveChanges();
+                db.Customers.Add(customer);
             }
             else
             {
-                response = "No Customer Data";
+                customer = db.Customers.Find(model.Id);
+                customer.EntityStatus = model.EntityStatus;
+                customer.ModificationDate = DateTime.UtcNow;
+                customer.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                customer.Name = model.Name;
             }
 
-            return Ok(response);
+            db.SaveChanges();
+         
+            return Ok(new CustomerListEntryViewModel(customer));
         }
 
         public IHttpActionResult DeleteCustomer(int id)
@@ -87,7 +87,7 @@ namespace TimeSlotting.Controllers
             }
             else
             {
-                customer.EntityStatus = EntityStatus.NORMAL;
+                customer.EntityStatus = EntityStatus.DELETED;
                 db.SaveChanges();
             }
 
