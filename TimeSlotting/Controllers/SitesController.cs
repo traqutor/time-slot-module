@@ -103,7 +103,7 @@ namespace TimeSlotting.Controllers
 
             db.SaveChanges();
           
-            return Ok(site);
+            return Ok(new SiteListEntryViewModel(site));
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
