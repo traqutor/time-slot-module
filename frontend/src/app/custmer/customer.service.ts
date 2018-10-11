@@ -45,7 +45,14 @@ export class CustomerService {
     return true;
   }
 
-  deleteOrderById(customerId: number): Observable<any> {
-    return this.http.delete(`${this.url}/api/Customers/DeleteCustomer/${customerId}`);
+  deleteOrder(customerId: number, index: number): boolean {
+    this.http.delete(`${this.url}/api/Customers/DeleteCustomer/${customerId}`)
+      .subscribe(() => {
+        this.customers.splice(index, 1);
+        this.customersChanged.next(this.customers);
+      }, error1 => {
+        return false;
+      });
+    return true;
   }
 }

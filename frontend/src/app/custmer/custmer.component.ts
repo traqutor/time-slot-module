@@ -25,12 +25,17 @@ export class CustmerComponent implements OnInit {
 
   }
 
-  editCustomer() {
+  editCustomer(customer: ICustomer, index: number) {
+    customer.name = 'Edited Customer!';
+    if (this.customerService.putCustomer(customer, index)) {
 
+    }
   }
 
-  deleteCusomer() {
+  deleteCustomer(customer: ICustomer, index: number) {
+    if (this.customerService.deleteOrder(customer.id, index)) {
 
+    }
   }
 
   ngOnInit() {
@@ -41,7 +46,7 @@ export class CustmerComponent implements OnInit {
     // subscribe for Customers
     this.subscriptions.push(this.customerService.customersChanged
       .subscribe((res: Array<ICustomer>) => {
-        this.subscriptions = res;
+        this.customers = res;
       }));
   }
 
