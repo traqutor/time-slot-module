@@ -17,6 +17,8 @@ using TimeSlotting.Data;
 using TimeSlotting.Data.Entities.Customers.Fleets;
 using TimeSlotting.Models.Users;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Net.Http;
+using System.Net;
 
 namespace TimeSlotting.Controllers
 {
@@ -266,11 +268,14 @@ namespace TimeSlotting.Controllers
             return Ok(response);
         }
 
-
         public UserListEntryViewModel GetUserInfo()
         {
             string loggedUserId = User.Identity.GetUserId();
             var userToReturn = db.WebUsers.Include(u => u.Customer).SingleOrDefault(u => u.ASPId == loggedUserId);
+
+            if (userToReturn == null)
+                throw new HttpResponseException(HttpStatusCode.Unauthorized);
+
             var possibleRoles = _roleManager.Roles.ToList();
             return new UserListEntryViewModel(userToReturn, possibleRoles);
         }
