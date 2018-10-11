@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {BehaviorSubject, Observable} from "rxjs";
 import {ICustomer} from "../user/user.model";
+import {MatSnackBar} from "@angular/material";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class CustomerService {
 
   private url: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private snackBar: MatSnackBar) {
     this.url = environment.url;
   }
 
@@ -30,29 +31,45 @@ export class CustomerService {
     return this.http.get<ICustomer>(`${this.url}/api/Customers/GetCustomer/${customerId}`);
   }
 
-  putCustomer(customer: ICustomer, index: number): boolean {
+  putCustomer(customer: ICustomer, index: number) {
+
+    console.log('customer', customer);
+    console.log('index', index);
+
     this.http.put(`${this.url}/api/Customers/PutCustomer`, customer)
       .subscribe((res: ICustomer) => {
-        if (index>=0) {
-          this.customers[index] = res;
-        } else {
+
+        // in case when entry entity ID is 0 that means Add action
+        // else is Edit so the object needs to be replaced in array
+
+        if (customer.id === 0) {
+
           this.customers.push(res);
+          this.snackBar.open('Customer Added', '', {
+            duration: 2000,
+          });
+
+        } else {
+
+          this.customers[index] = res;
+          this.snackBar.open('Customer Changed', '', {
+            duration: 2000,
+          });
+
         }
+
         this.customersChanged.next(this.customers);
-      }, error => {
-        return false;
       });
-    return true;
   }
 
-  deleteOrder(customerId: number, index: number): boolean {
+  deleteOrder(customerId: number, index: number) {
     this.http.delete(`${this.url}/api/Customers/DeleteCustomer/${customerId}`)
       .subscribe(() => {
         this.customers.splice(index, 1);
         this.customersChanged.next(this.customers);
-      }, error1 => {
-        return false;
+        this.snackBar.open('Customer Deleted!', '', {
+          duration: 2000,
+        });
       });
-    return true;
   }
 }

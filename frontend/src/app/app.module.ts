@@ -4,7 +4,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {OverlayModule} from '@angular/cdk/overlay';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
@@ -20,6 +19,9 @@ import { UserComponent } from './user/user.component';
 import {AuthInterceptor} from './auth/auth.interceptor';
 import {APP_DATE_FORMATS} from './auth/auth.model';
 import { CustmerComponent } from './custmer/custmer.component';
+import { CustomerDialogComponent } from './custmer/customer-dialog/customer-dialog.component';
+import { VendorsComponent } from './vendors/vendors.component';
+import { VendorDialogComponent } from './vendors/vendor-dialog/vendor-dialog.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,10 @@ import { CustmerComponent } from './custmer/custmer.component';
     LoginComponent,
     FrameComponent,
     UserComponent,
-    CustmerComponent
+    CustmerComponent,
+    CustomerDialogComponent,
+    VendorsComponent,
+    VendorDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +40,6 @@ import { CustmerComponent } from './custmer/custmer.component';
     AppMaterialModule,
     FormsModule,
     HttpClientModule,
-    HttpModule,
     FlexLayoutModule,
     ReactiveFormsModule,
     OverlayModule,
@@ -46,6 +50,10 @@ import { CustmerComponent } from './custmer/custmer.component';
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS},
+
+  ],
+  entryComponents: [
+    CustomerDialogComponent,
 
   ],
   bootstrap: [AppComponent]

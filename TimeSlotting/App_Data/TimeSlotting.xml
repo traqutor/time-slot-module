@@ -16,6 +16,20 @@
             <param name="model">Set model id to 0 if creating new. When creating/modfying only Name and EntityStatus is take into account, rest is auto completed.</param>
             <returns></returns>
         </member>
+        <member name="M:TimeSlotting.Controllers.SuppliersController.PutSupplier(TimeSlotting.Models.Deliveries.SupplierListEntryViewModel)">
+            <summary>
+            Creation and modification of the supplier
+            </summary>
+            <param name="model">Set model id to 0 if creating new. When creating/modfying only Name and EntityStatus is take into account, rest is auto completed.</param>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.VendorsController.PutVendor(TimeSlotting.Models.Deliveries.VendorListEntryViewModel)">
+            <summary>
+            Creation and modification of the vendor
+            </summary>
+            <param name="model">Set model id to 0 if creating new. When creating/modfying only Name and EntityStatus is take into account, rest is auto completed.</param>
+            <returns></returns>
+        </member>
         <member name="F:TimeSlotting.Data.Entities.UserSystemRoles.PossibleRoles">
             <summary>
             used for database initialization, if adding new roles, please assign it here so the initializer will create all roles properly
