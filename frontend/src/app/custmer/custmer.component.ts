@@ -1,22 +1,34 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CustomerService} from "./customer.service";
-import {ICustomer} from "../user/user.model";
+import {EntityStatusEnum, ICustomer} from "../user/user.model";
 import {CustomerDialogComponent} from "./customer-dialog/customer-dialog.component";
 import {MatDialog} from "@angular/material";
+import {ConfirmDialogService} from "../common/confirm-dialog/confirm-dialog.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-custmer',
   templateUrl: './custmer.component.html',
   styleUrls: ['./custmer.component.css']
 })
-export class CustmerComponent implements OnInit {
+export class CustmerComponent implements OnInit, OnDestroy {
 
   public customers: Array<ICustomer> = [];
 
-  private voidCustomer: ICustomer = {id: 0, name: '', creationDate: null, modificationDate: null};
+  private voidCustomer: ICustomer = {
+    id: 0,
+    name: '',
+    creationDate: null,
+    modificationDate: null,
+    createdBy: null,
+    modifiedBy: null,
+    entityStatus: EntityStatusEnum.NORMAL
+  };
   private subscriptions = [];
 
-  constructor(private customerService: CustomerService, public dialog: MatDialog) {
+  constructor(private customerService: CustomerService,
+              private confirm: ConfirmDialogService,
+              private dialog: MatDialog) {
   }
 
   addCustomer() {
@@ -40,9 +52,12 @@ export class CustmerComponent implements OnInit {
   }
 
   deleteCustomer(customer: ICustomer, index: number) {
-    if (this.customerService.deleteOrder(customer.id, index)) {
-
-    }
+    this.confirm.confirm('Delete Customer', 'Are you sure you would like to delete the Customer?')
+      .subscribe((res: boolean) => {
+        if (res) {
+          this.customerService.deleteOrder(customer.id, index);
+        }
+      });
   }
 
   ngOnInit() {
@@ -57,5 +72,10 @@ export class CustmerComponent implements OnInit {
       }));
   }
 
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub: Subscription) => {
+      sub.unsubscribe();
+    })
+  }
 
 }

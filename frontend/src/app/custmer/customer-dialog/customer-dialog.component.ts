@@ -28,7 +28,11 @@ export class CustomerDialogComponent implements OnInit {
       name: [this.customer.name, [Validators.required,]],
       creationDate: this.customer.creationDate,
       modificationDate: this.customer.modificationDate,
+      createdBy: this.customer.createdBy,
+      modifiedBy: this.customer.modifiedBy,
+      entityStatus: this.customer.entityStatus
     });
+
   }
 
   submit() {

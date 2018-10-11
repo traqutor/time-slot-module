@@ -22,6 +22,10 @@ import { CustmerComponent } from './custmer/custmer.component';
 import { CustomerDialogComponent } from './custmer/customer-dialog/customer-dialog.component';
 import { VendorsComponent } from './vendors/vendors.component';
 import { VendorDialogComponent } from './vendors/vendor-dialog/vendor-dialog.component';
+import {ConfirmDialogComponent} from "./common/confirm-dialog/confirm-dialog.component";
+import { SitessComponent } from './sitess/sitess.component';
+import { SitesComponent } from './sites/sites.component';
+import { SiteDialogComponent } from './sites/site-dialog/site-dialog.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +36,11 @@ import { VendorDialogComponent } from './vendors/vendor-dialog/vendor-dialog.com
     CustmerComponent,
     CustomerDialogComponent,
     VendorsComponent,
-    VendorDialogComponent
+    VendorDialogComponent,
+    ConfirmDialogComponent,
+    VendorDialogComponent,
+    SitesComponent,
+    SiteDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -44,7 +52,7 @@ import { VendorDialogComponent } from './vendors/vendor-dialog/vendor-dialog.com
     ReactiveFormsModule,
     OverlayModule,
     AppMaterialModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
@@ -54,6 +62,8 @@ import { VendorDialogComponent } from './vendors/vendor-dialog/vendor-dialog.com
   ],
   entryComponents: [
     CustomerDialogComponent,
+    ConfirmDialogComponent,
+    VendorDialogComponent,
 
   ],
   bootstrap: [AppComponent]

@@ -29,8 +29,11 @@ export interface IRole {
 export interface ICustomer {
   id: number;
   name: string;
+  createdBy: number;
+  modifiedBy: number;
   creationDate: Date,
   modificationDate: Date
+  entityStatus: EntityStatusEnum
 }
 
 export interface ISite {
