@@ -20,6 +20,10 @@ namespace TimeSlotting.Controllers
     {
         private TimeSlottingDBContext db = new TimeSlottingDBContext();
 
+        /// <summary>
+        /// doesnt display deleted
+        /// </summary>
+        /// <returns></returns>
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [ResponseType(typeof(List<SupplierListEntryViewModel>))]
@@ -28,6 +32,10 @@ namespace TimeSlotting.Controllers
             return Ok(db.Suppliers.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList().Select(el => new SupplierListEntryViewModel(el)).ToList());
         }
 
+        /// <summary>
+        /// displays only normal (no deleted and disabled)
+        /// </summary>
+        /// <returns></returns>
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [ResponseType(typeof(List<SupplierListEntryViewModel>))]

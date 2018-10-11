@@ -11,6 +11,9 @@ using Microsoft.AspNet.Identity;
 using TimeSlotting.Data;
 using TimeSlotting.Data.Entities;
 using TimeSlotting.Data.Entities.Customers.Fleets;
+using System.Collections.Generic;
+using TimeSlotting.Models.Customers.Fleets;
+using System.Web.Http.Description;
 
 namespace TimeSlotting.Controllers
 {
@@ -20,25 +23,36 @@ namespace TimeSlotting.Controllers
     public class FleetsController : ApiController
     {
         private TimeSlottingDBContext db = new TimeSlottingDBContext();
-
+        /// <summary>
+        /// gets fleets with customer id based on the logged user
+        /// </summary>
+        /// <returns></returns>
+        [ResponseType(typeof(List<FleetListEntryViewModel>))]
         public IHttpActionResult GetFleets()
         {
             int? id = null;
-            var fleets = db.Fleets.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList();
+            var fleets = db.Fleets.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).AsQueryable();
             if (!User.IsInRole("Administrator"))
             {
                 id = Common.GetCustomerId(User.Identity.GetUserId());
-                fleets = fleets.Where(x => x.CustomerId == id).ToList();
+                fleets = fleets.Where(x => x.CustomerId == id);
             }
 
-            return Ok(new { data = fleets, admin = User.IsInRole("Administrator"), cid = id });
+            return Ok(fleets.ToList().Select(el => new FleetListEntryViewModel(el)));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">customer id</param>
+        /// <returns></returns>
+        [ResponseType(typeof(List<FleetListEntryViewModel>))]
         public IHttpActionResult GetFleets(int id)
         {
-            return Ok(db.Fleets.Where(x => x.CustomerId ==  id && x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList());
+            return Ok(db.Fleets.Where(x => x.CustomerId ==  id && x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList().Select(el => new FleetListEntryViewModel(el)));
         }
 
+        [ResponseType(typeof(FleetListEntryViewModel))]
         public IHttpActionResult GetFleet(int id)
         {
             Fleet fleet = db.Fleets.Find(id);
@@ -47,46 +61,46 @@ namespace TimeSlotting.Controllers
                 return NotFound();
             }
 
-            return Ok(fleet);
+            return Ok(new FleetListEntryViewModel(fleet));
         }
 
-        public IHttpActionResult PutFleet(JObject jsonResult)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"> provide Name, Customer.Id</param>
+        /// <returns></returns>
+        [ResponseType(typeof(FleetListEntryViewModel))]
+        public IHttpActionResult PutFleet(FleetListEntryViewModel model)
         {
-            var response = "OK";
+           
+            Fleet fleet = new Fleet();
 
-            if (jsonResult != null)
+            if (model.Id == 0)
             {
-                JsonSerializer serializer = new JsonSerializer();
-                Fleet fleet = (Fleet)serializer.Deserialize(new JTokenReader(jsonResult.First.First), typeof(Fleet));
+                fleet.Name = model.Name;
+                fleet.CustomerId = model.Customer.Id;
+                fleet.EntityStatus = model.EntityStatus;
 
-                if (fleet.Id == 0)
-                {
-                    fleet.EntityStatus = EntityStatus.NORMAL;
-                    fleet.CreationDate = DateTime.UtcNow;
-                    fleet.ModificationDate = DateTime.UtcNow;
-                    fleet.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                    fleet.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                fleet.CreationDate = DateTime.UtcNow;
+                fleet.ModificationDate = DateTime.UtcNow;
+                fleet.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
+                fleet.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
-                    db.Fleets.Add(fleet);
-                }
-                else
-                {
-                    fleet.ModificationDate = DateTime.UtcNow;
-                    fleet.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
-
-                    db.Entry(fleet).State = EntityState.Modified;
-                    db.Entry(fleet).Property(x => x.CreationDate).IsModified = false;
-                    db.Entry(fleet).Property(x => x.CreatedBy).IsModified = false;
-                }
-
-                db.SaveChanges();
+                db.Fleets.Add(fleet);
             }
             else
             {
-                response = "No Fleet Data";
+                fleet.Name = model.Name;
+                fleet.CustomerId = model.Customer.Id;
+                fleet.EntityStatus = model.EntityStatus;
+
+                fleet.ModificationDate = DateTime.UtcNow;
+                fleet.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
             }
 
-            return Ok(response);
+            db.SaveChanges();
+         
+            return Ok(fleet);
         }
 
         public IHttpActionResult DeleteFleet(int id)
@@ -100,7 +114,7 @@ namespace TimeSlotting.Controllers
             }
             else
             {
-                fleet.EntityStatus = EntityStatus.NORMAL;
+                fleet.EntityStatus = EntityStatus.DELETED;
                 db.SaveChanges();
             }
 

@@ -21,32 +21,43 @@ namespace TimeSlotting.Controllers
     {
         private TimeSlottingDBContext db = new TimeSlottingDBContext();
 
+        /// <summary>
+        /// gets site with customer id based on the logged user
+        /// </summary>
+        /// <returns></returns>
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin")]
         [ResponseType(typeof(List<SiteListEntryViewModel>))]
         public IHttpActionResult GetSites()
         {
             int? id = null;
-            var sites = db.Sites.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList();
+            var sites = db.Sites.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).AsQueryable();
 
             if (!User.IsInRole("Administrator"))
             {
                 id = Common.GetCustomerId(User.Identity.GetUserId());
-                sites = sites.Where(x => x.CustomerId == id).ToList();
+                sites = sites.Where(x => x.CustomerId == id);
             }
 
-            return Ok(new { data = sites, admin = User.IsInRole("Administrator"), cid = id });
+            return Ok(sites.ToList().Select(el => new SiteListEntryViewModel(el)));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">customer id</param>
+        /// <returns></returns>
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
+        [ResponseType(typeof(List<SiteListEntryViewModel>))]
         public IHttpActionResult GetSites(int id)
         {
-            return Ok(db.Sites.Where(x => x.CustomerId == id && x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList());
+            return Ok(db.Sites.Where(x => x.CustomerId == id && x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList().Select(el => new SiteListEntryViewModel(el)));
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin")]
+        [ResponseType(typeof(SiteListEntryViewModel))]
         public IHttpActionResult GetSite(int id)
         {
             Site site = db.Sites.Find(id);
@@ -55,48 +66,44 @@ namespace TimeSlotting.Controllers
                 return NotFound();
             }
 
-            return Ok(site);
+            return Ok(new SiteListEntryViewModel(site));
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin")]
-        public IHttpActionResult PutSite(JObject jsonResult)
+        [ResponseType(typeof(SiteListEntryViewModel))]
+        public IHttpActionResult PutSite(SiteListEntryViewModel model)
         {
-            var response = "OK";
+            Site site = new Site();
 
-            if (jsonResult != null)
+            if (model.Id == 0)
             {
-                JsonSerializer serializer = new JsonSerializer();
-                Site site = (Site)serializer.Deserialize(new JTokenReader(jsonResult.First.First), typeof(Site));
+                site.Name = model.Name;
+                site.CustomerId = model.Customer.Id;
+                site.EntityStatus = model.EntityStatus;
 
-                if (site.Id == 0)
-                {
-                    site.EntityStatus = EntityStatus.NORMAL;
-                    site.CreationDate = DateTime.UtcNow;
-                    site.ModificationDate = DateTime.UtcNow;
-                    site.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                    site.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                site.CreationDate = DateTime.UtcNow;
+                site.ModificationDate = DateTime.UtcNow;
+                site.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
+                site.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
-                    db.Sites.Add(site);
-                }
-                else
-                {
-                    site.ModificationDate = DateTime.UtcNow;
-                    site.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
-
-                    db.Entry(site).State = EntityState.Modified;
-                    db.Entry(site).Property(x => x.CreationDate).IsModified = false;
-                    db.Entry(site).Property(x => x.CreatedBy).IsModified = false;
-                }
-
-                db.SaveChanges();
+                db.Sites.Add(site);
             }
             else
             {
-                response = "No Site Data";
+                site = db.Sites.Find(model.Id);
+
+                site.Name = model.Name;
+                site.CustomerId = model.Customer.Id;
+                site.EntityStatus = model.EntityStatus;
+
+                site.ModificationDate = DateTime.UtcNow;
+                site.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
             }
 
-            return Ok(response);
+            db.SaveChanges();
+          
+            return Ok(site);
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
