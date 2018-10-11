@@ -48,6 +48,16 @@ namespace TimeSlotting.Data.Initializers
                 var result = UserManager.AddToRole(sysAdmin.Id, UserSystemRoles.Administrator);
             }
 
+            WebUser webUser = new WebUser();
+            webUser.FirstName = "System";
+            webUser.LastName = "Admin";
+            webUser.User = sysAdmin;
+            webUser.CreationDate = DateTime.UtcNow;
+            webUser.ModificationDate = DateTime.UtcNow;
+      
+            context.WebUsers.Add(webUser);
+            context.SaveChanges();
+
             #endregion
 
 
