@@ -2,17 +2,18 @@
 </mat-toolbar>
 
 <div class="app-padding-default">
-  <mat-list>
+
+  <mat-list fxFlex="60" fxFlex.lt-md="100" >
 
     <h3 mat-subheader>SITES</h3>
 
     <mat-list-item *ngFor="let site of sites; let i = index">
-      {{site.name}}
-
+      <h4 mat-line>{{site.name}}</h4>
+      <p mat-line>{{site.creationDate}}</p>
       <button mat-icon-button
               matTooltip="Edit site"
               (click)="editSite(site, i)">
-        <mat-icon>edit</mat-icon>
+        <mat-icon mat-list-icon>edit</mat-icon>
       </button>
 
       <button mat-icon-button
@@ -20,13 +21,15 @@
               (click)="deleteSite(site, i)">
         <mat-icon>delete</mat-icon>
       </button>
-
+    <mat-divider></mat-divider>
     </mat-list-item>
   </mat-list>
+  <div class="app-padding-default">
 
-  <button mat-icon-button
-          matTooltip="Add site"
-          (click)="addSite()">
-    <mat-icon>add</mat-icon>
-  </button>
+    <button mat-raised-button
+            matTooltip="Add site"
+            (click)="addSite()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
 </div>

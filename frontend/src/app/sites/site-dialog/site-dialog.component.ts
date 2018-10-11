@@ -27,8 +27,6 @@ export class SiteDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    console.log('site', this.site);
-
     this.siteForm = this.formBuilder.group({
       id: this.site.id,
       name: [this.site.name, [Validators.required,]],
