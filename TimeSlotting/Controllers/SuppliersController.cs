@@ -61,7 +61,6 @@ namespace TimeSlotting.Controllers
         {
             Supplier supplier = new Supplier();
          
-              
             if (supplier.Id == 0)
             {
                 supplier.Name = model.Name;

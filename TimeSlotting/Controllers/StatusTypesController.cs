@@ -10,6 +10,9 @@ using Microsoft.AspNet.Identity;
 using TimeSlotting.Data;
 using TimeSlotting.Data.Entities;
 using TimeSlotting.Data.Entities.Deliveries;
+using TimeSlotting.Models.Deliveries;
+using System.Collections.Generic;
+using System.Web.Http.Description;
 
 namespace TimeSlotting.Controllers
 {
@@ -19,20 +22,23 @@ namespace TimeSlotting.Controllers
 
         [System.Web.Mvc.Authorize(Roles = "Administrator")]
         [System.Web.Http.Authorize(Roles = "Administrator")]
+        [ResponseType(typeof(List<StatusTypeListEntryViewModel>))]
         public IHttpActionResult GetStatusTypes()
         {
-            return Ok(db.StatusTypes.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList());
+            return Ok(db.StatusTypes.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList().Select(el => new StatusTypeListEntryViewModel(el)).ToList());
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
+        [ResponseType(typeof(List<StatusTypeListEntryViewModel>))]
         public IHttpActionResult GetStatusTypeList()
         {
-            return Ok(db.StatusTypes.Where(x => x.EntityStatus == EntityStatus.NORMAL).OrderBy(x => x.Name).ToList());
+            return Ok(db.StatusTypes.Where(x => x.EntityStatus == EntityStatus.NORMAL).OrderBy(x => x.Name).ToList().Select(el => new StatusTypeListEntryViewModel(el)).ToList());
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator")]
         [System.Web.Http.Authorize(Roles = "Administrator")]
+        [ResponseType(typeof(StatusTypeListEntryViewModel))]
         public IHttpActionResult GetStatusType(int id)
         {
             StatusType statusType = db.StatusTypes.Find(id);
@@ -41,48 +47,45 @@ namespace TimeSlotting.Controllers
                 return NotFound();
             }
 
-            return Ok(statusType);
+            return Ok(new StatusTypeListEntryViewModel(statusType));
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator")]
         [System.Web.Http.Authorize(Roles = "Administrator")]
-        public IHttpActionResult PutStatusType(JObject jsonResult)
+        [ResponseType(typeof(StatusTypeListEntryViewModel))]
+        public IHttpActionResult PutStatusType(StatusTypeListEntryViewModel model)
         {
-            var response = "OK";
+            
+            StatusType statusType = new StatusType();
 
-            if (jsonResult != null)
+            if (model.Id == 0)
             {
-                JsonSerializer serializer = new JsonSerializer();
-                StatusType statusType = (StatusType)serializer.Deserialize(new JTokenReader(jsonResult.First.First), typeof(StatusType));
+                statusType.Name = model.Name;
+                statusType.EntityStatus = model.EntityStatus;
+                statusType.CreationDate = DateTime.UtcNow;
+                statusType.ModificationDate = DateTime.UtcNow;
+                statusType.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
+                statusType.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
-                if (statusType.Id == 0)
-                {
-                    statusType.EntityStatus = EntityStatus.NORMAL;
-                    statusType.CreationDate = DateTime.UtcNow;
-                    statusType.ModificationDate = DateTime.UtcNow;
-                    statusType.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                    statusType.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
-
-                    db.StatusTypes.Add(statusType);
-                }
-                else
-                {
-                    statusType.ModificationDate = DateTime.UtcNow;
-                    statusType.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
-
-                    db.Entry(statusType).State = EntityState.Modified;
-                    db.Entry(statusType).Property(x => x.CreationDate).IsModified = false;
-                    db.Entry(statusType).Property(x => x.CreatedBy).IsModified = false;
-                }
-
-                db.SaveChanges();
+                db.StatusTypes.Add(statusType);
             }
             else
             {
-                response = "No Status Type Data";
+                statusType = db.StatusTypes.Find(model.Id);
+
+                statusType.Name = model.Name;
+                statusType.EntityStatus = model.EntityStatus;
+                statusType.ModificationDate = DateTime.UtcNow;
+                statusType.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+
+                db.Entry(statusType).State = EntityState.Modified;
+                db.Entry(statusType).Property(x => x.CreationDate).IsModified = false;
+                db.Entry(statusType).Property(x => x.CreatedBy).IsModified = false;
             }
 
-            return Ok(response);
+            db.SaveChanges();
+
+            return Ok(statusType);
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator")]

@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using TimeSlotting.Data.Entities;
-using TimeSlotting.Data.Entities.Customers;
+using TimeSlotting.Data.Entities.Deliveries;
 
-namespace TimeSlotting.Models.Customers
+namespace TimeSlotting.Models.Deliveries
 {
-    public class SiteListEntryViewModel
+    public class TimeSlotListEntryViewModel
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-
-        public int CustomerId { get; set; }
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
 
         public DateTime CreationDate { get; set; }
         public DateTime ModificationDate { get; set; }
@@ -21,17 +20,16 @@ namespace TimeSlotting.Models.Customers
 
         public EntityStatus EntityStatus { get; set; }
 
-
-        public SiteListEntryViewModel()
+        public TimeSlotListEntryViewModel()
         {
 
         }
 
-        public SiteListEntryViewModel(Site entity)
+        public TimeSlotListEntryViewModel(TimeSlot entity)
         {
             Id = entity.Id;
-            Name = entity.Name;
-            CustomerId = entity.CustomerId;
+            entity.StartTime = entity.StartTime;
+            entity.EndTime = entity.EndTime;
 
             EntityStatus = entity.EntityStatus;
 

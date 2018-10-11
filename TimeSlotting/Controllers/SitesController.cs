@@ -10,6 +10,9 @@ using Microsoft.AspNet.Identity;
 using TimeSlotting.Data;
 using TimeSlotting.Data.Entities;
 using TimeSlotting.Data.Entities.Customers;
+using TimeSlotting.Models.Customers;
+using System.Collections.Generic;
+using System.Web.Http.Description;
 
 namespace TimeSlotting.Controllers
 {
@@ -20,10 +23,12 @@ namespace TimeSlotting.Controllers
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin")]
+        [ResponseType(typeof(List<SiteListEntryViewModel>))]
         public IHttpActionResult GetSites()
         {
             int? id = null;
             var sites = db.Sites.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList();
+
             if (!User.IsInRole("Administrator"))
             {
                 id = Common.GetCustomerId(User.Identity.GetUserId());

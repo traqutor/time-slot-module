@@ -16,6 +16,7 @@ using System.Web.Mvc;
 using TimeSlotting.Data;
 using TimeSlotting.Data.Entities;
 using TimeSlotting.Data.Entities.Deliveries;
+using TimeSlotting.Models.Deliveries;
 
 namespace TimeSlotting.Controllers
 {
@@ -26,11 +27,13 @@ namespace TimeSlotting.Controllers
     {
         private TimeSlottingDBContext db = new TimeSlottingDBContext();
 
+        [ResponseType(typeof(List<TimeSlotListEntryViewModel>))]
         public IHttpActionResult GetTimeSlots()
         {
-            return Ok(db.TimeSlots.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.StartTime).ToList());
+            return Ok(db.TimeSlots.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.StartTime).ToList().Select(el => new TimeSlotListEntryViewModel(el)).ToList());
         }
 
+        [ResponseType(typeof(TimeSlotListEntryViewModel))]
         public IHttpActionResult GetTimeSlot(int id)
         {
             TimeSlot timeslot = db.TimeSlots.Find(id);
@@ -39,46 +42,42 @@ namespace TimeSlotting.Controllers
                 return NotFound();
             }
 
-            return Ok(timeslot);
+            return Ok(new TimeSlotListEntryViewModel(timeslot));
         }
 
-        public IHttpActionResult PutTimeSlot(JObject jsonResult)
+        [ResponseType(typeof(TimeSlotListEntryViewModel))]
+        public IHttpActionResult PutTimeSlot(TimeSlotListEntryViewModel model)
         {
-            var response = "OK";
 
-            if (jsonResult != null)
+            TimeSlot timeslot = new TimeSlot();
+
+            if (model.Id == 0)
             {
-                JsonSerializer serializer = new JsonSerializer();
-                TimeSlot timeslot = (TimeSlot)serializer.Deserialize(new JTokenReader(jsonResult.First.First), typeof(TimeSlot));
+                timeslot.StartTime = model.StartTime;
+                timeslot.EndTime = model.EndTime;
+                timeslot.EntityStatus = model.EntityStatus;
+                timeslot.CreationDate = DateTime.UtcNow;
+                timeslot.ModificationDate = DateTime.UtcNow;
+                timeslot.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
+                timeslot.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
-                if (timeslot.Id == 0)
-                {
-                    timeslot.EntityStatus = EntityStatus.NORMAL;
-                    timeslot.CreationDate = DateTime.UtcNow;
-                    timeslot.ModificationDate = DateTime.UtcNow;
-                    timeslot.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                    timeslot.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
-
-                    db.TimeSlots.Add(timeslot);
-                }
-                else
-                {
-                    timeslot.ModificationDate = DateTime.UtcNow;
-                    timeslot.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
-
-                    db.Entry(timeslot).State = EntityState.Modified;
-                    db.Entry(timeslot).Property(x => x.CreationDate).IsModified = false;
-                    db.Entry(timeslot).Property(x => x.CreatedBy).IsModified = false;
-                }
-
-                db.SaveChanges();
+                db.TimeSlots.Add(timeslot);
             }
             else
             {
-                response = "No Time Slot Data";
+                timeslot = db.TimeSlots.Find(model.Id);
+
+                timeslot.StartTime = model.StartTime;
+                timeslot.EndTime = model.EndTime;
+                timeslot.EntityStatus = model.EntityStatus;
+
+                timeslot.ModificationDate = DateTime.UtcNow;
+                timeslot.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
             }
 
-            return Ok(response);
+            db.SaveChanges();
+       
+            return Ok(timeslot);
         }
 
         public IHttpActionResult DeleteTimeSlot(int id)

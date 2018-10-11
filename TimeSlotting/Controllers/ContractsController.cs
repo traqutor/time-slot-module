@@ -11,6 +11,8 @@ using Microsoft.AspNet.Identity;
 using TimeSlotting.Data;
 using TimeSlotting.Data.Entities;
 using TimeSlotting.Data.Entities.Deliveries;
+using TimeSlotting.Models.Deliveries;
+using System.Collections.Generic;
 
 namespace TimeSlotting.Controllers
 {
@@ -20,21 +22,23 @@ namespace TimeSlotting.Controllers
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
+        [ResponseType(typeof(List<ContractListEntryViewModel>))]
         public IHttpActionResult GetContracts()
         {
-            return Ok(db.Contracts.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList());
+            return Ok(db.Contracts.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.Name).ToList().Select(el => new ContractListEntryViewModel(el)).ToList());
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
+        [ResponseType(typeof(List<ContractListEntryViewModel>))]
         public IHttpActionResult GetContractList()
         {
-            return Ok(db.Contracts.Where(x => x.EntityStatus == EntityStatus.NORMAL).OrderBy(x => x.Name).ToList());
+            return Ok(db.Contracts.Where(x => x.EntityStatus == EntityStatus.NORMAL).OrderBy(x => x.Name).ToList().Select(el => new ContractListEntryViewModel(el)).ToList());
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator")]
         [System.Web.Http.Authorize(Roles = "Administrator")]
-        [ResponseType(typeof(Contract))]
+        [ResponseType(typeof(ContractListEntryViewModel))]
         public IHttpActionResult GetContract(int id)
         {
             Contract contract = db.Contracts.Find(id);
@@ -43,48 +47,40 @@ namespace TimeSlotting.Controllers
                 return NotFound();
             }
 
-            return Ok(contract);
+            return Ok(new ContractListEntryViewModel(contract));
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator")]
         [System.Web.Http.Authorize(Roles = "Administrator")]
-        public IHttpActionResult PutContract(JObject jsonResult)
+        [ResponseType(typeof(ContractListEntryViewModel))]
+        public IHttpActionResult PutContract(ContractListEntryViewModel model)
         {
-            var response = "OK";
+            Contract contract = new Contract();
 
-            if (jsonResult != null)
+            if (model.Id == 0)
             {
-                JsonSerializer serializer = new JsonSerializer();
-                Contract contract = (Contract)serializer.Deserialize(new JTokenReader(jsonResult.First.First), typeof(Contract));
+                contract.Name = model.Name;
+                contract.EntityStatus = model.EntityStatus;
+                contract.CreationDate = DateTime.UtcNow;
+                contract.ModificationDate = DateTime.UtcNow;
+                contract.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
+                contract.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
-                if (contract.Id == 0)
-                {
-                    contract.EntityStatus = EntityStatus.NORMAL;
-                    contract.CreationDate = DateTime.UtcNow;
-                    contract.ModificationDate = DateTime.UtcNow;
-                    contract.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                    contract.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
-
-                    db.Contracts.Add(contract);
-                }
-                else
-                {
-                    contract.ModificationDate = DateTime.UtcNow;
-                    contract.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
-
-                    db.Entry(contract).State = EntityState.Modified;
-                    db.Entry(contract).Property(x => x.CreationDate).IsModified = false;
-                    db.Entry(contract).Property(x => x.ModificationDate).IsModified = false;
-                }
-
-                db.SaveChanges();
+                db.Contracts.Add(contract);
             }
             else
             {
-                response = "No Contract Data";
+                contract = db.Contracts.Find(model.Id);
+
+                contract.Name = model.Name;
+                contract.EntityStatus = model.EntityStatus;
+                contract.ModificationDate = DateTime.UtcNow;
+                contract.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
             }
 
-            return Ok(response);
+            db.SaveChanges();
+       
+            return Ok(contract);
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator")]
