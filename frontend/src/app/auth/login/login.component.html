@@ -29,6 +29,11 @@
                  ngModel>
         </mat-form-field>
 
+        <div class="app-padding-small">
+          <mat-error *ngIf="isError">
+            {{errMessage}}
+          </mat-error>
+        </div>
 
         <button mat-raised-button
                 color="primary"
@@ -36,6 +41,10 @@
                 [disabled]="!f.valid">
           Sign In
         </button>
+
+        <div fxLayout="row" fxLayoutAlign="center center" class="app-padding-small">
+          <button mat-button routerLink="/passwordReset">Forgot your password?</button>
+        </div>
 
 
       </form>
