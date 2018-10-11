@@ -9,6 +9,13 @@
             User info etc
             </summary>
         </member>
+        <member name="M:TimeSlotting.Controllers.CustomersController.PutCustomer(TimeSlotting.Models.Customers.CustomerListEntryViewModel)">
+            <summary>
+            Creation and modification of the customer
+            </summary>
+            <param name="model">Set model id to 0 if creating new. When creating/modfying only Name is take into account, rest is auto completed.</param>
+            <returns></returns>
+        </member>
         <member name="F:TimeSlotting.Data.Entities.UserSystemRoles.PossibleRoles">
             <summary>
             used for database initialization, if adding new roles, please assign it here so the initializer will create all roles properly
