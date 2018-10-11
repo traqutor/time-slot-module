@@ -19,13 +19,15 @@ import { FrameComponent } from './common/frame/frame.component';
 import { UserComponent } from './user/user.component';
 import {AuthInterceptor} from './auth/auth.interceptor';
 import {APP_DATE_FORMATS} from './auth/auth.model';
+import { CustmerComponent } from './custmer/custmer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     FrameComponent,
-    UserComponent
+    UserComponent,
+    CustmerComponent
   ],
   imports: [
     BrowserModule,

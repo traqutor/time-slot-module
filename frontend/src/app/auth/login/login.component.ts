@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
         this.auth.getUserInfo()
           .subscribe((user: IUserInfo) => {
             this.auth.setUser(user);
-            this.router.navigateByUrl('frame');
+            this.router.navigateByUrl('frame/customers');
           });
       }, err => {
         this.isLogging = false;
