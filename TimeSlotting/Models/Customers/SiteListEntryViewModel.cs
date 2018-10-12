@@ -32,7 +32,9 @@ namespace TimeSlotting.Models.Customers
         {
             Id = entity.Id;
             Name = entity.Name;
-            Customer = new CustomerListEntryViewModel(entity.Customer);
+
+            if(entity.Customer != null)
+                Customer = new CustomerListEntryViewModel(entity.Customer);
 
             EntityStatus = entity.EntityStatus;
 
