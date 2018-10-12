@@ -1,2 +1,37 @@
+<mat-toolbar color="primary">
+
+  <button mat-button [matMenuTriggerFor]="menu">Admin</button>
+
+  <mat-menu #menu="matMenu">
+
+    <button mat-menu-item routerLink="/frame/customers">
+      <mat-icon>group</mat-icon>
+      Customers
+    </button>
+
+    <mat-divider></mat-divider>
+    <button mat-menu-item routerLink="/frame/vendors">
+      <mat-icon>group</mat-icon>
+      Vendors
+    </button>
+    <button mat-menu-item routerLink="/frame/suppliers">
+      <mat-icon>group</mat-icon>
+      Suppliers
+    </button>
+    <button mat-menu-item routerLink="/frame/commodities">
+      <mat-icon>group</mat-icon>
+      Commodities
+    </button>
+
+
+    <mat-divider></mat-divider>
+    <button mat-menu-item routerLink="/frame/sites">
+      Sites
+    </button>
+
+  </mat-menu>
+
+</mat-toolbar>
+
 <router-outlet></router-outlet>
 

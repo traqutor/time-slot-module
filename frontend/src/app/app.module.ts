@@ -25,6 +25,12 @@ import {VendorDialogComponent} from './vendors/vendor-dialog/vendor-dialog.compo
 import {ConfirmDialogComponent} from "./common/confirm-dialog/confirm-dialog.component";
 import {SitesComponent} from './sites/sites.component';
 import {SiteDialogComponent} from './sites/site-dialog/site-dialog.component';
+import { SuppliersComponent } from './suppliers/suppliers.component';
+import { SupplierDialogComponent } from './suppliers/supplier-dialog/supplier-dialog.component';
+import { CommoditiesComponent } from './commodities/commodities.component';
+import { CommodityDialogComponent } from './commodities/commodity-dialog/commodity-dialog.component';
+import { ContractsComponent } from './contracts/contracts.component';
+import { ContractDialogComponent } from './contracts/contract-dialog/contract-dialog.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +46,12 @@ import {SiteDialogComponent} from './sites/site-dialog/site-dialog.component';
     VendorDialogComponent,
     SitesComponent,
     SiteDialogComponent,
+    SuppliersComponent,
+    SupplierDialogComponent,
+    CommoditiesComponent,
+    CommodityDialogComponent,
+    ContractsComponent,
+    ContractDialogComponent,
 
   ],
   imports: [
@@ -65,6 +77,8 @@ import {SiteDialogComponent} from './sites/site-dialog/site-dialog.component';
     ConfirmDialogComponent,
     VendorDialogComponent,
     SiteDialogComponent,
+    SupplierDialogComponent,
+    CommodityDialogComponent,
   ],
   bootstrap: [AppComponent]
 })
