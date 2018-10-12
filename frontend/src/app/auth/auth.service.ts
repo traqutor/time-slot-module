@@ -4,7 +4,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {BehaviorSubject, Observable, ReplaySubject} from "rxjs";
 import {distinctUntilChanged} from "rxjs/operators";
-import {IUserInfo} from "../user/user.model";
+import {IUserInfo} from "../users/user.model";
 
 @Injectable({
   providedIn: 'root'

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialog} from "@angular/material";
 import {Subscription} from "rxjs";
 
-import {EntityStatusEnum} from "../user/user.model";
+import {EntityStatusEnum} from "../users/user.model";
 import {ConfirmDialogService} from "../common/confirm-dialog/confirm-dialog.service";
 import {IVehicle} from "./vehicle.model";
 import {VehicleService} from "./vehicle.service";

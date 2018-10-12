@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {CustomerService} from "../../custmer/customer.service";
 import {Subscription} from "rxjs";
-import {ICustomer} from "../../user/user.model";
+import {ICustomer} from "../../users/user.model";
 import {IFleet} from "../fleet.model";
 
 @Component({

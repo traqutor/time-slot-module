@@ -15,7 +15,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppMaterialModule} from './app-material.module';
 import {LoginComponent} from './auth/login/login.component';
 import {FrameComponent} from './common/frame/frame.component';
-import {UserComponent} from './user/user.component';
+import {UsersComponent} from './users/users.component';
 import {AuthInterceptor} from './auth/auth.interceptor';
 import {APP_DATE_FORMATS} from './auth/auth.model';
 import {CustmerComponent} from './custmer/custmer.component';
@@ -25,27 +25,28 @@ import {VendorDialogComponent} from './vendors/vendor-dialog/vendor-dialog.compo
 import {ConfirmDialogComponent} from "./common/confirm-dialog/confirm-dialog.component";
 import {SitesComponent} from './sites/sites.component';
 import {SiteDialogComponent} from './sites/site-dialog/site-dialog.component';
-import { SuppliersComponent } from './suppliers/suppliers.component';
-import { SupplierDialogComponent } from './suppliers/supplier-dialog/supplier-dialog.component';
-import { CommoditiesComponent } from './commodities/commodities.component';
-import { CommodityDialogComponent } from './commodities/commodity-dialog/commodity-dialog.component';
-import { ContractsComponent } from './contracts/contracts.component';
-import { ContractDialogComponent } from './contracts/contract-dialog/contract-dialog.component';
-import { StatusTypesComponent } from './status-types/status-types.component';
-import { StatusTypeDialogComponent } from './status-types/status-type-dialog/status-type-dialog.component';
-import { FleetsComponent } from './fleets/fleets.component';
-import { FleetDialogComponent } from './fleets/fleet-dialog/fleet-dialog.component';
-import { TimeSlotsComponent } from './time-slots/time-slots.component';
-import { TimeSlotDialogComponent } from './time-slots/time-slot-dialog/time-slot-dialog.component';
-import { VehiclesComponent } from './vehicles/vehicles.component';
-import { VehicleDialogComponent } from './vehicles/vehicle-dialog/vehicle-dialog.component';
+import {SuppliersComponent} from './suppliers/suppliers.component';
+import {SupplierDialogComponent} from './suppliers/supplier-dialog/supplier-dialog.component';
+import {CommoditiesComponent} from './commodities/commodities.component';
+import {CommodityDialogComponent} from './commodities/commodity-dialog/commodity-dialog.component';
+import {ContractsComponent} from './contracts/contracts.component';
+import {ContractDialogComponent} from './contracts/contract-dialog/contract-dialog.component';
+import {StatusTypesComponent} from './status-types/status-types.component';
+import {StatusTypeDialogComponent} from './status-types/status-type-dialog/status-type-dialog.component';
+import {FleetsComponent} from './fleets/fleets.component';
+import {FleetDialogComponent} from './fleets/fleet-dialog/fleet-dialog.component';
+import {TimeSlotsComponent} from './time-slots/time-slots.component';
+import {TimeSlotDialogComponent} from './time-slots/time-slot-dialog/time-slot-dialog.component';
+import {VehiclesComponent} from './vehicles/vehicles.component';
+import {VehicleDialogComponent} from './vehicles/vehicle-dialog/vehicle-dialog.component';
+import {UserDialogComponent} from "./users/user-dialog/user-dialog.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     FrameComponent,
-    UserComponent,
+    UsersComponent,
     CustmerComponent,
     CustomerDialogComponent,
     VendorsComponent,
@@ -68,6 +69,7 @@ import { VehicleDialogComponent } from './vehicles/vehicle-dialog/vehicle-dialog
     TimeSlotDialogComponent,
     VehiclesComponent,
     VehicleDialogComponent,
+    UserDialogComponent,
 
   ],
   imports: [
@@ -101,6 +103,7 @@ import { VehicleDialogComponent } from './vehicles/vehicle-dialog/vehicle-dialog
     FleetDialogComponent,
     TimeSlotDialogComponent,
     VehicleDialogComponent,
+    UserDialogComponent,
   ],
   bootstrap: [AppComponent]
 })

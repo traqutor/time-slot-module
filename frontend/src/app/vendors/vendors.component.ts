@@ -1,7 +1,7 @@
 import {MatDialog} from "@angular/material";
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
-import {EntityStatusEnum} from "../user/user.model";
+import {EntityStatusEnum} from "../users/user.model";
 import {ConfirmDialogService} from "../common/confirm-dialog/confirm-dialog.service";
 import {IVendor} from "./vendor.model";
 import {VendorDialogComponent} from "./vendor-dialog/vendor-dialog.component";

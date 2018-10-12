@@ -1,5 +1,5 @@
 import {IFleet} from "../fleets/fleet.model";
-import {EntityStatusEnum} from "../user/user.model";
+import {EntityStatusEnum} from "../users/user.model";
 
 export interface IVehicle {
   id: number,

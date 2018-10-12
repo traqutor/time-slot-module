@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {IContract} from "../contracts/contract.model";
-import {EntityStatusEnum} from "../user/user.model";
+import {EntityStatusEnum} from "../users/user.model";
 import {ContractService} from "../contracts/contract.service";
 import {ConfirmDialogService} from "../common/confirm-dialog/confirm-dialog.service";
 import {MatDialog} from "@angular/material";

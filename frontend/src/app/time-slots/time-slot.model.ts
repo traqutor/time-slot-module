@@ -1,4 +1,4 @@
-import {EntityStatusEnum} from "../user/user.model";
+import {EntityStatusEnum} from "../users/user.model";
 
 export interface ITimeSlot {
   id: number;

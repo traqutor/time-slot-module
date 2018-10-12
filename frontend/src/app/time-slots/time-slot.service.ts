@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {ICustomer} from "../user/user.model";
+import {ICustomer} from "../users/user.model";
 import {BehaviorSubject, Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {MatSnackBar} from "@angular/material";

@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CustomerService} from "./customer.service";
-import {EntityStatusEnum, ICustomer} from "../user/user.model";
+import {EntityStatusEnum, ICustomer} from "../users/user.model";
 import {CustomerDialogComponent} from "./customer-dialog/customer-dialog.component";
 import {MatDialog} from "@angular/material";
 import {ConfirmDialogService} from "../common/confirm-dialog/confirm-dialog.service";

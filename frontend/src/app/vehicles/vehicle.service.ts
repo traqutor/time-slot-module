@@ -5,6 +5,7 @@ import {HttpClient} from "@angular/common/http";
 import {MatSnackBar} from "@angular/material";
 import {environment} from "../../environments/environment";
 import {IVehicle} from "./vehicle.model";
+import {IUser} from "../users/user.model";
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,7 @@ export class VehicleService {
 
   // get vehicles for specific fleet Id
   getVehiclesForSpecificDriver(driverId: number): Observable<Array<IVehicle>> {
-    return this.http.get <Array<IVehicle>>(`${this.url}/api/Vehicles/GetDriverVehicles`);
+    return this.http.request <Array<IVehicle>>('get', `${this.url}/api/Vehicles/GetDriverVehicles`, {body: driverId});
   }
 
 

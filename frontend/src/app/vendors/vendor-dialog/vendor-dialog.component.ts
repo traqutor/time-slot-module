@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {CustomerService} from "../../custmer/customer.service";
-import {EntityStatusEnum, ICustomer} from "../../user/user.model";
+import {EntityStatusEnum, ICustomer} from "../../users/user.model";
 import {IVendor} from "../vendor.model";
 
 @Component({

@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 import {CustomerService} from "../customer.service";
-import {ICustomer} from "../../user/user.model";
+import {ICustomer} from "../../users/user.model";
 
 @Component({
   selector: 'app-customer-dialog',

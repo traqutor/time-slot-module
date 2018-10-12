@@ -1,4 +1,4 @@
-import {EntityStatusEnum, ICustomer} from "../user/user.model";
+import {EntityStatusEnum, ICustomer} from "../users/user.model";
 
 export interface IFleet {
   id: 0;

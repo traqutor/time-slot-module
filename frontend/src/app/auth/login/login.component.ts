@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 
 import {AuthService} from "../auth.service";
 import {tap} from "rxjs/operators";
-import {AuthResponse, IUserInfo} from "../../user/user.model";
+import {AuthResponse, IUserInfo} from "../../users/user.model";
 
 @Component({
   selector: 'app-login',

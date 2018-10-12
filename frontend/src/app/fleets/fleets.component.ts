@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ISite} from "../sites/site.model";
-import {EntityStatusEnum} from "../user/user.model";
+import {EntityStatusEnum} from "../users/user.model";
 import {SiteService} from "../sites/site.service";
 import {ConfirmDialogService} from "../common/confirm-dialog/confirm-dialog.service";
 import {MatDialog} from "@angular/material";
