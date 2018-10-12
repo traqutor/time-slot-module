@@ -35,6 +35,10 @@ import { StatusTypesComponent } from './status-types/status-types.component';
 import { StatusTypeDialogComponent } from './status-types/status-type-dialog/status-type-dialog.component';
 import { FleetsComponent } from './fleets/fleets.component';
 import { FleetDialogComponent } from './fleets/fleet-dialog/fleet-dialog.component';
+import { TimeSlotsComponent } from './time-slots/time-slots.component';
+import { TimeSlotDialogComponent } from './time-slots/time-slot-dialog/time-slot-dialog.component';
+import { VehiclesComponent } from './vehicles/vehicles.component';
+import { VehicleDialogComponent } from './vehicles/vehicle-dialog/vehicle-dialog.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +64,10 @@ import { FleetDialogComponent } from './fleets/fleet-dialog/fleet-dialog.compone
     StatusTypeDialogComponent,
     FleetsComponent,
     FleetDialogComponent,
+    TimeSlotsComponent,
+    TimeSlotDialogComponent,
+    VehiclesComponent,
+    VehicleDialogComponent,
 
   ],
   imports: [
@@ -91,6 +99,7 @@ import { FleetDialogComponent } from './fleets/fleet-dialog/fleet-dialog.compone
     StatusTypeDialogComponent,
     SiteDialogComponent,
     FleetDialogComponent,
+    TimeSlotDialogComponent,
   ],
   bootstrap: [AppComponent]
 })
