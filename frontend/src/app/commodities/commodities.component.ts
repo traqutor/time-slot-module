@@ -1,10 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ISupplier} from "../suppliers/supplier.model";
 import {EntityStatusEnum} from "../user/user.model";
-import {SupplierService} from "../suppliers/supplier.service";
 import {ConfirmDialogService} from "../common/confirm-dialog/confirm-dialog.service";
 import {MatDialog} from "@angular/material";
-import {SupplierDialogComponent} from "../suppliers/supplier-dialog/supplier-dialog.component";
 import {Subscription} from "rxjs";
 import {ICommodity} from "./commodity.model";
 import {CommodityService} from "./commodity.service";

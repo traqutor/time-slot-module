@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {ISupplier} from "../suppliers/supplier.model";
 import {BehaviorSubject, Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {MatSnackBar} from "@angular/material";

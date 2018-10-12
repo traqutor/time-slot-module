@@ -1,3 +1,42 @@
-<p>
-  contract-dialog works!
-</p>
+<h1 mat-dialog-title>Contract</h1>
+
+<div mat-dialog-content>
+
+  <form [formGroup]="contractForm" fxLayout="column">
+
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Contract Name</mat-label>
+
+      <input matInput
+             cdkFocusInitial
+             type="text"
+             placeholder="Contract Name"
+             formControlName="name">
+      <mat-error
+        *ngIf="contractForm.get('name').hasError('required') && contractForm.get('name').touched">
+        Name is required.
+      </mat-error>
+
+    </mat-form-field>
+
+  </form>
+
+</div>
+
+<div mat-dialog-actions>
+
+  <button mat-raised-button
+          color="primary"
+          [disabled]="!contractForm.valid"
+          type="button"
+          (click)="submit()">OK
+  </button>
+
+  <button mat-raised-button
+          type="button"
+          mat-dialog-close>Cancel
+  </button>
+
+</div>
+
