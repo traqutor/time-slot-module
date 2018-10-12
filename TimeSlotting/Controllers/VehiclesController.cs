@@ -134,9 +134,9 @@ namespace TimeSlotting.Controllers
 
             db.SaveChanges();
 
-            vehicle = db.Vehicles.Include(e => e.CreatedBy).Include(e => e.ModifiedBy).SingleOrDefault(c => c.Id == vehicle.Id);
+            vehicle = db.Vehicles.Include(e => e.CreatedBy).Include(e => e.ModifiedBy).Include("Fleet.Customer").SingleOrDefault(c => c.Id == vehicle.Id);
 
-            return Ok(vehicle);
+            return Ok(new VehicleListEntryViewModel(vehicle));
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
