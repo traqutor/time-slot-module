@@ -11,6 +11,7 @@ import {SuppliersComponent} from "./suppliers/suppliers.component";
 import {CommoditiesComponent} from "./commodities/commodities.component";
 import {ContractsComponent} from "./contracts/contracts.component";
 import {StatusTypesComponent} from "./status-types/status-types.component";
+import {FleetsComponent} from "./fleets/fleets.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -27,6 +28,7 @@ const routes: Routes = [
       {path: 'statusTypes', component: StatusTypesComponent},
 
       {path: 'sites', component: SitesComponent},
+      {path: 'fleets', component: FleetsComponent},
     ]
   },
 ];

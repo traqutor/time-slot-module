@@ -1,20 +1,20 @@
-<h1 mat-dialog-title>Site</h1>
+<h1 mat-dialog-title>Fleet</h1>
 
 <div mat-dialog-content>
 
-  <form [formGroup]="siteForm" fxLayout="column">
+  <form [formGroup]="fleetForm" fxLayout="column">
 
     <mat-form-field fxFlex appearance="outline">
 
-      <mat-label>Site Name</mat-label>
+      <mat-label>Fleet Name</mat-label>
 
       <input matInput
              cdkFocusInitial
              type="text"
-             placeholder="Site Name"
+             placeholder="Fleet Name"
              formControlName="name">
       <mat-error
-        *ngIf="siteForm.get('name').hasError('required') && siteForm.get('name').touched">
+        *ngIf="fleetForm.get('name').hasError('required') && fleetForm.get('name').touched">
         Name is required.
       </mat-error>
 
@@ -37,12 +37,11 @@
       </mat-select>
 
       <mat-error
-        *ngIf="siteForm.get('customer').hasError('required') && siteForm.get('customer').touched">
+        *ngIf="fleetForm.get('customer').hasError('required') && fleetForm.get('customer').touched">
         Customer is required.
       </mat-error>
 
     </mat-form-field>
-
 
   </form>
 
@@ -52,7 +51,7 @@
 
   <button mat-raised-button
           color="primary"
-          [disabled]="!siteForm.valid"
+          [disabled]="!fleetForm.valid"
           type="button"
           (click)="submit()">OK
   </button>

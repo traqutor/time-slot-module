@@ -33,6 +33,8 @@ import { ContractsComponent } from './contracts/contracts.component';
 import { ContractDialogComponent } from './contracts/contract-dialog/contract-dialog.component';
 import { StatusTypesComponent } from './status-types/status-types.component';
 import { StatusTypeDialogComponent } from './status-types/status-type-dialog/status-type-dialog.component';
+import { FleetsComponent } from './fleets/fleets.component';
+import { FleetDialogComponent } from './fleets/fleet-dialog/fleet-dialog.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,8 @@ import { StatusTypeDialogComponent } from './status-types/status-type-dialog/sta
     ContractDialogComponent,
     StatusTypesComponent,
     StatusTypeDialogComponent,
+    FleetsComponent,
+    FleetDialogComponent,
 
   ],
   imports: [
@@ -85,6 +89,8 @@ import { StatusTypeDialogComponent } from './status-types/status-type-dialog/sta
     CommodityDialogComponent,
     ContractDialogComponent,
     StatusTypeDialogComponent,
+    SiteDialogComponent,
+    FleetDialogComponent,
   ],
   bootstrap: [AppComponent]
 })
