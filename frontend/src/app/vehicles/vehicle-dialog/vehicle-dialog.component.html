@@ -1,3 +1,90 @@
-<p>
-  vehicle-dialog works!
-</p>
+<h1 mat-dialog-title>Vehicle</h1>
+
+<div mat-dialog-content>
+
+  <form [formGroup]="vehicleForm" fxLayout="column">
+
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Rego</mat-label>
+
+      <input matInput
+             cdkFocusInitial
+             type="text"
+             placeholder="Rego"
+             formControlName="rego">
+      <mat-error
+        *ngIf="vehicleForm.get('rego').hasError('required') && vehicleForm.get('rego').touched">
+        Rego is required.
+      </mat-error>
+
+    </mat-form-field>
+
+    <!--customer-->
+    <mat-form-field *ngIf="customers" fxFlex appearance="outline">
+
+      <mat-label>Customer</mat-label>
+
+      <mat-select #option
+                  placeholder="Select Customer"
+                  formControlName="customer"
+                  (valueChange)="onCustomerChange(option.value)"
+                  [compareWith]="compare">
+
+        <mat-option *ngFor="let cust of customers" [value]="cust">
+          {{cust.name}}
+        </mat-option>
+
+      </mat-select>
+
+      <mat-error
+        *ngIf="vehicleForm.get('customer').hasError('required') && vehicleForm.get('customer').touched">
+        Customer is required.
+      </mat-error>
+
+    </mat-form-field>
+
+
+    <!--fleet-->
+    <mat-form-field *ngIf="fleets" fxFlex appearance="outline">
+
+      <mat-label>Fleed</mat-label>
+
+      <mat-select #option
+                  placeholder="Select Fleet"
+                  formControlName="fleet"
+                  [compareWith]="compare">
+
+        <mat-option *ngFor="let fleet of fleets" [value]="fleet">
+          {{fleet.name}}
+        </mat-option>
+
+      </mat-select>
+
+      <mat-error
+        *ngIf="vehicleForm.get('fleet').hasError('required') && vehicleForm.get('fleet').touched">
+        Customer is required.
+      </mat-error>
+
+    </mat-form-field>
+
+
+  </form>
+
+</div>
+
+<div mat-dialog-actions>
+
+  <button mat-raised-button
+          color="primary"
+          [disabled]="!vehicleForm.valid"
+          type="button"
+          (click)="submit()">OK
+  </button>
+
+  <button mat-raised-button
+          type="button"
+          mat-dialog-close>Cancel
+  </button>
+
+</div>

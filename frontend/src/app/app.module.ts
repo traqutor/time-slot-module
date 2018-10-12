@@ -100,6 +100,7 @@ import { VehicleDialogComponent } from './vehicles/vehicle-dialog/vehicle-dialog
     SiteDialogComponent,
     FleetDialogComponent,
     TimeSlotDialogComponent,
+    VehicleDialogComponent,
   ],
   bootstrap: [AppComponent]
 })
