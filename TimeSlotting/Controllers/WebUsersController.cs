@@ -219,6 +219,9 @@ namespace TimeSlotting.Controllers
                     user.SiteId = model.Site?.Id;
 
                     user.ASPId = applicationUser.Id;
+                    user.FirstName = model.Name;
+                    user.LastName = model.Surname;
+
                     user.EntityStatus = EntityStatus.NORMAL;
                     user.CreationDate = DateTime.UtcNow;
                     user.ModificationDate = DateTime.UtcNow;
@@ -246,6 +249,9 @@ namespace TimeSlotting.Controllers
              
                 if (result.Result.Succeeded)
                 {
+                    user.FirstName = model.Name;
+                    user.LastName = model.Surname;
+
                     user.ModificationDate = DateTime.UtcNow;
                     user.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
