@@ -125,11 +125,7 @@ namespace TimeSlotting.Controllers
                 vehicle.EntityStatus = model.EntityStatus;
 
                 vehicle.ModificationDate = DateTime.UtcNow;
-                vehicle.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
-
-                db.Entry(vehicle).State = EntityState.Modified;
-                db.Entry(vehicle).Property(x => x.CreationDate).IsModified = false;
-                db.Entry(vehicle).Property(x => x.CreatedBy).IsModified = false;
+                vehicle.ModifiedById = Common.GetUserId(User.Identity.GetUserId());;
             }
 
             db.SaveChanges();
