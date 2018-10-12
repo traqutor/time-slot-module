@@ -192,7 +192,7 @@ namespace TimeSlotting.Controllers
         /// updates or creates user
         /// </summary>
         /// <param name="model">email, password, Role.Name - required for new user creation
-        /// optional: Customer.Id, Site.Id, Fleet.Id, Vehicles.regos
+        /// optional: Customer.Id, Site.Id, Fleet.Id, Vehicles.Ids
         /// </param>
         /// <returns></returns>
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
@@ -280,12 +280,12 @@ namespace TimeSlotting.Controllers
 
                 foreach (var vehicle in model.Vehicles)
                 {
-                    var id = Regex.Replace(vehicle.Rego, "[^0-9]", "");
-                    if (id != "")
+                    var id = vehicle.Id;
+                    if (id != 0)
                     {
                         var item = new VehicleDriver();
                         item.WebUserId = user.Id;
-                        item.VehicleId = Int32.Parse(id);
+                        item.VehicleId = id;
 
                         db.VehicleDrivers.Add(item);
                     }

@@ -153,7 +153,9 @@
             <summary>
             updates or creates user
             </summary>
-            <param name="model">email, password, Role.Name - required for new user creation</param>
+            <param name="model">email, password, Role.Name - required for new user creation
+            optional: Customer.Id, Site.Id, Fleet.Id, Vehicles.regos
+            </param>
             <returns></returns>
         </member>
         <member name="F:TimeSlotting.Data.Entities.UserSystemRoles.PossibleRoles">
