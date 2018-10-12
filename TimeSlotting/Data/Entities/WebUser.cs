@@ -45,7 +45,11 @@ namespace TimeSlotting.Data.Entities
         public EntityStatus EntityStatus { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime ModificationDate { get; set; }
-        public int CreatedBy { get; set; }
-        public int ModifiedBy { get; set; }
+        public int? CreatedById { get; set; }
+        [ForeignKey("CreatedById")]
+        public virtual WebUser CreatedBy { get; set; }
+        public int? ModifiedById { get; set; }
+        [ForeignKey("ModifiedById")]
+        public virtual WebUser ModifiedBy { get; set; }
     }
 }

@@ -84,8 +84,8 @@ namespace TimeSlotting.Controllers
 
                 site.CreationDate = DateTime.UtcNow;
                 site.ModificationDate = DateTime.UtcNow;
-                site.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                site.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                site.CreatedById = Common.GetUserId(User.Identity.GetUserId());
+                site.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
                 db.Sites.Add(site);
             }
@@ -98,11 +98,13 @@ namespace TimeSlotting.Controllers
                 site.EntityStatus = model.EntityStatus;
 
                 site.ModificationDate = DateTime.UtcNow;
-                site.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                site.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
             }
 
             db.SaveChanges();
-          
+
+            site = db.Sites.Include(e => e.CreatedBy).Include(e => e.ModifiedBy).Include(e => e.Customer).SingleOrDefault(c => c.Id == site.Id);
+
             return Ok(new SiteListEntryViewModel(site));
         }
 

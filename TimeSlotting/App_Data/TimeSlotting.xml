@@ -98,7 +98,7 @@
             <summary>
             gets vehicles for a specific driver
             </summary>
-            <param name="uid">driver id</param>
+            <param name="uid">user id</param>
             <returns></returns>
         </member>
         <member name="M:TimeSlotting.Controllers.VehiclesController.PutVehicle(TimeSlotting.Models.Customers.Fleets.VehicleListEntryViewModel)">
@@ -154,7 +154,7 @@
             updates or creates user
             </summary>
             <param name="model">email, password, Role.Name - required for new user creation
-            optional: Customer.Id, Site.Id, Fleet.Id, Vehicles.regos
+            optional: Customer.Id, Site.Id, Fleet.Id, Vehicles.Ids
             </param>
             <returns></returns>
         </member>

@@ -75,8 +75,8 @@ namespace TimeSlotting.Controllers
                 supplier.EntityStatus = model.EntityStatus;
                 supplier.CreationDate = DateTime.UtcNow;
                 supplier.ModificationDate = DateTime.UtcNow;
-                supplier.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                supplier.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                supplier.CreatedById = Common.GetUserId(User.Identity.GetUserId());
+                supplier.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
                 db.Suppliers.Add(supplier);
             }
@@ -88,11 +88,12 @@ namespace TimeSlotting.Controllers
                 supplier.EntityStatus = model.EntityStatus;
 
                 supplier.ModificationDate = DateTime.UtcNow;
-                supplier.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                supplier.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
             }
 
             db.SaveChanges();
-        
+
+            supplier = db.Suppliers.Include(e => e.CreatedBy).Include(e => e.ModifiedBy).SingleOrDefault(c => c.Id == supplier.Id);
 
             return Ok(supplier);
         }

@@ -222,8 +222,8 @@ namespace TimeSlotting.Controllers
                     user.EntityStatus = EntityStatus.NORMAL;
                     user.CreationDate = DateTime.UtcNow;
                     user.ModificationDate = DateTime.UtcNow;
-                    user.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                    user.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                    user.CreatedById = Common.GetUserId(User.Identity.GetUserId());
+                    user.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
                     db.WebUsers.Add(user);
                     db.SaveChanges();
@@ -247,7 +247,7 @@ namespace TimeSlotting.Controllers
                 if (result.Result.Succeeded)
                 {
                     user.ModificationDate = DateTime.UtcNow;
-                    user.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                    user.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
                     db.Entry(user).State = EntityState.Modified;
                     db.Entry(user).Property(x => x.ASPId).IsModified = false;

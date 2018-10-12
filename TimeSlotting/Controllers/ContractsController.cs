@@ -63,8 +63,8 @@ namespace TimeSlotting.Controllers
                 contract.EntityStatus = model.EntityStatus;
                 contract.CreationDate = DateTime.UtcNow;
                 contract.ModificationDate = DateTime.UtcNow;
-                contract.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                contract.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                contract.CreatedById = Common.GetUserId(User.Identity.GetUserId());
+                contract.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
                 db.Contracts.Add(contract);
             }
@@ -75,11 +75,13 @@ namespace TimeSlotting.Controllers
                 contract.Name = model.Name;
                 contract.EntityStatus = model.EntityStatus;
                 contract.ModificationDate = DateTime.UtcNow;
-                contract.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                contract.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
             }
 
             db.SaveChanges();
-       
+
+            contract = db.Contracts.Include(e => e.CreatedBy).Include(e => e.ModifiedBy).SingleOrDefault(c => c.Id == contract.Id);
+
             return Ok(contract);
         }
 

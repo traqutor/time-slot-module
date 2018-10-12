@@ -58,8 +58,8 @@ namespace TimeSlotting.Controllers
                 timeslot.EntityStatus = model.EntityStatus;
                 timeslot.CreationDate = DateTime.UtcNow;
                 timeslot.ModificationDate = DateTime.UtcNow;
-                timeslot.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                timeslot.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                timeslot.CreatedById = Common.GetUserId(User.Identity.GetUserId());
+                timeslot.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
                 db.TimeSlots.Add(timeslot);
             }
@@ -72,11 +72,13 @@ namespace TimeSlotting.Controllers
                 timeslot.EntityStatus = model.EntityStatus;
 
                 timeslot.ModificationDate = DateTime.UtcNow;
-                timeslot.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                timeslot.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
             }
 
             db.SaveChanges();
-       
+
+            timeslot = db.TimeSlots.Include(e => e.CreatedBy).Include(e => e.ModifiedBy).SingleOrDefault(c => c.Id == timeslot.Id);
+
             return Ok(timeslot);
         }
 

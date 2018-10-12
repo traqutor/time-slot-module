@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using TimeSlotting.Data.Entities;
 using TimeSlotting.Data.Entities.Customers.Fleets;
+using TimeSlotting.Models.Users;
 
 namespace TimeSlotting.Models.Customers.Fleets
 {
@@ -14,8 +15,8 @@ namespace TimeSlotting.Models.Customers.Fleets
 
         public CustomerListEntryViewModel Customer { get; set; }
 
-        public int CreatedBy { get; set; }
-        public int ModifiedBy { get; set; }
+        public UserListEntryViewModel CreatedBy { get; set; }
+        public UserListEntryViewModel ModifiedBy { get; set; }
 
         public DateTime CreationDate { get; set; }
         public DateTime ModificationDate { get; set; }
@@ -37,8 +38,8 @@ namespace TimeSlotting.Models.Customers.Fleets
 
             EntityStatus = entity.EntityStatus;
 
-            CreatedBy = entity.CreatedBy;
-            ModifiedBy = entity.ModifiedBy;
+            CreatedBy = new UserListEntryViewModel(entity.CreatedBy);
+            ModifiedBy = new UserListEntryViewModel(entity.ModifiedBy);
 
             CreationDate = entity.CreationDate;
             ModificationDate = entity.ModificationDate;

@@ -75,8 +75,8 @@ namespace TimeSlotting.Controllers
                 vendor.EntityStatus = model.EntityStatus;
                 vendor.CreationDate = DateTime.UtcNow;
                 vendor.ModificationDate = DateTime.UtcNow;
-                vendor.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                vendor.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                vendor.CreatedById = Common.GetUserId(User.Identity.GetUserId());
+                vendor.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
                 db.Vendors.Add(vendor);
             }
@@ -87,11 +87,13 @@ namespace TimeSlotting.Controllers
                 vendor.Name = model.Name;
                 vendor.EntityStatus = model.EntityStatus;
                 vendor.ModificationDate = DateTime.UtcNow;
-                vendor.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                vendor.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
             }
 
             db.SaveChanges();
-    
+
+            vendor = db.Vendors.Include(e => e.CreatedBy).Include(e => e.ModifiedBy).SingleOrDefault(c => c.Id == vendor.Id);
+
             return Ok(new VendorListEntryViewModel(vendor));
         }
 

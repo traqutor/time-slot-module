@@ -72,8 +72,8 @@ namespace TimeSlotting.Controllers
                 commodity.EntityStatus = model.EntityStatus;
                 commodity.CreationDate = DateTime.UtcNow;
                 commodity.ModificationDate = DateTime.UtcNow;
-                commodity.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                commodity.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                commodity.CreatedById = Common.GetUserId(User.Identity.GetUserId());
+                commodity.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
                 db.Commodities.Add(commodity);
             }
@@ -85,11 +85,13 @@ namespace TimeSlotting.Controllers
                 commodity.EntityStatus = model.EntityStatus;
 
                 commodity.ModificationDate = DateTime.UtcNow;
-                commodity.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                commodity.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
             }
 
             db.SaveChanges();
-      
+
+            commodity = db.Commodities.Include(e => e.CreatedBy).Include(e => e.ModifiedBy).SingleOrDefault(c => c.Id == commodity.Id);
+
             return Ok(commodity);
         }
 

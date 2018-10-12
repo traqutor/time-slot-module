@@ -64,8 +64,8 @@ namespace TimeSlotting.Controllers
                 statusType.EntityStatus = model.EntityStatus;
                 statusType.CreationDate = DateTime.UtcNow;
                 statusType.ModificationDate = DateTime.UtcNow;
-                statusType.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                statusType.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                statusType.CreatedById = Common.GetUserId(User.Identity.GetUserId());
+                statusType.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
                 db.StatusTypes.Add(statusType);
             }
@@ -76,7 +76,7 @@ namespace TimeSlotting.Controllers
                 statusType.Name = model.Name;
                 statusType.EntityStatus = model.EntityStatus;
                 statusType.ModificationDate = DateTime.UtcNow;
-                statusType.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                statusType.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
                 db.Entry(statusType).State = EntityState.Modified;
                 db.Entry(statusType).Property(x => x.CreationDate).IsModified = false;
@@ -84,6 +84,8 @@ namespace TimeSlotting.Controllers
             }
 
             db.SaveChanges();
+
+            statusType = db.StatusTypes.Include(e => e.CreatedBy).Include(e => e.ModifiedBy).SingleOrDefault(c => c.Id == statusType.Id);
 
             return Ok(statusType);
         }

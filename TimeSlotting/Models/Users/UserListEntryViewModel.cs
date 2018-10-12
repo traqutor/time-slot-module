@@ -33,6 +33,15 @@ namespace TimeSlotting.Models.Users
 
         }
 
+        public UserListEntryViewModel(WebUser entity)
+        {
+            Id = entity.Id;
+            Email = entity.User.UserName;
+
+            Name = entity.FirstName;
+            Surname = entity.LastName;
+        }
+
         public UserListEntryViewModel(WebUser entity, List<IdentityRole> roles)
         {
             Id = entity.Id;

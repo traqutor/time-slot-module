@@ -13,8 +13,8 @@ namespace TimeSlotting.Models.Customers
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public int CreatedBy { get; set; }
-        public int ModifiedBy { get; set; }
+        public UserListEntryViewModel CreatedBy { get; set; }
+        public UserListEntryViewModel ModifiedBy { get; set; }
 
         public DateTime CreationDate { get; set; }
         public DateTime ModificationDate { get; set; }
@@ -30,11 +30,13 @@ namespace TimeSlotting.Models.Customers
         {
             Id = entity.Id;
             Name = entity.Name;
-
+            
             EntityStatus = entity.EntityStatus;
 
-            CreatedBy = entity.CreatedBy;
-            ModifiedBy = entity.ModifiedBy;
+            var id = entity.CreatedBy.Id;
+
+            CreatedBy = new UserListEntryViewModel(entity.CreatedBy);
+            ModifiedBy = new UserListEntryViewModel(entity.ModifiedBy);
 
             CreationDate = entity.CreationDate;
             ModificationDate = entity.ModificationDate;

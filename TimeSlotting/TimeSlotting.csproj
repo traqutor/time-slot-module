@@ -270,6 +270,10 @@
     <Compile Include="Migrations\201810091809402_InitialCreate.Designer.cs">
       <DependentUpon>201810091809402_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810121207206_DatabaseForeignKeysForCreatedBy.cs" />
+    <Compile Include="Migrations\201810121207206_DatabaseForeignKeysForCreatedBy.Designer.cs">
+      <DependentUpon>201810121207206_DatabaseForeignKeysForCreatedBy.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Customers\CustomerListEntryViewModel.cs" />
@@ -1220,6 +1224,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201810091809402_InitialCreate.resx">
       <DependentUpon>201810091809402_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810121207206_DatabaseForeignKeysForCreatedBy.resx">
+      <DependentUpon>201810121207206_DatabaseForeignKeysForCreatedBy.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

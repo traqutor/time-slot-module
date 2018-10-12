@@ -102,15 +102,15 @@ namespace TimeSlotting.Controllers
                     timeslot.EntityStatus = EntityStatus.NORMAL;
                     timeslot.CreationDate = DateTime.UtcNow;
                     timeslot.ModificationDate = DateTime.UtcNow;
-                    timeslot.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                    timeslot.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                   // timeslot.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
+                    timeslot.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
                     db.DeliveryTimeSlots.Add(timeslot);
                 }
                 else
                 {
                     timeslot.ModificationDate = DateTime.UtcNow;
-                    timeslot.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                    timeslot.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
                     db.Entry(timeslot).State = EntityState.Modified;
                     db.Entry(timeslot).Property(x => x.CreationDate).IsModified = false;

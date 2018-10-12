@@ -28,6 +28,12 @@ namespace TimeSlotting.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<WebUser>()
+                .HasOptional(u => u.CreatedBy).WithMany();
+
+            modelBuilder.Entity<WebUser>()
+                .HasOptional(u => u.ModifiedBy).WithMany();
         }
 
         public virtual DbSet<WebUser> WebUsers { get; set; }

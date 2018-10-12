@@ -57,8 +57,8 @@ namespace TimeSlotting.Controllers
                 customer.EntityStatus = model.EntityStatus;
                 customer.CreationDate = DateTime.UtcNow;
                 customer.ModificationDate = DateTime.UtcNow;
-                customer.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                customer.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                customer.CreatedById = Common.GetUserId(User.Identity.GetUserId());
+                customer.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
                 db.Customers.Add(customer);
             }
@@ -67,12 +67,14 @@ namespace TimeSlotting.Controllers
                 customer = db.Customers.Find(model.Id);
                 customer.EntityStatus = model.EntityStatus;
                 customer.ModificationDate = DateTime.UtcNow;
-                customer.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                customer.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
                 customer.Name = model.Name;
             }
 
             db.SaveChanges();
-         
+
+            customer = db.Customers.Include(e => e.CreatedBy).Include(e => e.ModifiedBy).SingleOrDefault(c => c.Id == customer.Id);
+
             return Ok(new CustomerListEntryViewModel(customer));
         }
 

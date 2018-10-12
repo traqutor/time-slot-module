@@ -83,24 +83,28 @@ namespace TimeSlotting.Controllers
 
                 fleet.CreationDate = DateTime.UtcNow;
                 fleet.ModificationDate = DateTime.UtcNow;
-                fleet.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                fleet.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                fleet.CreatedById = Common.GetUserId(User.Identity.GetUserId());
+                fleet.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
                 db.Fleets.Add(fleet);
             }
             else
             {
+                fleet = db.Fleets.Find(model.Id);
+
                 fleet.Name = model.Name;
                 fleet.CustomerId = model.Customer.Id;
                 fleet.EntityStatus = model.EntityStatus;
 
                 fleet.ModificationDate = DateTime.UtcNow;
-                fleet.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                fleet.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
             }
 
             db.SaveChanges();
-         
-            return Ok(fleet);
+
+            fleet = db.Fleets.Include(e => e.CreatedBy).Include(e => e.ModifiedBy).Include(e => e.Customer).SingleOrDefault(c => c.Id == fleet.Id);
+
+            return Ok(new FleetListEntryViewModel(fleet));
         }
 
         public IHttpActionResult DeleteFleet(int id)

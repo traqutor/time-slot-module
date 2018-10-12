@@ -60,7 +60,7 @@ namespace TimeSlotting.Controllers
         /// <summary>
         /// gets vehicles for a specific driver
         /// </summary>
-        /// <param name="uid">driver id</param>
+        /// <param name="uid">user id</param>
         /// <returns></returns>
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
@@ -110,8 +110,8 @@ namespace TimeSlotting.Controllers
 
                 vehicle.CreationDate = DateTime.UtcNow;
                 vehicle.ModificationDate = DateTime.UtcNow;
-                vehicle.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                vehicle.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                vehicle.CreatedById = Common.GetUserId(User.Identity.GetUserId());
+                vehicle.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
                 db.Vehicles.Add(vehicle);
             }
@@ -125,7 +125,7 @@ namespace TimeSlotting.Controllers
                 vehicle.EntityStatus = model.EntityStatus;
 
                 vehicle.ModificationDate = DateTime.UtcNow;
-                vehicle.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+                vehicle.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
                 db.Entry(vehicle).State = EntityState.Modified;
                 db.Entry(vehicle).Property(x => x.CreationDate).IsModified = false;
@@ -133,7 +133,9 @@ namespace TimeSlotting.Controllers
             }
 
             db.SaveChanges();
-          
+
+            vehicle = db.Vehicles.Include(e => e.CreatedBy).Include(e => e.ModifiedBy).SingleOrDefault(c => c.Id == vehicle.Id);
+
             return Ok(vehicle);
         }
 
