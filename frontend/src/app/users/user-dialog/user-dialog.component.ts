@@ -47,11 +47,16 @@ export class UserDialogComponent implements OnInit, OnDestroy {
       }));
 
     // take roles
-
     this.userService.getRoles()
       .subscribe((res: IRoleResult) => {
         this.roles = res.results;
       });
+
+    if (this.user.id > 0) {
+      this.onCustomerChange(this.user.customer);
+      this.onFleetChange(this.user.fleet);
+    }
+
 
     this.userForm = this.formBuilder.group({
       id: this.user.id,
@@ -81,11 +86,9 @@ export class UserDialogComponent implements OnInit, OnDestroy {
   }
 
   onFleetChange(fleet: IFleet) {
-    console.log('szukam vehicli dla', fleet);
     this.vehicleService.getVehiclesForFleetId(fleet.id)
       .subscribe((res: Array<IVehicle>) => {
         this.fleetsVehicles = res;
-        console.log('this.fleetsVehicles',this.fleetsVehicles);
       });
   }
 
