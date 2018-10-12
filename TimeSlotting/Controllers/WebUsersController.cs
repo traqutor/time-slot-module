@@ -203,7 +203,7 @@ namespace TimeSlotting.Controllers
             WebUser user = new WebUser();
 
             var userManager = Common.GetUserManager();
-            if (user.Id == 0)
+            if (model.Id == 0)
             {                    
                 var applicationUser = new User();
                 applicationUser.Email = model.Email;
@@ -249,6 +249,8 @@ namespace TimeSlotting.Controllers
              
                 if (result.Result.Succeeded)
                 {
+                    user = db.WebUsers.Find(model.Id);
+
                     user.FirstName = model.Name;
                     user.LastName = model.Surname;
 
@@ -256,9 +258,6 @@ namespace TimeSlotting.Controllers
                     user.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
                     db.Entry(user).State = EntityState.Modified;
-                    db.Entry(user).Property(x => x.ASPId).IsModified = false;
-                    db.Entry(user).Property(x => x.CreationDate).IsModified = false;
-                    db.Entry(user).Property(x => x.CreatedBy).IsModified = false;
                     db.SaveChanges();
 
                     if (model.Password != "")
