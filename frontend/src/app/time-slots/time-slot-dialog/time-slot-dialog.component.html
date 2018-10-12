@@ -1,0 +1,55 @@
+<h1 mat-dialog-title>Time Slot</h1>
+
+<div mat-dialog-content>
+
+  <form [formGroup]="timeSlotForm">
+
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Start Time</mat-label>
+
+      <input matInput
+             cdkFocusInitial
+             type="text"
+             placeholder="Start time"
+             formControlName="startTime">
+      <mat-error
+        *ngIf="timeSlotForm.get('startTime').hasError('required') && timeSlotForm.get('startTime').touched">
+        Start Time is required.
+      </mat-error>
+
+    </mat-form-field>
+
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>End Time</mat-label>
+
+      <input matInput
+             cdkFocusInitial
+             type="text"
+             placeholder="End time"
+             formControlName="endTime">
+      <mat-error
+        *ngIf="timeSlotForm.get('endTime').hasError('required') && timeSlotForm.get('endTime').touched">
+        End Time is required.
+      </mat-error>
+
+    </mat-form-field>
+
+  </form>
+
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button
+          color="primary"
+          [disabled]="!timeSlotForm.valid"
+          type="button"
+          (click)="submit()">OK
+  </button>
+
+  <button mat-raised-button
+          type="button"
+          mat-dialog-close>Cancel
+  </button>
+</div>

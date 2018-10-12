@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ISite} from "../sites/site.model";
 import {BehaviorSubject, Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
@@ -29,19 +29,15 @@ export class FleetService {
       });
   }
 
-  getFleetsById(fleetId: number) {
-    this.http.get(`${this.url}/api/Fleets/GetFleets/${fleetId}`)
-      .subscribe((res: Array<IFleet>) => {
-        this.fleets = res;
-        this.fleetsChanged.next(this.fleets);
-      });
+  getFleetsById(fleetId: number): Observable<Array<IFleet>> {
+    return this.http.get<Array<IFleet>>(`${this.url}/api/Fleets/GetFleets/${fleetId}`);
   }
 
   getFleetById(fleetId: number): Observable<IFleet> {
     return this.http.get<IFleet>(`${this.url}/api/Fleets/GetFleet/${fleetId}`);
   }
 
-  putFleet(fleet: IFleet, index: number)  {
+  putFleet(fleet: IFleet, index: number) {
 
     this.http.put(`${this.url}/api/Fleets/PutFleet`, fleet)
       .subscribe((res: IFleet) => {

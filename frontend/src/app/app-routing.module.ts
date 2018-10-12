@@ -12,6 +12,9 @@ import {CommoditiesComponent} from "./commodities/commodities.component";
 import {ContractsComponent} from "./contracts/contracts.component";
 import {StatusTypesComponent} from "./status-types/status-types.component";
 import {FleetsComponent} from "./fleets/fleets.component";
+import {TimeSlotsComponent} from "./time-slots/time-slots.component";
+import {VehiclesComponent} from "./vehicles/vehicles.component";
+import {UserComponent} from "./user/user.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -25,10 +28,14 @@ const routes: Routes = [
       {path: 'commodities', component: CommoditiesComponent},
       {path: 'contracts', component: ContractsComponent},
 
+      {path: 'timeSlots', component: TimeSlotsComponent},
       {path: 'statusTypes', component: StatusTypesComponent},
 
       {path: 'sites', component: SitesComponent},
       {path: 'fleets', component: FleetsComponent},
+      {path: 'vehicles', component: VehiclesComponent},
+
+      {path: 'users', component: UserComponent},
     ]
   },
 ];
