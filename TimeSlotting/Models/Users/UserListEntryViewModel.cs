@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using TimeSlotting.Data.Entities;
 using TimeSlotting.Models.Customers;
+using TimeSlotting.Models.Customers.Fleets;
 
 namespace TimeSlotting.Models.Users
 {
@@ -22,6 +23,8 @@ namespace TimeSlotting.Models.Users
 
         public CustomerListEntryViewModel Customer { get; set; }
         public SiteListEntryViewModel Site { get; set; }
+        public FleetListEntryViewModel Fleet { get; set; }
+        public List<VehicleListEntryViewModel> Vehicles { get; set; } = new List<VehicleListEntryViewModel>();
 
         public EntityStatus EntityStatus { get; set; }
 
@@ -39,13 +42,21 @@ namespace TimeSlotting.Models.Users
             Surname = entity.LastName;
 
             if (entity.Customer != null)
-            {
                 Customer = new CustomerListEntryViewModel(entity.Customer);
-            }
-
+          
             if (entity.Site != null)
-            {
                 Site = new SiteListEntryViewModel(entity.Site);
+           
+            if (entity.Fleet != null)
+                Fleet = new FleetListEntryViewModel(entity.Fleet);
+
+            if(entity.VehicleDrivers != null)
+            {
+                foreach (var item in entity.VehicleDrivers)
+                {
+                    if (item.Vehicle != null)
+                        Vehicles.Add(new VehicleListEntryViewModel(item.Vehicle));
+                }
             }
 
             Role = new RoleListEntryViewModel(roles.SingleOrDefault(r => r.Id == entity.User.Roles.FirstOrDefault().RoleId));

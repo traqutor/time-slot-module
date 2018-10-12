@@ -127,6 +127,35 @@
             <param name="model">Set model id to 0 if creating new. When creating/modfying only Name and EntityStatus is take into account, rest is auto completed.</param>
             <returns></returns>
         </member>
+        <member name="M:TimeSlotting.Controllers.WebUsersController.GetUsers">
+            <summary>
+            returns UsersList
+            includes Customer,Site,Fleet
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.WebUsersController.GetUser(System.Int32)">
+            <summary>
+            returns a user with a given id
+            includes Customer,Site,Fleet,Vehicles
+            </summary>
+            <param name="id">user id</param>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.WebUsersController.GetDrivers(System.Int32)">
+            <summary>
+            get all drivers for a given customer
+            </summary>
+            <param name="cid">customer id</param>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.WebUsersController.PutUser(TimeSlotting.Models.Users.UserListEntryViewModel)">
+            <summary>
+            updates or creates user
+            </summary>
+            <param name="model">email, password, Role.Name - required for new user creation</param>
+            <returns></returns>
+        </member>
         <member name="F:TimeSlotting.Data.Entities.UserSystemRoles.PossibleRoles">
             <summary>
             used for database initialization, if adding new roles, please assign it here so the initializer will create all roles properly

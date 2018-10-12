@@ -19,6 +19,7 @@ using TimeSlotting.Models.Users;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Net.Http;
 using System.Net;
+using System.Web.Http.Description;
 
 namespace TimeSlotting.Controllers
 {
@@ -47,11 +48,18 @@ namespace TimeSlotting.Controllers
             return Ok(Common.GetUserName(id));
         }
 
+        /// <summary>
+        /// returns UsersList
+        /// includes Customer,Site,Fleet
+        /// </summary>
+        /// <returns></returns>
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin")]
+        [ResponseType(typeof(List<UserListEntryViewModel>))]
         public IHttpActionResult GetUsers()
         {
-            var userList = new List<Tuple<WebUser, User, String>>();
+            /* Old code
+             * var userList = new List<Tuple<WebUser, User, String>>();
             var users = (from m in db.WebUsers
                          join u in db.Users on m.ASPId equals u.Id
                          where m.EntityStatus != EntityStatus.DELETED
@@ -72,13 +80,36 @@ namespace TimeSlotting.Controllers
             }
 
             return Ok(new { data = userList, admin = User.IsInRole("Administrator"), cid = id });
+            */
+
+            var users = db.WebUsers.Include(u => u.Customer).Include(u => u.Site).Include(u => u.Fleet).Where(u => u.EntityStatus != EntityStatus.DELETED).AsQueryable();
+                        
+            int? id = null;
+            if (!User.IsInRole("Administrator"))
+            {
+                id = Common.GetCustomerId(User.Identity.GetUserId());
+                users = users.Where(x => x.CustomerId == id);
+            }
+
+            var usersList = users.AsNoTracking().ToList();
+
+            var roles = db.Roles.OrderByDescending(r => r.Id).ToList(); 
+
+            return Ok(users.ToList().Select(el => new UserListEntryViewModel(el, roles)));
         }
 
+        /// <summary>
+        /// returns a user with a given id
+        /// includes Customer,Site,Fleet,Vehicles
+        /// </summary>
+        /// <param name="id">user id</param>
+        /// <returns></returns>
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin")]
-
+        [ResponseType(typeof(UserListEntryViewModel))]
         public IHttpActionResult GetUser(int id)
         {
+            /* Old code
             WebUser user = db.WebUsers.Find(id);
             if (user == null)
             {
@@ -97,6 +128,16 @@ namespace TimeSlotting.Controllers
             var result = new { user = user, email = Common.GetUserEmail(id), role = Common.GetRoleName(aspUser.Roles.First().RoleId), vehicles = vehicles };
 
             return Ok(result);
+            */
+            WebUser user = db.WebUsers.Include(u => u.Customer).Include(u => u.Site).Include(u => u.Fleet).Include("VehicleDrivers.Vehicle").AsNoTracking().SingleOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var roles = db.Roles.OrderByDescending(r => r.Id).ToList();
+            
+            return Ok(new UserListEntryViewModel(user, roles));
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
@@ -110,10 +151,17 @@ namespace TimeSlotting.Controllers
             return Ok(new { role = role, cid = cid, uid = Common.GetUserId(User.Identity.GetUserId()) });
         }
 
+        /// <summary>
+        /// get all drivers for a given customer
+        /// </summary>
+        /// <param name="cid">customer id</param>
+        /// <returns></returns>
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
+        [ResponseType(typeof(List<UserListEntryViewModel>))]
         public IHttpActionResult GetDrivers(int cid)
         {
+            /* old code
             var users = (from m in db.WebUsers
                          join u in db.Users on m.ASPId equals u.Id
                          where m.EntityStatus != EntityStatus.DELETED && m.CustomerId == cid
@@ -129,123 +177,125 @@ namespace TimeSlotting.Controllers
             }
 
             return Ok(drivers);
+            */
+
+            var roles = db.Roles.OrderByDescending(r => r.Id).ToList();
+            string driverRoleId = roles.SingleOrDefault(r => r.Name == UserSystemRoles.Driver)?.Id;
+
+            var users = db.WebUsers.Where(u => u.EntityStatus != EntityStatus.DELETED && u.CustomerId == cid && u.User.Roles.Any(r => r.RoleId == driverRoleId))
+                .OrderBy(u => u.LastName).AsNoTracking();
+
+            return Ok(users.ToList().Select(el => new UserListEntryViewModel(el, roles)));
         }
 
+        /// <summary>
+        /// updates or creates user
+        /// </summary>
+        /// <param name="model">email, password, Role.Name - required for new user creation
+        /// optional: Customer.Id, Site.Id, Fleet.Id, Vehicles.regos
+        /// </param>
+        /// <returns></returns>
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin")]
-        public IHttpActionResult PutUser(JObject jsonResult)
+        [ResponseType(typeof(UserListEntryViewModel))]
+        public IHttpActionResult PutUser(UserListEntryViewModel model)
         {
-            var response = "OK";
+            WebUser user = new WebUser();
 
-            if (jsonResult != null)
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                WebUser user = (WebUser)serializer.Deserialize(new JTokenReader(jsonResult.First.First), typeof(WebUser));
+            var userManager = Common.GetUserManager();
+            if (user.Id == 0)
+            {                    
+                var applicationUser = new User();
+                applicationUser.Email = model.Email;
+                applicationUser.UserName = model.Email;
 
-                var email = jsonResult.First.Next.First.ToString();
-                var password = jsonResult.First.Next.Next.First.ToString();
-                var role = jsonResult.First.Next.Next.Next.First.ToString();
-                var vehicles = jsonResult.First.Next.Next.Next.Next.First.ToString();
+                var result = userManager.Create(applicationUser, model.Password);
+                if (result.Succeeded)
+                {
+                    userManager.AddToRole(applicationUser.Id, model.Role.Name);
 
-                var userManager = Common.GetUserManager();
-                if (user.Id == 0)
-                {                    
-                    var applicationUser = new User();
-                    applicationUser.Email = email;
-                    applicationUser.UserName = email;
+                    user.CustomerId = model.Customer?.Id;
+                    user.FleetId = model.Fleet?.Id;
+                    user.SiteId = model.Site?.Id;
 
-                    var result = userManager.Create(applicationUser, password);
-                    if (result.Succeeded)
-                    {
-                        userManager.AddToRole(applicationUser.Id, role);
+                    user.ASPId = applicationUser.Id;
+                    user.EntityStatus = EntityStatus.NORMAL;
+                    user.CreationDate = DateTime.UtcNow;
+                    user.ModificationDate = DateTime.UtcNow;
+                    user.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
+                    user.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
 
-                        user.ASPId = applicationUser.Id;
-                        user.EntityStatus = EntityStatus.NORMAL;
-                        user.CreationDate = DateTime.UtcNow;
-                        user.ModificationDate = DateTime.UtcNow;
-                        user.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                        user.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
-
-                        db.WebUsers.Add(user);
-                        db.SaveChanges();
-                    }
-                    else
-                    {
-                        foreach (var error in result.Errors)
-                        {
-                            response = error;
-                        }
-                    }
+                    db.WebUsers.Add(user);
+                    db.SaveChanges();
                 }
                 else
                 {
-                    var userASP = userManager.FindById(user.ASPId);
-                    userASP.Email = email;
-                    userASP.UserName = email;
-
-                    userManager.RemoveFromRole(user.ASPId, userManager.GetRoles(user.ASPId)[0]);
-                    userManager.AddToRole(user.ASPId, role);
-
-                    var result = userManager.UpdateAsync(userASP);
-                    foreach (var error in result.Result.Errors)
-                    {
-                        response = error;
-                    }
-
-                    if (result.Result.Succeeded)
-                    {
-                        user.ModificationDate = DateTime.UtcNow;
-                        user.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
-
-                        db.Entry(user).State = EntityState.Modified;
-                        db.Entry(user).Property(x => x.ASPId).IsModified = false;
-                        db.Entry(user).Property(x => x.CreationDate).IsModified = false;
-                        db.Entry(user).Property(x => x.CreatedBy).IsModified = false;
-                        db.SaveChanges();
-
-                        if (password != "")
-                        {
-                            var provider = new DpapiDataProtectionProvider("Sample");
-                            userManager.UserTokenProvider = new DataProtectorTokenProvider<User>(provider.Create("PasswordReset"));
-
-                            var token = userManager.GeneratePasswordResetToken(userASP.Id);
-                            var reset = userManager.ResetPassword(userASP.Id, token, password);
-                            foreach (var error in reset.Errors)
-                            {
-                                response = error;
-                            }
-                        }
-                    }
-                }
-
-                if (vehicles != "" && response == "OK")
-                {
-                    db.VehicleDrivers.RemoveRange(db.VehicleDrivers.Where(x => x.WebUserId == user.Id));
-                    db.SaveChanges();
-
-                    var regos = vehicles.Split(',');
-                    foreach (string rego in regos)
-                    {
-                        var id = Regex.Replace(rego, "[^0-9]", "");
-                        if (id != "")
-                        {
-                            var item = new VehicleDriver();
-                            item.WebUserId = user.Id;
-                            item.VehicleId = Int32.Parse(id);
-
-                            db.VehicleDrivers.Add(item);
-                        }
-                    }
-
-                    db.SaveChanges();
+                    return BadRequest(JsonConvert.SerializeObject(result.Errors));
                 }
             }
             else
             {
-                response = "No User Data";
+                var userASP = userManager.FindById(user.ASPId);
+                userASP.Email = model.Email;
+                userASP.UserName = model.Email;
+
+                userManager.RemoveFromRole(user.ASPId, userManager.GetRoles(user.ASPId)[0]);
+                userManager.AddToRole(user.ASPId, model.Role.Name);
+
+                var result = userManager.UpdateAsync(userASP);
+             
+                if (result.Result.Succeeded)
+                {
+                    user.ModificationDate = DateTime.UtcNow;
+                    user.ModifiedBy = Common.GetUserId(User.Identity.GetUserId());
+
+                    db.Entry(user).State = EntityState.Modified;
+                    db.Entry(user).Property(x => x.ASPId).IsModified = false;
+                    db.Entry(user).Property(x => x.CreationDate).IsModified = false;
+                    db.Entry(user).Property(x => x.CreatedBy).IsModified = false;
+                    db.SaveChanges();
+
+                    if (model.Password != "")
+                    {
+                        var provider = new DpapiDataProtectionProvider("Sample");
+                        userManager.UserTokenProvider = new DataProtectorTokenProvider<User>(provider.Create("PasswordReset"));
+
+                        var token = userManager.GeneratePasswordResetToken(userASP.Id);
+                        var reset = userManager.ResetPassword(userASP.Id, token, model.Password);
+
+                        if(reset.Errors.Count() > 0)
+                            return BadRequest(JsonConvert.SerializeObject(result.Result.Errors));
+                    }
+                }
+                else
+                {
+                    return BadRequest(JsonConvert.SerializeObject(result.Result.Errors));
+                }
             }
 
-            return Ok(response);
+            if (model.Vehicles != null)
+            {
+                db.VehicleDrivers.RemoveRange(db.VehicleDrivers.Where(x => x.WebUserId == user.Id));
+                db.SaveChanges();
+
+                foreach (var vehicle in model.Vehicles)
+                {
+                    var id = Regex.Replace(vehicle.Rego, "[^0-9]", "");
+                    if (id != "")
+                    {
+                        var item = new VehicleDriver();
+                        item.WebUserId = user.Id;
+                        item.VehicleId = Int32.Parse(id);
+
+                        db.VehicleDrivers.Add(item);
+                    }
+                }
+                db.SaveChanges();
+            }
+
+            var roles = db.Roles.OrderByDescending(r => r.Id).ToList();
+
+            return Ok(new UserListEntryViewModel(user, roles));
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin")]
@@ -271,7 +321,7 @@ namespace TimeSlotting.Controllers
         public UserListEntryViewModel GetUserInfo()
         {
             string loggedUserId = User.Identity.GetUserId();
-            var userToReturn = db.WebUsers.Include(u => u.Customer).SingleOrDefault(u => u.ASPId == loggedUserId);
+            var userToReturn = db.WebUsers.Include(u => u.Customer).AsNoTracking().SingleOrDefault(u => u.ASPId == loggedUserId);
 
             if (userToReturn == null)
                 throw new HttpResponseException(HttpStatusCode.Unauthorized);
