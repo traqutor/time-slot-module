@@ -10,6 +10,7 @@ import {SitesComponent} from "./sites/sites.component";
 import {SuppliersComponent} from "./suppliers/suppliers.component";
 import {CommoditiesComponent} from "./commodities/commodities.component";
 import {ContractsComponent} from "./contracts/contracts.component";
+import {StatusTypesComponent} from "./status-types/status-types.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -22,6 +23,8 @@ const routes: Routes = [
       {path: 'suppliers', component: SuppliersComponent},
       {path: 'commodities', component: CommoditiesComponent},
       {path: 'contracts', component: ContractsComponent},
+
+      {path: 'statusTypes', component: StatusTypesComponent},
 
       {path: 'sites', component: SitesComponent},
     ]

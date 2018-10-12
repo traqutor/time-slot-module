@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {ICommodity} from "../commodities/commodity.model";
 import {EntityStatusEnum} from "../user/user.model";
-import {CommodityService} from "../commodities/commodity.service";
 import {ConfirmDialogService} from "../common/confirm-dialog/confirm-dialog.service";
 import {MatDialog} from "@angular/material";
-import {CommodityDialogComponent} from "../commodities/commodity-dialog/commodity-dialog.component";
 import {Subscription} from "rxjs";
 import {IContract} from "./contract.model";
 import {ContractService} from "./contract.service";

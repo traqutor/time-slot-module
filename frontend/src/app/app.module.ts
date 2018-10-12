@@ -84,6 +84,7 @@ import { StatusTypeDialogComponent } from './status-types/status-type-dialog/sta
     SupplierDialogComponent,
     CommodityDialogComponent,
     ContractDialogComponent,
+    StatusTypeDialogComponent,
   ],
   bootstrap: [AppComponent]
 })
