@@ -42,6 +42,7 @@ import {VehicleDialogComponent} from './vehicles/vehicle-dialog/vehicle-dialog.c
 import {UserDialogComponent} from "./users/user-dialog/user-dialog.component";
 import { AdminComponent } from './common/admin/admin.component';
 import { TimeSlotsUserViewComponent } from './time-slots/time-slots-user-view/time-slots-user-view.component';
+import { TimeSlotDeliveryDialogComponent } from './time-slots/time-slot-delivery-dialog/time-slot-delivery-dialog.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { TimeSlotsUserViewComponent } from './time-slots/time-slots-user-view/ti
     UserDialogComponent,
     AdminComponent,
     TimeSlotsUserViewComponent,
+    TimeSlotDeliveryDialogComponent,
 
   ],
   imports: [
@@ -108,6 +110,7 @@ import { TimeSlotsUserViewComponent } from './time-slots/time-slots-user-view/ti
     TimeSlotDialogComponent,
     VehicleDialogComponent,
     UserDialogComponent,
+    TimeSlotDeliveryDialogComponent,
   ],
   bootstrap: [AppComponent]
 })
