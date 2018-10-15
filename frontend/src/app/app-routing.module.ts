@@ -15,12 +15,15 @@ import {FleetsComponent} from "./fleets/fleets.component";
 import {TimeSlotsComponent} from "./time-slots/time-slots.component";
 import {VehiclesComponent} from "./vehicles/vehicles.component";
 import {UsersComponent} from "./users/users.component";
+import {AdminComponent} from "./common/admin/admin.component";
+import {TimeSlotsUserViewComponent} from "./time-slots/time-slots-user-view/time-slots-user-view.component";
+import {AuthGuard} from "./auth/auth-guard.service";
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
   {
-    path: 'frame', component: FrameComponent, children: [
+    path: 'admin', component: AdminComponent,  canActivate: [AuthGuard], children: [
       {path: 'customers', component: CustmerComponent},
 
       {path: 'vendors', component: VendorsComponent},
@@ -37,7 +40,11 @@ const routes: Routes = [
 
       {path: 'users', component: UsersComponent},
     ]
-  },
+  }, {
+    path: 'frame', component: FrameComponent, canActivate: [AuthGuard], children: [
+      {path: 'timeSlots', component: TimeSlotsUserViewComponent},
+    ],
+  }
 ];
 
 @NgModule({
@@ -45,4 +52,5 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule {
+
 }

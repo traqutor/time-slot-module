@@ -40,6 +40,8 @@ import {TimeSlotDialogComponent} from './time-slots/time-slot-dialog/time-slot-d
 import {VehiclesComponent} from './vehicles/vehicles.component';
 import {VehicleDialogComponent} from './vehicles/vehicle-dialog/vehicle-dialog.component';
 import {UserDialogComponent} from "./users/user-dialog/user-dialog.component";
+import { AdminComponent } from './common/admin/admin.component';
+import { TimeSlotsUserViewComponent } from './time-slots/time-slots-user-view/time-slots-user-view.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +72,8 @@ import {UserDialogComponent} from "./users/user-dialog/user-dialog.component";
     VehiclesComponent,
     VehicleDialogComponent,
     UserDialogComponent,
+    AdminComponent,
+    TimeSlotsUserViewComponent,
 
   ],
   imports: [

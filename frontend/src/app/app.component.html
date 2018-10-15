@@ -1,63 +1,84 @@
 <mat-toolbar color="primary">
 
-  <button mat-button [matMenuTriggerFor]="menu">Admin</button>
+  Genius Time Slot Module
+
+  <button mat-button
+          *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"
+          [matMenuTriggerFor]="menu">Admin
+  </button>
 
   <mat-menu #menu="matMenu">
 
-    <button mat-menu-item routerLink="/frame/customers">
+    <button mat-menu-item routerLink="/admin/customers">
       <mat-icon>group</mat-icon>
       Customers
     </button>
 
     <mat-divider></mat-divider>
-    <button mat-menu-item routerLink="/frame/vendors">
+    <button mat-menu-item routerLink="/admin/vendors">
       <mat-icon>group</mat-icon>
       Vendors
     </button>
-    <button mat-menu-item routerLink="/frame/suppliers">
+    <button mat-menu-item routerLink="/admin/suppliers">
       <mat-icon>group</mat-icon>
       Suppliers
     </button>
-    <button mat-menu-item routerLink="/frame/commodities">
+    <button mat-menu-item routerLink="/admin/commodities">
       <mat-icon>group</mat-icon>
       Commodities
     </button>
-    <button mat-menu-item routerLink="/frame/contracts">
+    <button mat-menu-item routerLink="/admin/contracts">
       <mat-icon>group</mat-icon>
       Contracts
     </button>
 
     <mat-divider></mat-divider>
-    <button mat-menu-item routerLink="/frame/timeSlots">
+    <button mat-menu-item routerLink="/admin/timeSlots">
       <mat-icon>group</mat-icon>
       Time Slots
     </button>
-    <button mat-menu-item routerLink="/frame/statusTypes">
+    <button mat-menu-item routerLink="/admin/statusTypes">
       <mat-icon>group</mat-icon>
       Status Types
     </button>
 
     <mat-divider></mat-divider>
-    <button mat-menu-item routerLink="/frame/sites">
+    <button mat-menu-item routerLink="/admin/sites">
       <mat-icon>group</mat-icon>
       Sites
     </button>
 
-    <button mat-menu-item routerLink="/frame/fleets">
+    <button mat-menu-item routerLink="/admin/fleets">
       <mat-icon>group</mat-icon>
       Fleets
     </button>
-    <button mat-menu-item routerLink="/frame/vehicles">
+    <button mat-menu-item routerLink="/admin/vehicles">
       <mat-icon>group</mat-icon>
       Vehicles
     </button>
 
     <mat-divider></mat-divider>
-    <button mat-menu-item routerLink="/frame/users">
+    <button mat-menu-item routerLink="/admin/users">
       <mat-icon>group</mat-icon>
       Users
     </button>
 
+  </mat-menu>
+
+  <span class="app-spacer"></span>
+
+  <button *ngIf="user"
+          mat-button
+          matTooltip="User specific actions"
+          [matMenuTriggerFor]="userMenu">
+    <mat-icon>account_circle</mat-icon>
+    {{user.name}} {{user.surname}}
+  </button>
+  <mat-menu #userMenu="matMenu">
+
+    <button mat-menu-item (click)="logOut()">
+      Log out
+    </button>
   </mat-menu>
 
 </mat-toolbar>

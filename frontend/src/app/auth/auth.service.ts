@@ -24,36 +24,35 @@ export class AuthService {
     this.url = environment.url;
   }
 
-  saveCredentialsToStorage(login: string, token: string) {
-    sessionStorage.setItem('login', login);
+  saveCredentialsToStorage(token: string) {
     sessionStorage.setItem('token', token);
   }
 
+  saveUserInfoToStorage(userInfo: IUserInfo) {
+    sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
+    this.currentUserSubject.next(userInfo);
+  }
+
   removeCredentialsFromStorage() {
-    sessionStorage.removeItem('login');
+    sessionStorage.removeItem('userInfo');
     sessionStorage.removeItem('token');
+    this.currentUserSubject.next(null);
   }
 
   getTokenFromStorage(): string {
     return sessionStorage.getItem('token');
   }
 
-  setUser(user?: IUserInfo) {
-    sessionStorage.setItem('user', JSON.stringify(user));
-    this.currentUserSubject.next(user);
+  getUserFromStorage(): IUserInfo {
+    return JSON.parse(sessionStorage.getItem('userInfo'));
   }
 
-  setAuth(auth: boolean) {
-    this.isAuthenticatedSubject.next(auth);
-  }
-
-  getUser(): IUserInfo {
-    return JSON.parse(sessionStorage.getItem('user'));
-  }
 
   isUserAuthenticated() {
     const token: string = this.getTokenFromStorage();
     if (token) {
+      const userInfo: IUserInfo = this.getUserFromStorage();
+      this.currentUserSubject.next(userInfo);
       return true;
     }
     return false;
@@ -70,9 +69,9 @@ export class AuthService {
 
   logout() {
     this.removeCredentialsFromStorage();
-    this.setUser({} as IUserInfo);
-    this.setAuth(false);
+    this.saveUserInfoToStorage({} as IUserInfo);
     this.router.navigateByUrl('/login');
+    this.currentUserSubject.next(null);
   }
 
   getUserInfo(): Observable<IUserInfo> {

@@ -14,7 +14,7 @@ import {AuthResponse, IUserInfo} from "../../users/user.model";
 export class LoginComponent implements OnInit {
 
   public errMessage: string;
-  public isLogging: boolean ;
+  public isLogging: boolean;
   public isError: boolean;
 
   constructor(private auth: AuthService, private router: Router) {
@@ -29,20 +29,17 @@ export class LoginComponent implements OnInit {
     this.isError = false;
     const login = form.value.login;
     const password = form.value.password;
-    this.auth.login({ login, password })
-      .pipe(
-        tap((authResponse: AuthResponse) => {
-          this.isLogging = false;
-          this.auth.saveCredentialsToStorage(authResponse.userName, authResponse.access_token);
-          this.auth.setAuth(true);
-        })
-      )
-      .subscribe(() => {
+    this.auth.login({login, password})
+      .subscribe((authResponse: AuthResponse) => {
+        this.auth.saveCredentialsToStorage(authResponse.access_token);
+
         this.auth.getUserInfo()
           .subscribe((user: IUserInfo) => {
-            this.auth.setUser(user);
-            this.router.navigateByUrl('frame/customers');
+            this.isLogging = false;
+            this.auth.saveUserInfoToStorage(user);
+            this.router.navigateByUrl('frame/timeSlots');
           });
+
       }, err => {
         this.isLogging = false;
         this.isError = true;
