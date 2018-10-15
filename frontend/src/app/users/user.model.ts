@@ -67,3 +67,10 @@ export enum EntityStatusEnum {
   NORMAL = 0, DELETED = 1, DISABLED = 2
 }
 
+export enum UserRoleNameEnum {
+  Administrator = 'Administrator',
+  CustomerAdmin = 'CustomerAdmin',
+  CustomerUser = 'CustomerUser',
+  Driver = 'Driver',
+  SiteUser = 'SiteUser'
+}

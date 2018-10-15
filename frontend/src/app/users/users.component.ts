@@ -21,7 +21,7 @@ export class UsersComponent implements OnInit {
     password: null,
     name: null,
     surname: null,
-    role: {id: null, name: null},
+    role: null,
     customer: {
       id: 0,
       name: null,

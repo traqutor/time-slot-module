@@ -15,8 +15,8 @@
              placeholder="Email"
              formControlName="email">
       <mat-error
-        *ngIf="userForm.get('email').hasError('required') && userForm.get('email').touched">
-        Email is required.
+        *ngIf="(userForm.get('email').hasError('required') || userForm.get('email').hasError('email')) && userForm.get('email').touched">
+        Valid email is required.
       </mat-error>
 
     </mat-form-field>
@@ -79,7 +79,7 @@
 
 
     <!--Customer-->
-    <mat-form-field *ngIf="customers"
+    <mat-form-field *ngIf="customers.length > 0 && isCustomerValidationRequired"
                     fxFlex
                     appearance="outline">
 
@@ -98,14 +98,42 @@
       </mat-select>
 
       <mat-error
-        *ngIf="userForm.get('fleet').hasError('required') && userForm.get('fleet').touched">
+        *ngIf="userForm.get('customer').hasError('required') && userForm.get('customer').touched">
         Customer is required.
       </mat-error>
 
     </mat-form-field>
 
+    <!--site-->
+    <mat-form-field *ngIf="sites.length > 0 && this.isSiteValidationRequired"
+                    fxFlex
+                    appearance="outline">
+
+      <mat-label>Site</mat-label>
+
+      <mat-select #option
+                  placeholder="Select Site"
+                  formControlName="site"
+                  [compareWith]="compare">
+
+        <mat-option *ngFor="let sit of sites" [value]="sit">
+          {{sit.name}}
+        </mat-option>
+
+      </mat-select>
+
+      <mat-error
+        *ngIf="userForm.get('site').hasError('required') && userForm.get('site').touched">
+        Site is required.
+      </mat-error>
+
+    </mat-form-field>
+
+
     <!--fleet-->
-    <mat-form-field *ngIf="fleets.length > 0" fxFlex appearance="outline">
+    <mat-form-field *ngIf="fleets.length > 0 && this.isFleetValidationRequired"
+                    fxFlex
+                    appearance="outline">
 
       <mat-label>Fleet</mat-label>
 
@@ -130,7 +158,7 @@
 
 
     <!--vehicles-->
-    <mat-form-field *ngIf="fleets.length > 0" fxFlex appearance="outline">
+    <mat-form-field *ngIf="fleetsVehicles.length > 0 && isvehicleValidationRequired" fxFlex appearance="outline">
 
       <mat-label>Vehicles</mat-label>
 

@@ -11,3 +11,4 @@ export interface IVehicle {
   modificationDate: Date;
   entityStatus: EntityStatusEnum
 }
+

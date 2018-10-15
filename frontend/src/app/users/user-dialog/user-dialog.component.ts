@@ -1,14 +1,17 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ICustomer, IRole, IRoleResult, IUser} from "../user.model";
-import {IFleet} from "../../fleets/fleet.model";
+import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import {Subscription} from "rxjs";
+
+import {ICustomer, IRole, IRoleResult, IUser, UserRoleNameEnum} from "../user.model";
+import {IFleet} from "../../fleets/fleet.model";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {CustomerService} from "../../custmer/customer.service";
 import {FleetService} from "../../fleets/fleet.service";
 import {UserService} from "../user.service";
 import {IVehicle} from "../../vehicles/vehicle.model";
 import {VehicleService} from "../../vehicles/vehicle.service";
+import {SiteService} from "../../sites/site.service";
+import {ISite} from "../../sites/site.model";
 
 @Component({
   selector: 'app-user-dialog',
@@ -19,9 +22,17 @@ export class UserDialogComponent implements OnInit, OnDestroy {
 
   userForm: FormGroup;
   customers: Array<ICustomer> = [];
+  sites: Array<ISite> = [];
   fleets: Array<IFleet> = [];
   roles: Array<IRole> = [];
   fleetsVehicles: Array<IVehicle> = [];
+  USER_ROLES = UserRoleNameEnum;
+
+  // dynamic validations variables
+  isCustomerValidationRequired = false;
+  isSiteValidationRequired = false;
+  isFleetValidationRequired = false;
+  isvehicleValidationRequired = false;
 
   private subscriptions: Array<Subscription> = [];
 
@@ -29,6 +40,7 @@ export class UserDialogComponent implements OnInit, OnDestroy {
               private formBuilder: FormBuilder,
               private customerService: CustomerService,
               private userService: UserService,
+              private siteService: SiteService,
               private fleetService: FleetService,
               private vehicleService: VehicleService,
               @Inject(MAT_DIALOG_DATA) public user: IUser) {
@@ -36,6 +48,8 @@ export class UserDialogComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+
+    console.log('this.user', this.user);
 
     // invoke Customers and fleet get from db
     this.customerService.getCustomers();
@@ -47,20 +61,14 @@ export class UserDialogComponent implements OnInit, OnDestroy {
       }));
 
     // take roles
-    this.userService.getRoles()
+    this.subscriptions.push(this.userService.getRoles()
       .subscribe((res: IRoleResult) => {
         this.roles = res.results;
-      });
-
-    if (this.user.id > 0) {
-      this.onCustomerChange(this.user.customer);
-      this.onFleetChange(this.user.fleet);
-    }
-
+      }));
 
     this.userForm = this.formBuilder.group({
       id: this.user.id,
-      email: [this.user.email, [Validators.required]],
+      email: [this.user.email, [Validators.required, Validators.email]],
       password: this.user.password,
       name: [this.user.name, [Validators.required]],
       surname: [this.user.surname, [Validators.required]],
@@ -72,18 +80,56 @@ export class UserDialogComponent implements OnInit, OnDestroy {
       entityStatus: this.user.entityStatus
     });
 
+    // depends on the User role select related properties to display in mat-select options
+
+    if (this.user.role) {
+      this.onRoleChange(this.user.role);
+    }
+
+    if (this.user.customer && this.user.customer.id > 0) {
+      this.onCustomerChange(this.user.customer);
+    }
+
+    if (this.user.id > 0 && this.user.fleet && this.user.fleet.id > 0) {
+      // this.onCustomerChange(this.user.customer);
+      this.onFleetChange(this.user.fleet);
+    }
+
+
+  }
+
+  // todo conditional validation of form required fielsd
+  conditionalValidator(condition: (() => boolean), validator: ValidatorFn): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } => {
+      if (!condition()) {
+        return null;
+      }
+      return validator(control);
+    }
   }
 
   onRoleChange(role: IRole) {
-
+    this.isCustomerValidationRequired = role.name !== this.USER_ROLES.Administrator;
+    this.isSiteValidationRequired = role.name === this.USER_ROLES.SiteUser;
+    this.isFleetValidationRequired = role.name === this.USER_ROLES.Driver;
+    this.isvehicleValidationRequired = role.name === this.USER_ROLES.Driver;
   }
 
   onCustomerChange(customer: ICustomer) {
-    this.fleetService.getFleetsById(customer.id).subscribe((res: Array<IFleet>) => {
-        this.fleets = res;
-      }
-    );
+
+    this.subscriptions.push(this.siteService.getSitesById(customer.id)
+      .subscribe((res: Array<ISite>) => {
+          this.sites = res;
+        }
+      ));
+
+    this.subscriptions.push(this.fleetService.getFleetsById(customer.id)
+      .subscribe((res: Array<IFleet>) => {
+          this.fleets = res;
+        }
+      ));
   }
+
 
   onFleetChange(fleet: IFleet) {
     this.vehicleService.getVehiclesForFleetId(fleet.id)
