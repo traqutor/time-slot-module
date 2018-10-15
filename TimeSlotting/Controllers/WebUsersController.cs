@@ -238,16 +238,19 @@ namespace TimeSlotting.Controllers
             }
             else
             {
-                var userASP = userManager.FindById(user.ASPId);
-                userASP.Email = model.Email;
-                userASP.UserName = model.Email;
+                var aspUser = db.WebUsers.AsNoTracking().SingleOrDefault(wu => wu.Id == model.Id).User;
 
-                userManager.RemoveFromRole(user.ASPId, userManager.GetRoles(user.ASPId)[0]);
-                userManager.AddToRole(user.ASPId, model.Role.Name);
+                aspUser.Email = model.Email;
+                aspUser.UserName = model.Email;
 
-                var result = userManager.UpdateAsync(userASP);
+                db.SaveChanges();
+
+                userManager.RemoveFromRole(aspUser.Id, userManager.GetRoles(aspUser.Id)[0]);
+                var result = userManager.AddToRole(aspUser.Id, model.Role.Name);
+
+                //var result = userManager.UpdateAsync(aspUser);
              
-                if (result.Result.Succeeded)
+                if (result.Succeeded)
                 {
                     user = db.WebUsers.Find(model.Id);
 
@@ -265,16 +268,16 @@ namespace TimeSlotting.Controllers
                         var provider = new DpapiDataProtectionProvider("Sample");
                         userManager.UserTokenProvider = new DataProtectorTokenProvider<User>(provider.Create("PasswordReset"));
 
-                        var token = userManager.GeneratePasswordResetToken(userASP.Id);
-                        var reset = userManager.ResetPassword(userASP.Id, token, model.Password);
+                        var token = userManager.GeneratePasswordResetToken(user.ASPId);
+                        var reset = userManager.ResetPassword(user.ASPId, token, model.Password);
 
                         if(reset.Errors.Count() > 0)
-                            return BadRequest(JsonConvert.SerializeObject(result.Result.Errors));
+                            return BadRequest(JsonConvert.SerializeObject(result.Errors));
                     }
                 }
                 else
                 {
-                    return BadRequest(JsonConvert.SerializeObject(result.Result.Errors));
+                    return BadRequest(JsonConvert.SerializeObject(result.Errors));
                 }
             }
 
@@ -299,6 +302,8 @@ namespace TimeSlotting.Controllers
             }
 
             var roles = db.Roles.OrderByDescending(r => r.Id).ToList();
+
+            user = db.WebUsers.Include(c => c.User).SingleOrDefault(u => u.Id == user.Id);
 
             return Ok(new UserListEntryViewModel(user, roles));
         }
