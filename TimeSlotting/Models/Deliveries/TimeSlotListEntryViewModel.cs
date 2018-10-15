@@ -29,8 +29,8 @@ namespace TimeSlotting.Models.Deliveries
         public TimeSlotListEntryViewModel(TimeSlot entity)
         {
             Id = entity.Id;
-            entity.StartTime = entity.StartTime;
-            entity.EndTime = entity.EndTime;
+            StartTime = entity.StartTime;
+            EndTime = entity.EndTime;
 
             EntityStatus = entity.EntityStatus;
 
