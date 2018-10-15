@@ -66,7 +66,7 @@ export class UserDialogComponent implements OnInit, OnDestroy {
         this.roles = res.results;
       }));
 
-
+    // Reactive form
     this.userForm = this.formBuilder.group({
       id: this.user.id,
       email: [this.user.email, [Validators.required, Validators.email]],
@@ -96,7 +96,6 @@ export class UserDialogComponent implements OnInit, OnDestroy {
     if (this.user.id > 0 && this.user.fleet && this.user.fleet.id > 0) {
       this.onFleetChange(this.user.fleet);
     }
-
 
   }
 
@@ -137,19 +136,17 @@ export class UserDialogComponent implements OnInit, OnDestroy {
       .subscribe((res: Array<IVehicle>) => {
         this.fleetsVehicles = res;
 
-        console.log('this.fleetsVehicles', this.fleetsVehicles);
-
-        // some worlkaround to make multiple selction  work
+        // ToDO some worlkaround to make multiple selection on Vehicles work
         let tmp: IVehicle[] = [];
-          this.fleetsVehicles.forEach((recivedVehilce: IVehicle) => {
-            this.user.vehicles.forEach((userVehicle) => {
+        this.fleetsVehicles.forEach((recivedVehilce: IVehicle) => {
+          this.user.vehicles.forEach((userVehicle) => {
             if (recivedVehilce.id === userVehicle.id) {
               tmp.push(recivedVehilce);
             }
           });
         });
-        console.log('tmp', tmp);
         this.userForm.controls['vehicles'].setValue(tmp);
+
       });
   }
 

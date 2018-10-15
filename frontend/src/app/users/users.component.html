@@ -1,13 +1,11 @@
-
-
 <div class="app-padding-default">
 
-  <mat-list fxFlex="60" fxFlex.lt-md="100" >
+  <mat-list fxFlex="60" fxFlex.lt-md="100">
 
     <h3 mat-subheader>USERS</h3>
 
     <mat-list-item *ngFor="let user of users; let i = index">
-      <h4 mat-line>{{user.name}}</h4>
+      <h4 mat-line>{{user.name?user.name: 'Name'}} {{user.surname ? user.surname: 'Surname'}} - {{user.role.name}}</h4>
       <p mat-line>{{user.email}}</p>
       <button mat-icon-button
               matTooltip="Edit User"
