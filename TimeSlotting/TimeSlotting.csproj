@@ -282,6 +282,7 @@
     <Compile Include="Models\Customers\SiteListEntryViewModel.cs" />
     <Compile Include="Models\Deliveries\CommodityListEntryViewModel.cs" />
     <Compile Include="Models\Deliveries\ContractListEntryViewModel.cs" />
+    <Compile Include="Models\Deliveries\DeliveryTimeSlotModel.cs" />
     <Compile Include="Models\Deliveries\StatusTypeListEntryViewModel.cs" />
     <Compile Include="Models\Deliveries\SupplierListEntryViewModel.cs" />
     <Compile Include="Models\Deliveries\TimeSlotListEntryViewModel.cs" />

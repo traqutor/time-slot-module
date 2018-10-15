@@ -28,6 +28,21 @@
             <param name="model">Set model id to 0 if creating new. When creating/modfying only Name and EntityStatus is take into account, rest is auto completed.</param>
             <returns></returns>
         </member>
+        <member name="M:TimeSlotting.Controllers.DeliveryTimeSlotsController.GetTimeSlotData(System.Int32,System.String)">
+            <summary>
+            returns the list of deliveryTimeslotModels
+            </summary>
+            <param name="sid">Customer site id</param>
+            <param name="day">date</param>
+            <returns></returns>
+        </member>
+        <member name="M:TimeSlotting.Controllers.DeliveryTimeSlotsController.PutTimeSlot(TimeSlotting.Models.Deliveries.DeliveryTimeSlotModel)">
+            <summary>
+            For DelivetyTimeslot creation/edition
+            </summary>
+            <param name="model">provide: deliveryDate, TimeSlot.Id, Customer.Id, Site.Id, StatusType.Id, Contract.Id, Supplier.Id, Vendor.Id, Commodity.Id, Vehicle.Id, Driver.Id </param>
+            <returns></returns>
+        </member>
         <member name="M:TimeSlotting.Controllers.SitesController.GetSites">
             <summary>
             gets site with customer id based on the logged user

@@ -16,6 +16,7 @@ using System.Web.Mvc;
 using TimeSlotting.Data;
 using TimeSlotting.Data.Entities;
 using TimeSlotting.Data.Entities.Deliveries;
+using TimeSlotting.Models.Deliveries;
 
 namespace TimeSlotting.Controllers
 {
@@ -26,13 +27,22 @@ namespace TimeSlotting.Controllers
     {
         private TimeSlottingDBContext db = new TimeSlottingDBContext();
 
+        
+        [ResponseType(typeof(List<DeliveryTimeSlotModel>))]
         public IHttpActionResult GetTimeSlots()
         {
-            var timeslots = db.DeliveryTimeSlots.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.TimeSlot.StartTime).ToList();
+            var timeslots = db.DeliveryTimeSlots.Where(x => x.EntityStatus != EntityStatus.DELETED).OrderBy(x => x.TimeSlot.StartTime).ToList().Select(c => new DeliveryTimeSlotModel(c)).ToList();
 
             return Ok(timeslots);
         }
 
+        /// <summary>
+        /// returns the list of deliveryTimeslotModels
+        /// </summary>
+        /// <param name="sid">Customer site id</param>
+        /// <param name="day">date</param>
+        /// <returns></returns>
+        [ResponseType(typeof(List<DeliveryTimeSlotModel>))]
         public IHttpActionResult GetTimeSlotData(int sid, string day)
         {
             DateTime dayDate = DateTime.Parse(day);
@@ -51,30 +61,21 @@ namespace TimeSlotting.Controllers
                              where m.EntityStatus == EntityStatus.NORMAL
                              select m).OrderBy(x => x.StartTime).ToList();
 
-            List<Tuple<TimeSlot, DeliveryTimeSlot>> list = new List<Tuple<TimeSlot, DeliveryTimeSlot>>();
-            foreach (TimeSlot item in timeslots)
-            {
-                var timeslot = (from m in db.DeliveryTimeSlots
-                                where m.EntityStatus != EntityStatus.DELETED && m.TimeSlotId == item.Id
-                                && m.SiteId == sid && m.DeliveryDate == DbFunctions.TruncateTime(dayDate.Date)
-                                select m).ToList();
+            int[] timeslotsArr = timeslots.Select(ts => ts.Id).ToArray();
 
-                if (timeslot.Count > 0)
-                {
-                    list.Add(new Tuple<TimeSlot, DeliveryTimeSlot>(item, timeslot[0]));
-                }
-                else
-                {
-                    list.Add(new Tuple<TimeSlot, DeliveryTimeSlot>(item, new DeliveryTimeSlot()));
-                }
-            }
+           
+            var timeslot = (from m in db.DeliveryTimeSlots
+                            where m.EntityStatus != EntityStatus.DELETED && timeslotsArr.Contains(m.TimeSlotId)
+                            && m.SiteId == sid && m.DeliveryDate == DbFunctions.TruncateTime(dayDate.Date)
+                            select m).ToList();
 
-            return Ok(new { data = list, cid = site.CustomerId });
+            return Ok(timeslot.Select(el => new DeliveryTimeSlotModel(el)));
         }
 
+        [ResponseType(typeof(DeliveryTimeSlotModel))]
         public IHttpActionResult GetTimeSlot(int id)
         {
-            return Ok(db.DeliveryTimeSlots.Find(id));
+            return Ok(new DeliveryTimeSlotModel(db.DeliveryTimeSlots.Find(id)));
         }
 
         public IHttpActionResult GetTimeSlot(int tid, int sid, DateTime day)
@@ -88,43 +89,77 @@ namespace TimeSlotting.Controllers
             return Ok(timeslot);
         }
 
-        public IHttpActionResult PutTimeSlot(JObject jsonResult)
+        /// <summary>
+        /// For DelivetyTimeslot creation/edition
+        /// </summary>
+        /// <param name="model">provide: deliveryDate, TimeSlot.Id, Customer.Id, Site.Id, StatusType.Id, Contract.Id, Supplier.Id, Vendor.Id, Commodity.Id, Vehicle.Id, Driver.Id </param>
+        /// <returns></returns>
+        [ResponseType(typeof(DeliveryTimeSlotModel))]
+        public IHttpActionResult PutTimeSlot(DeliveryTimeSlotModel model)
         {
-            var response = "OK";
+            DeliveryTimeSlot timeslot = new DeliveryTimeSlot();
 
-            if (jsonResult != null)
+            if (model.Id == 0)
             {
-                JsonSerializer serializer = new JsonSerializer();
-                DeliveryTimeSlot timeslot = (DeliveryTimeSlot)serializer.Deserialize(new JTokenReader(jsonResult.First.First), typeof(DeliveryTimeSlot));
 
-                if (timeslot.Id == 0)
-                {
-                    timeslot.EntityStatus = EntityStatus.NORMAL;
-                    timeslot.CreationDate = DateTime.UtcNow;
-                    timeslot.ModificationDate = DateTime.UtcNow;
-                   // timeslot.CreatedBy = Common.GetUserId(User.Identity.GetUserId());
-                    timeslot.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
+                timeslot.Tons = model.Tons;
+                timeslot.DeliveryDate = model.DeliveryDate;
 
-                    db.DeliveryTimeSlots.Add(timeslot);
-                }
-                else
-                {
-                    timeslot.ModificationDate = DateTime.UtcNow;
-                    timeslot.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
+                timeslot.TimeSlotId = model.TimeSlot.Id;
+                
+                timeslot.CustomerId = model.Customer.Id;
+                timeslot.SiteId = model.Site.Id;
+                timeslot.StatusTypeId = model.StatusType.Id;
 
-                    db.Entry(timeslot).State = EntityState.Modified;
-                    db.Entry(timeslot).Property(x => x.CreationDate).IsModified = false;
-                    db.Entry(timeslot).Property(x => x.CreatedBy).IsModified = false;
-                }
+                timeslot.ContractId = model.Contract.Id;
+                timeslot.SupplierId = model.Supplier.Id;
+                timeslot.VendorId = model.Vendor.Id;
+                timeslot.CommodityId = model.Commodity.Id;
 
-                db.SaveChanges();
+                timeslot.VehicleId = model.Vehicle.Id;
+                timeslot.DriverId = model.Driver.Id;
+
+                timeslot.EntityStatus = EntityStatus.NORMAL;
+                timeslot.CreationDate = DateTime.UtcNow;
+                timeslot.ModificationDate = DateTime.UtcNow;
+                timeslot.CreatedById = Common.GetUserId(User.Identity.GetUserId());
+                timeslot.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
+
+                db.DeliveryTimeSlots.Add(timeslot);
             }
             else
             {
-                response = "No Time Slot Data";
+                timeslot = db.DeliveryTimeSlots.Find(model.Id);
+
+                timeslot.Tons = model.Tons;
+                timeslot.DeliveryDate = model.DeliveryDate;
+
+                timeslot.TimeSlotId = model.TimeSlot.Id;
+
+                timeslot.CustomerId = model.Customer.Id;
+                timeslot.SiteId = model.Site.Id;
+                timeslot.StatusTypeId = model.StatusType.Id;
+
+                timeslot.ContractId = model.Contract.Id;
+                timeslot.SupplierId = model.Supplier.Id;
+                timeslot.VendorId = model.Vendor.Id;
+                timeslot.CommodityId = model.Commodity.Id;
+
+                timeslot.VehicleId = model.Vehicle.Id;
+                timeslot.DriverId = model.Driver.Id;
+
+                timeslot.ModificationDate = DateTime.UtcNow;
+                timeslot.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
             }
 
-            return Ok(response);
+            db.SaveChanges();
+
+            //have to make a new query with something included so it doest use the cached one -- need a better solution for that
+            timeslot = db.DeliveryTimeSlots.Include(dts => dts.Customer).SingleOrDefault(dts => dts.Id == timeslot.Id);
+            //db.Entry(site).Reload(); -nope
+            //db.Entry(site).GetDatabaseValues(); -nope
+
+            return Ok(new DeliveryTimeSlotModel(timeslot));
         }
 
         public IHttpActionResult DeleteTimeSlot(int id)
