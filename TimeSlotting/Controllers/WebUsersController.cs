@@ -267,7 +267,7 @@ namespace TimeSlotting.Controllers
                     db.Entry(user).State = EntityState.Modified;
                     db.SaveChanges();
 
-                    if (model.Password != "")
+                    if (!string.IsNullOrEmpty(model.Password))
                     {
                         var provider = new DpapiDataProtectionProvider("Sample");
                         userManager.UserTokenProvider = new DataProtectorTokenProvider<User>(provider.Create("PasswordReset"));
