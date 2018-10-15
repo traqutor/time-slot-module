@@ -68,10 +68,10 @@ export class StatusTypesComponent implements OnInit {
 
   ngOnInit() {
 
-    // invoke Customers get from db by Admin
+    // invoke StatusTypes get from db by Admin
     this.statusTypeService.getStatusTypes();
 
-    // subscribe for Customers
+    // subscribe for StatusTypes
     this.subscriptions.push(this.statusTypeService.statusTypesChanged
       .subscribe((res: Array<IStatusType>) => {
         this.statusTypes = res;

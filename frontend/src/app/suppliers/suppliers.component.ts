@@ -65,10 +65,10 @@ export class SuppliersComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    // invoke Customers get from db by Admin
+    // invoke Supplies get from db by Admin
     this.supplierService.getSuppliers();
 
-    // subscribe for Customers
+    // subscribe for Suppliers
     this.subscriptions.push(this.supplierService.suppliersChanged
       .subscribe((res: Array<ISupplier>) => {
         this.suppliers = res;

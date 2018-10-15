@@ -65,10 +65,10 @@ export class CommoditiesComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    // invoke Customers get from db by Admin
+    // invoke Commodities get from db by Admin
     this.commodityService.getCommodities();
 
-    // subscribe for Customers
+    // subscribe for Commodities
     this.subscriptions.push(this.commodityService.commoditiesChanged
       .subscribe((res: Array<ICommodity>) => {
         this.commodities = res;

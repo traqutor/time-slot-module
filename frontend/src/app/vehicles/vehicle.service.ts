@@ -38,7 +38,8 @@ export class VehicleService {
 
   // get vehicles for specific fleet Id
   getVehiclesForSpecificDriver(driverId: number): Observable<Array<IVehicle>> {
-    return this.http.request <Array<IVehicle>>('get', `${this.url}/api/Vehicles/GetDriverVehicles`, {body: driverId});
+    return this.http.request <Array<IVehicle>>('get',
+      `${this.url}/api/Vehicles/GetDriverVehicles?uid=${driverId}`);
   }
 
 

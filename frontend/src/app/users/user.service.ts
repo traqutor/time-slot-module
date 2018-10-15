@@ -30,7 +30,7 @@ export class UserService {
   }
 
   getDriversForCompany(companyId: number): Observable<Array<IUser>> {
-    return this.http.request<Array<IUser>>('get', `${this.url}/api/WebUsers/GetDrivers`, {body: companyId});
+    return this.http.request<Array<IUser>>(`get`, `${this.url}/api/WebUsers/GetDrivers?cid=${companyId}`);
   }
 
   getRoles(): Observable<IRoleResult> {

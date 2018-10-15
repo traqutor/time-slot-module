@@ -1,3 +1,189 @@
-<p>
-  time-slot-delivery-dialog works!
-</p>
+<h1 mat-dialog-title>Edit Delivery</h1>
+
+<div mat-dialog-content>
+
+  <form [formGroup]="timeSlotForm" fxLayout="column">
+
+    <div fxLayout="row" fxLayout.lt-sm="column">
+
+      <mat-form-field fxFlex appearance="outline">
+
+        <mat-label>Driver</mat-label>
+
+        <mat-select #optionDriver
+                    cdkFocusInitial
+                    placeholder="Select Driver"
+                    formControlName="driver"
+                    (valueChange)="onDriverChange(optionDriver.value)"
+                    [compareWith]="compare">
+
+          <mat-option *ngFor="let item of drivers" [value]="item">
+            {{item.name}} {{item.surname}}
+          </mat-option>
+        </mat-select>
+
+        <mat-error
+          *ngIf="timeSlotForm.get('driver').hasError('required') && timeSlotForm.get('driver').touched">
+          Driver is required.
+        </mat-error>
+
+      </mat-form-field>
+
+      <mat-form-field fxFlex appearance="outline">
+
+        <mat-label>Vehicle</mat-label>
+
+        <mat-select placeholder="Select Vehicle"
+                    formControlName="vehicle"
+                    [compareWith]="compare">
+
+          <mat-option *ngFor="let item of vehicles" [value]="item">
+            {{item.rego}}
+          </mat-option>
+        </mat-select>
+
+        <mat-error
+          *ngIf="timeSlotForm.get('vehicle').hasError('required') && timeSlotForm.get('vehicle').touched">
+          Vehicle is required.
+        </mat-error>
+
+      </mat-form-field>
+    </div>
+
+
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Contracts</mat-label>
+
+      <mat-select placeholder="Select Contract"
+                  formControlName="contract"
+                  [compareWith]="compare">
+
+        <mat-option *ngFor="let item of contracts" [value]="item">
+          {{item.name}}
+        </mat-option>
+      </mat-select>
+
+      <mat-error
+        *ngIf="timeSlotForm.get('contract').hasError('required') && timeSlotForm.get('contract').touched">
+        Contract is required.
+      </mat-error>
+
+    </mat-form-field>
+
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Vendor</mat-label>
+
+      <mat-select placeholder="Select Vendor"
+                  formControlName="vendor"
+                  [compareWith]="compare">
+
+        <mat-option *ngFor="let item of vendors" [value]="item">
+          {{item.name}}
+        </mat-option>
+      </mat-select>
+
+      <mat-error
+        *ngIf="timeSlotForm.get('vendor').hasError('required') && timeSlotForm.get('vendor').touched">
+        Contract is required.
+      </mat-error>
+
+    </mat-form-field>
+
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Supplier</mat-label>
+
+      <mat-select placeholder="Select Supplier"
+                  formControlName="supplier"
+                  [compareWith]="compare">
+
+        <mat-option *ngFor="let item of suppliers" [value]="item">
+          {{item.name}}
+        </mat-option>
+      </mat-select>
+
+      <mat-error
+        *ngIf="timeSlotForm.get('supplier').hasError('required') && timeSlotForm.get('supplier').touched">
+        Supplier is required.
+      </mat-error>
+
+    </mat-form-field>
+
+
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Commodity</mat-label>
+
+      <mat-select placeholder="Select Commodity"
+                  formControlName="commodity"
+                  [compareWith]="compare">
+
+        <mat-option *ngFor="let item of commodities" [value]="item">
+          {{item.name}}
+        </mat-option>
+      </mat-select>
+
+      <mat-error
+        *ngIf="timeSlotForm.get('commodity').hasError('required') && timeSlotForm.get('commodity').touched">
+        Commodity is required.
+      </mat-error>
+
+    </mat-form-field>
+
+
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Status</mat-label>
+
+      <mat-select placeholder="Select status"
+                  formControlName="statusType"
+                  [compareWith]="compare">
+
+        <mat-option *ngFor="let item of statusTypes" [value]="item">
+          {{item.name}}
+        </mat-option>
+      </mat-select>
+
+      <mat-error
+        *ngIf="timeSlotForm.get('statusType').hasError('required') && timeSlotForm.get('statusType').touched">
+        Status is required.
+      </mat-error>
+
+    </mat-form-field>
+
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Tons</mat-label>
+
+      <input matInput
+             type="number"
+             placeholder="Tons"
+             formControlName="tons">
+      <mat-error
+        *ngIf="timeSlotForm.get('tons').hasError('required') && timeSlotForm.get('tons').touched">
+        Tonnage is required.
+      </mat-error>
+
+    </mat-form-field>
+
+
+  </form>
+
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button
+          color="primary"
+          [disabled]="!timeSlotForm.valid"
+          type="button"
+          (click)="submit()">OK
+  </button>
+
+  <button mat-raised-button
+          type="button"
+          mat-dialog-close>Cancel
+  </button>
+</div>
+

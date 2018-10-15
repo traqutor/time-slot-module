@@ -7,10 +7,10 @@ import {ITimeSlotDelivery} from "../time-slot.model";
 import {EntityStatusEnum, ICustomer} from "../../users/user.model";
 import {TimeSlotService} from "../time-slot.service";
 import {ConfirmDialogService} from "../../common/confirm-dialog/confirm-dialog.service";
-import {TimeSlotDialogComponent} from "../time-slot-dialog/time-slot-dialog.component";
 import {CustomerService} from "../../custmer/customer.service";
 import {ISite} from "../../sites/site.model";
 import {SiteService} from "../../sites/site.service";
+import {TimeSlotDeliveryDialogComponent} from "../time-slot-delivery-dialog/time-slot-delivery-dialog.component";
 
 @Component({
   selector: 'app-time-slots-user-view',
@@ -98,10 +98,11 @@ export class TimeSlotsUserViewComponent implements OnInit {
 
   getSlots(site: ISite) {
     if (site) {
-      this.timeSlotService.getTimeSlotData(site.id, this.date)
+      const tmpDate = this.date.toISOString()
+      this.subscriptions.push(this.timeSlotService.getTimeSlotData(site.id, tmpDate)
         .subscribe((res: Array<ITimeSlotDelivery>) => {
           this.timeSlots = res;
-        });
+        }));
     }
   }
 
@@ -114,28 +115,32 @@ export class TimeSlotsUserViewComponent implements OnInit {
   }
 
   editDeliverySlot(timeSlot: ITimeSlotDelivery, index: number) {
-    const dialogRef = this.dialog.open(TimeSlotDialogComponent, {
+
+    timeSlot.customer = this.customer;
+    timeSlot.site = this.site;
+
+    const dialogRef = this.dialog.open(TimeSlotDeliveryDialogComponent, {
       width: '45%',
       disableClose: true,
       data: timeSlot,
     });
-    dialogRef.afterClosed()
+    this.subscriptions.push(dialogRef.afterClosed()
       .subscribe((resolvedTimeSlot: ITimeSlotDelivery) => {
 
         if (resolvedTimeSlot) {
           this.timeSlotService.putTimeSlot(resolvedTimeSlot, index);
         }
 
-      });
+      }));
   }
 
   deleteDeliverySlot(timeSlot: ITimeSlotDelivery, index: number) {
-    this.confirm.confirm('Delete TimeSlot', 'Are you sure you would like to delete the TimeSlot?')
+    this.subscriptions.push(this.confirm.confirm('Delete TimeSlot', 'Are you sure you would like to delete the TimeSlot?')
       .subscribe((res: boolean) => {
         if (res) {
           this.timeSlotService.deleteTimseSlot(timeSlot.id, index);
         }
-      });
+      }));
   }
 
 

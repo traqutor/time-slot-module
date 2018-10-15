@@ -65,10 +65,10 @@ export class VendorsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    // invoke Customers get from db by Admin
+    // invoke Vendors get from db by Admin
     this.vendorService.getVendors();
 
-    // subscribe for Customers
+    // subscribe for Vendors
     this.subscriptions.push(this.vendorService.vendorsChanged
       .subscribe((res: Array<IVendor>) => {
         this.vendors = res;

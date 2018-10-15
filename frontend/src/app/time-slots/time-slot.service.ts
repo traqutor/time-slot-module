@@ -27,10 +27,9 @@ export class TimeSlotService {
       });
   }
 
-  getTimeSlotData(siteId: number, date: Date): Observable<Array<ITimeSlotDelivery>> {
+  getTimeSlotData(siteId: number, date: string): Observable<Array<ITimeSlotDelivery>> {
     return this.http.request<Array<ITimeSlotDelivery>>(`get`,
-      `${this.url}/api/DeliveryTimeSlots/GetTimeSlotData`,
-      {body: {sid: siteId, day: date}});
+      `${this.url}/api/DeliveryTimeSlots/GetTimeSlotData?sid=${siteId}&day=${date}`);
   }
 
   getTimeSlotById(timeSlotId: number): Observable<ITimeSlotDelivery> {
