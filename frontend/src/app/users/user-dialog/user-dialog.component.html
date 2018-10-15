@@ -165,7 +165,7 @@
       <mat-select #option
                   placeholder="Select Vehicles"
                   formControlName="vehicles"
-                  [compareWith]="compare"
+                  [compareWith]="compareArray"
                   multiple>
 
         <mat-option *ngFor="let vehicle of fleetsVehicles" [value]="vehicle">

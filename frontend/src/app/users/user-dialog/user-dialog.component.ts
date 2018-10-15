@@ -66,6 +66,7 @@ export class UserDialogComponent implements OnInit, OnDestroy {
         this.roles = res.results;
       }));
 
+
     this.userForm = this.formBuilder.group({
       id: this.user.id,
       email: [this.user.email, [Validators.required, Validators.email]],
@@ -76,7 +77,7 @@ export class UserDialogComponent implements OnInit, OnDestroy {
       customer: this.user.customer,
       site: this.user.site,
       fleet: this.user.fleet,
-      vehicles: this.user.vehicles,
+      vehicles: [],
       entityStatus: this.user.entityStatus
     });
 
@@ -141,16 +142,32 @@ export class UserDialogComponent implements OnInit, OnDestroy {
       .subscribe((res: Array<IVehicle>) => {
         this.fleetsVehicles = res;
         console.log('this.fleetsVehicles', this.fleetsVehicles);
+
+        // some worlkaround to make multiple selction  work
+        let tmp: IVehicle[] = [];
+        this.user.vehicles.forEach((userVehicle) => {
+        this.fleetsVehicles.forEach((recivedVehilce: IVehicle) => {
+            if (recivedVehilce.id = userVehicle.id) {
+              tmp.push(recivedVehilce);
+            }
+          });
+        });
+        this.userForm.controls['vehicles'].setValue(tmp);
       });
   }
 
   compare(val1, val2) {
+    return val1 && val2 ? val1.id === val2.id : val1 === val2;
+  }
+
+  compareArray(val1, val2) {
     console.log('val1', val1);
     console.log('val2', val2);
     if (val1 && val2) {
       return val1.id === val2.id;
     }
   }
+
 
   submit() {
     this.dialogRef.close(this.userForm.value);
