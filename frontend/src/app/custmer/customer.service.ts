@@ -33,9 +33,6 @@ export class CustomerService {
 
   putCustomer(customer: ICustomer, index: number) {
 
-    console.log('customer', customer);
-    console.log('index', index);
-
     this.http.put(`${this.url}/api/Customers/PutCustomer`, customer)
       .subscribe((res: ICustomer) => {
 

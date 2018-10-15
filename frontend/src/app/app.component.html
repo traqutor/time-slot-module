@@ -2,9 +2,18 @@
 
   Genius Time Slot Module
 
+  <div style="width: 48px"></div>
+
+  <button mat-button routerLink="/frame/timeSlots">
+    <mat-icon>event</mat-icon>
+    Book Time Slots
+  </button>
+
   <button mat-button
           *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"
-          [matMenuTriggerFor]="menu">Admin
+          [matMenuTriggerFor]="menu">
+    <mat-icon>settings</mat-icon>
+    Admin
   </button>
 
   <mat-menu #menu="matMenu">

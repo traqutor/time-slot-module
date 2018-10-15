@@ -1,35 +1,81 @@
-
-
 <div class="app-padding-default">
 
-  <mat-list fxFlex="60" fxFlex.lt-md="100" >
+  <mat-list fxFlex="60" fxFlex.lt-md="100">
 
-    <h3 mat-subheader>TIME SLOTS</h3>
+    <div fxLayout="row" fxLayoutAlign="start center">
+
+      <div mat-subheader>
+        TIME SLOTS
+      </div>
+
+      <!--customer-->
+      <mat-form-field appearance="outline" class="app-padding-right">
+
+        <mat-label>Customer</mat-label>
+
+        <mat-select placeholder="Select Customer"
+                    [(ngModel)]="customer"
+                    (selectionChange)="getSites(customer)"
+                    [compareWith]="compare">
+
+          <mat-option *ngFor="let cust of customers" [value]="cust">
+            {{cust.name}}
+          </mat-option>
+
+        </mat-select>
+
+      </mat-form-field>
+
+      <!--site-->
+      <mat-form-field appearance="outline" class="app-padding-right">
+
+        <mat-label>Site</mat-label>
+
+        <mat-select placeholder="Select Site"
+                    (selectionChange)="getSlots(site)"
+                    [(ngModel)]="site">
+
+          <mat-option *ngFor="let sit of sites" [value]="sit">
+            {{sit.name}}
+          </mat-option>
+
+        </mat-select>
+
+      </mat-form-field>
+
+      <!--date-->
+
+      <mat-form-field appearance="outline" class="app-padding-right">
+        <input matInput
+               [matDatepicker]="picker"
+               [(ngModel)]="date"
+               (dateChange)="getSlots(site)"
+               placeholder="Choose a date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+    </div>
+
 
     <mat-list-item *ngFor="let slot of timeSlots; let i = index">
-      <h4 mat-line>{{slot.startTime}} - {{slot.endTime}}</h4>
+      <h4 mat-line>{{slot.timeSlot.startTime}} - {{slot.timeSlot.endTime}}</h4>
       <p mat-line>{{slot.creationDate}}</p>
-      <button mat-icon-button
+      <button mat-button
               matTooltip="Edit Time Slot"
-              (click)="editTimeSlot(slot, i)">
+              (click)="editDeliverySlot(slot, i)">
         <mat-icon mat-list-icon>edit</mat-icon>
+        {{slot.timeSlot.entityStatus}}
       </button>
 
       <button mat-icon-button
               matTooltip="Delete Time Slot"
-              (click)="deleteTimseSlot(slot, i)">
+              (click)="deleteDeliverySlot(slot, i)">
         <mat-icon>delete</mat-icon>
       </button>
       <mat-divider></mat-divider>
     </mat-list-item>
   </mat-list>
-  <div class="app-padding-default">
 
-    <button mat-raised-button
-            matTooltip="Add Time Slot"
-            (click)="addTimseSlot()">
-      <mat-icon>add</mat-icon>
-    </button>
-  </div>
 </div>
 

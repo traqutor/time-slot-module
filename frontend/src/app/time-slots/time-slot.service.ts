@@ -1,18 +1,17 @@
-import { Injectable } from '@angular/core';
-import {ICustomer} from "../users/user.model";
+import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {MatSnackBar} from "@angular/material";
 import {environment} from "../../environments/environment";
-import {ITimeSlot} from "./time-slot.model";
+import {ITimeSlotDelivery} from "./time-slot.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TimeSlotService {
 
-  private timeSlots: Array<ITimeSlot> = [];
-  public timeSlotsChanged: BehaviorSubject<Array<ITimeSlot>> = new BehaviorSubject<Array<ITimeSlot>>([]);
+  private timeSlots: Array<ITimeSlotDelivery> = [];
+  public timeSlotsChanged: BehaviorSubject<Array<ITimeSlotDelivery>> = new BehaviorSubject<Array<ITimeSlotDelivery>>([]);
 
   private url: string;
 
@@ -22,23 +21,26 @@ export class TimeSlotService {
 
   getTimeSlots() {
     this.http.get(`${this.url}/api/TimeSlots/GetTimeSlots`)
-      .subscribe((res: Array<ITimeSlot>) => {
+      .subscribe((res: Array<ITimeSlotDelivery>) => {
         this.timeSlots = res;
         this.timeSlotsChanged.next(this.timeSlots);
       });
   }
 
-  getTimeSlotById(timeSlotId: number): Observable<ITimeSlot> {
-    return this.http.get<ITimeSlot>(`${this.url}/api/TimeSlots/GetTimeSlot/${timeSlotId}`);
+  getTimeSlotData(siteId: number, date: Date): Observable<Array<ITimeSlotDelivery>> {
+    return this.http.request<Array<ITimeSlotDelivery>>(`get`,
+      `${this.url}/api/DeliveryTimeSlots/GetTimeSlotData`,
+      {body: {sid: siteId, day: date}});
   }
 
-  putTimeSlot(timeSlot: ITimeSlot, index: number) {
+  getTimeSlotById(timeSlotId: number): Observable<ITimeSlotDelivery> {
+    return this.http.get<ITimeSlotDelivery>(`${this.url}/api/TimeSlots/GetTimeSlot/${timeSlotId}`);
+  }
 
-    console.log('timeSlot', timeSlot);
-    console.log('index', index);
+  putTimeSlot(timeSlot: ITimeSlotDelivery, index: number) {
 
     this.http.put(`${this.url}/api/TimeSlots/PutTimeSlot`, timeSlot)
-      .subscribe((res: ITimeSlot) => {
+      .subscribe((res: ITimeSlotDelivery) => {
 
         // in case when entry entity ID is 0 that means Add action
         // else is Edit so the object needs to be replaced in array
@@ -62,6 +64,8 @@ export class TimeSlotService {
         this.timeSlotsChanged.next(this.timeSlots);
       });
   }
+
+
 
   deleteTimseSlot(timeSlotId: number, index: number) {
     this.http.delete(`${this.url}/api/TimeSlots/DeleteTimeSlot/${timeSlotId}`)

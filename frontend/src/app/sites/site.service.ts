@@ -28,8 +28,8 @@ export class SiteService {
       });
   }
 
-  getSitesById(siteId: number): Observable<Array<ISite>> {
-    return this.http.get<Array<ISite>>(`${this.url}/api/Sites/GetSites/${siteId}`);
+  getSitesById(customerId: number): Observable<Array<ISite>> {
+    return this.http.get<Array<ISite>>(`${this.url}/api/Sites/GetSites/${customerId}`);
   }
 
   getSiteById(siteId: number): Observable<ISite> {

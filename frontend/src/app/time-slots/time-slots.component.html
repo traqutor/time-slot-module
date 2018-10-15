@@ -7,7 +7,7 @@
     <h3 mat-subheader>TIME SLOTS</h3>
 
     <mat-list-item *ngFor="let slot of timeSlots; let i = index">
-      <h4 mat-line>{{slot.startTime}} - {{slot.endTime}}</h4>
+      <h4 mat-line>{{slot.timeSlot.startTime}} - {{slot.timeSlot.endTime}}</h4>
       <p mat-line>{{slot.creationDate}}</p>
       <button mat-icon-button
               matTooltip="Edit Time Slot"

@@ -1,13 +1,16 @@
 import {MatDialog} from "@angular/material";
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 
 
-import {ITimeSlot} from "../time-slot.model";
-import {EntityStatusEnum} from "../../users/user.model";
+import {ITimeSlotDelivery} from "../time-slot.model";
+import {EntityStatusEnum, ICustomer} from "../../users/user.model";
 import {TimeSlotService} from "../time-slot.service";
 import {ConfirmDialogService} from "../../common/confirm-dialog/confirm-dialog.service";
 import {TimeSlotDialogComponent} from "../time-slot-dialog/time-slot-dialog.component";
+import {CustomerService} from "../../custmer/customer.service";
+import {ISite} from "../../sites/site.model";
+import {SiteService} from "../../sites/site.service";
 
 @Component({
   selector: 'app-time-slots-user-view',
@@ -16,37 +19,108 @@ import {TimeSlotDialogComponent} from "../time-slot-dialog/time-slot-dialog.comp
 })
 export class TimeSlotsUserViewComponent implements OnInit {
 
-  public timeSlots: Array<ITimeSlot> = [];
+  public timeSlots: Array<ITimeSlotDelivery> = [];
+  public customers: Array<ICustomer> = [];
+  public sites: Array<ISite> = [];
 
-  private voidTimeSlot: ITimeSlot = {
+  public customer: ICustomer;
+  public site: ISite;
+  public date: Date;
+
+  private voidTimeSlot: ITimeSlotDelivery = {
     id: 0,
-    startTime: '',
-    endTime: '',
     creationDate: null,
     modificationDate: null,
     createdBy: null,
     modifiedBy: null,
-    entityStatus: EntityStatusEnum.NORMAL
+    entityStatus: EntityStatusEnum.NORMAL,
+    timeSlot: {
+      id: 0,
+      startTime: '',
+      endTime: '',
+      creationDate: null,
+      modificationDate: null,
+      createdBy: null,
+      modifiedBy: null,
+      entityStatus: EntityStatusEnum.NORMAL
+    },
+    commodity: null,
+    contract: null,
+    customer: null,
+    deliveryDate: null,
+    driver: null,
+    site: null,
+    statusType: null,
+    supplier: null,
+    tons: null,
+    vehicle: null,
+    vendor: null
   };
+
+  // subscriptions are only for cleanup after destroy
   private subscriptions = [];
 
   constructor(private timeSlotService: TimeSlotService,
+              private customerService: CustomerService,
+              private siteService: SiteService,
               private confirm: ConfirmDialogService,
               private dialog: MatDialog) {
   }
 
-  addTimseSlot() {
-    this.editTimeSlot(this.voidTimeSlot, -1);
+  ngOnInit() {
+
+    this.date = new Date();
+
+    // get customers
+    // invoke Customers get from db
+    this.customerService.getCustomers();
+
+    // subscribe for Customers
+    this.subscriptions.push(this.customerService.customersChanged
+      .subscribe((res: Array<ICustomer>) => {
+        this.customers = res;
+      }));
+
+    // get sites
+    // get slots
+
   }
 
-  editTimeSlot(timeSlot: ITimeSlot, index: number) {
+  getSites(customer: ICustomer) {
+    if (customer) {
+      this.subscriptions.push(this.siteService.getSitesById(customer.id)
+        .subscribe((res: Array<ISite>) => {
+            this.sites = res;
+          }
+        ));
+    }
+  }
+
+  getSlots(site: ISite) {
+    if (site) {
+      this.timeSlotService.getTimeSlotData(site.id, this.date)
+        .subscribe((res: Array<ITimeSlotDelivery>) => {
+          this.timeSlots = res;
+        });
+    }
+  }
+
+  compare(val1, val2) {
+    return val1 && val2 ? val1.id === val2.id : val1 === val2;
+  }
+
+  addTimseSlot() {
+    this.editDeliverySlot(this.voidTimeSlot, -1);
+  }
+
+  editDeliverySlot(timeSlot: ITimeSlotDelivery, index: number) {
     const dialogRef = this.dialog.open(TimeSlotDialogComponent, {
       width: '45%',
       disableClose: true,
       data: timeSlot,
     });
     dialogRef.afterClosed()
-      .subscribe((resolvedTimeSlot: ITimeSlot) => {
+      .subscribe((resolvedTimeSlot: ITimeSlotDelivery) => {
 
         if (resolvedTimeSlot) {
           this.timeSlotService.putTimeSlot(resolvedTimeSlot, index);
@@ -55,26 +129,15 @@ export class TimeSlotsUserViewComponent implements OnInit {
       });
   }
 
-  deleteTimseSlot(timseslot: ITimeSlot, index: number) {
+  deleteDeliverySlot(timeSlot: ITimeSlotDelivery, index: number) {
     this.confirm.confirm('Delete TimeSlot', 'Are you sure you would like to delete the TimeSlot?')
       .subscribe((res: boolean) => {
         if (res) {
-          this.timeSlotService.deleteTimseSlot(timseslot.id, index);
+          this.timeSlotService.deleteTimseSlot(timeSlot.id, index);
         }
       });
   }
 
-  ngOnInit() {
-
-    // invoke Customers get from db
-    this.timeSlotService.getTimeSlots();
-
-    // subscribe for Customers
-    this.subscriptions.push(this.timeSlotService.timeSlotsChanged
-      .subscribe((res: Array<ITimeSlot>) => {
-        this.timeSlots = res;
-      }));
-  }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub: Subscription) => {
