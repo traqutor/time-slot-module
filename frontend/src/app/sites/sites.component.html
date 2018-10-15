@@ -8,7 +8,19 @@
 
     <mat-list-item *ngFor="let site of sites; let i = index">
       <h4 mat-line>{{site.name}}</h4>
-      <p mat-line>{{site.creationDate}}</p>
+      <p mat-line>
+        <b>Created:</b>
+        {{site.createdBy.name}}
+        {{site.createdBy.surname}} |
+        {{site.creationDate | date :
+        'DD/MMM/YYYY - HH:mm'}}
+
+        <b style="padding-left: 24px">Modified:</b>
+        {{site.modifiedBy.name}}
+        {{site.modifiedBy.surname}} |
+        {{site.modificationDate| date :
+        'DD/MMM/YYYY - HH:mm'}}
+      </p>
       <button mat-icon-button
               matTooltip="Edit site"
               (click)="editSite(site, i)">

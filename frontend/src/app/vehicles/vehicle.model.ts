@@ -1,12 +1,12 @@
 import {IFleet} from "../fleets/fleet.model";
-import {EntityStatusEnum} from "../users/user.model";
+import {EntityStatusEnum, IUser} from "../users/user.model";
 
 export interface IVehicle {
   id: number,
   rego: string;
   fleet: IFleet
-  createdBy: number;
-  modifiedBy: number;
+  createdBy: IUser;
+  modifiedBy: IUser;
   creationDate: Date;
   modificationDate: Date;
   entityStatus: EntityStatusEnum

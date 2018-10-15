@@ -55,8 +55,8 @@ export interface IRoleResult {
 export interface ICustomer {
   id: number;
   name: string;
-  createdBy: number;
-  modifiedBy: number;
+  createdBy: IUser;
+  modifiedBy: IUser;
   creationDate: Date,
   modificationDate: Date
   entityStatus: EntityStatusEnum

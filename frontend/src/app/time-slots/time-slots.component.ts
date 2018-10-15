@@ -54,7 +54,7 @@ export class TimeSlotsComponent implements OnInit, OnDestroy {
               private dialog: MatDialog) {
   }
 
-  addTimseSlot() {
+  addTimeSlot() {
     this.editTimeSlot(this.voidTimeSlot, -1);
   }
 

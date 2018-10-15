@@ -1,11 +1,11 @@
-import {EntityStatusEnum} from "../users/user.model";
+import {EntityStatusEnum, IUser} from "../users/user.model";
 
 export interface IVendor {
   id: number;
   name: string;
   creationDate: Date;
   modificationDate: Date;
-  createdBy: number;
-  modifiedBy: number;
+  createdBy: IUser;
+  modifiedBy: IUser;
   entityStatus: EntityStatusEnum
 }

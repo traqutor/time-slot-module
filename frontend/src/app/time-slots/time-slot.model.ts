@@ -13,8 +13,8 @@ interface ITimeSlot {
   endTime: string;
   creationDate: Date;
   modificationDate: Date;
-  createdBy: number;
-  modifiedBy: number;
+  createdBy: IUser;
+  modifiedBy: IUser;
   entityStatus: EntityStatusEnum;
 }
 

@@ -8,7 +8,19 @@
 
     <mat-list-item *ngFor="let slot of timeSlots; let i = index">
       <h4 mat-line>{{slot.timeSlot.startTime}} - {{slot.timeSlot.endTime}}</h4>
-      <p mat-line>{{slot.creationDate}}</p>
+      <p mat-line>
+        <b>Created:</b>
+        {{slot.createdBy.name}}
+        {{slot.createdBy.surname}} |
+        {{slot.creationDate | date :
+        'DD/MMM/YYYY - HH:mm'}}
+
+        <b style="padding-left: 24px">Modified:</b>
+        {{slot.modifiedBy.name}}
+        {{slot.modifiedBy.surname}} |
+        {{slot.modificationDate| date :
+        'DD/MMM/YYYY - HH:mm'}}
+      </p>
       <button mat-icon-button
               matTooltip="Edit Time Slot"
               (click)="editTimeSlot(slot, i)">
@@ -27,7 +39,7 @@
 
     <button mat-raised-button
             matTooltip="Add Time Slot"
-            (click)="addTimseSlot()">
+            (click)="addTimeSlot()">
       <mat-icon>add</mat-icon>
     </button>
   </div>

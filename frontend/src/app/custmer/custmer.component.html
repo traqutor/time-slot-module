@@ -1,30 +1,45 @@
 
 <div class="app-padding-default">
-  <mat-list>
+
+  <mat-list fxFlex="60" fxFlex.lt-md="100" >
 
     <h3 mat-subheader>CUSTOMERS</h3>
 
     <mat-list-item *ngFor="let customer of customers; let i = index">
-      {{customer.name}}
+      <h4 mat-line>{{customer.name}}</h4>
+      <p mat-line>
+        <b>Created:</b>
+        {{customer.createdBy.name}}
+        {{customer.createdBy.surname}} |
+        {{customer.creationDate | date :
+        'DD/MMM/YYYY - HH:mm'}}
 
+        <b style="padding-left: 24px">Modified:</b>
+        {{customer.modifiedBy.name}}
+        {{customer.modifiedBy.surname}} |
+        {{customer.modificationDate| date :
+        'DD/MMM/YYYY - HH:mm'}}
+      </p>
       <button mat-icon-button
               matTooltip="Edit Customer"
               (click)="editCustomer(customer, i)">
-        <mat-icon>edit</mat-icon>
+        <mat-icon mat-list-icon>edit</mat-icon>
       </button>
 
       <button mat-icon-button
-              matTooltip="Delete customer"
-      (click)="deleteCustomer(customer, i)">
+              matTooltip="Delete Customer"
+              (click)="deleteCustomer(customer, i)">
         <mat-icon>delete</mat-icon>
       </button>
-
+      <mat-divider></mat-divider>
     </mat-list-item>
   </mat-list>
+  <div class="app-padding-default">
 
-  <button mat-icon-button
-          matTooltip="Add Customer"
-          (click)="addCustomer()">
-    <mat-icon>add</mat-icon>
-  </button>
+    <button mat-raised-button
+            matTooltip="Add Customer"
+            (click)="addCustomer()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
 </div>

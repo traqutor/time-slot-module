@@ -8,7 +8,19 @@
 
     <mat-list-item *ngFor="let fleet of fleets; let i = index">
       <h4 mat-line>{{fleet.name}}</h4>
-      <p mat-line>{{fleet.creationDate}}</p>
+      <p mat-line>
+        <b>Created:</b>
+        {{fleet.createdBy.name}}
+        {{fleet.createdBy.surname}} |
+        {{fleet.creationDate | date :
+        'DD/MMM/YYYY - HH:mm'}}
+
+        <b style="padding-left: 24px">Modified:</b>
+        {{fleet.modifiedBy.name}}
+        {{fleet.modifiedBy.surname}} |
+        {{fleet.modificationDate| date :
+        'DD/MMM/YYYY - HH:mm'}}
+      </p>
       <button mat-icon-button
               matTooltip="Edit Fleet"
               (click)="editFleet(fleet, i)">

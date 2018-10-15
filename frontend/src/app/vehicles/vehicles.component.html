@@ -6,7 +6,19 @@
 
     <mat-list-item *ngFor="let vehicle of vehicles; let i = index">
       <h4 mat-line>{{vehicle.rego}}</h4>
-      <p mat-line>{{vehicle.creationDate}}</p>
+      <p mat-line>
+        <b>Created:</b>
+        {{vehicle.createdBy.name}}
+        {{vehicle.createdBy.surname}} |
+        {{vehicle.creationDate | date :
+        'DD/MMM/YYYY - HH:mm'}}
+
+        <b style="padding-left: 24px">Modified:</b>
+        {{vehicle.modifiedBy.name}}
+        {{vehicle.modifiedBy.surname}} |
+        {{vehicle.modificationDate| date :
+        'DD/MMM/YYYY - HH:mm'}}
+      </p>
       <button mat-icon-button
               matTooltip="Edit Vehicle"
               (click)="editVehicle(vehicle, i)">

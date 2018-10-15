@@ -19,6 +19,7 @@ export class TimeSlotDialogComponent implements OnInit {
 
 
   ngOnInit() {
+    console.log('timeSlot', this.timeSlot);
 
     this.timeSlotForm = this.formBuilder.group({
       id: this.timeSlot.id,
