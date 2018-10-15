@@ -84,19 +84,16 @@ export class UserDialogComponent implements OnInit, OnDestroy {
     // depends on the User role select related properties to display in mat-select options
     // get role dependent settings Customer,
     if (this.user.role) {
-      console.log('this.user.role', this.user.role);
       this.onRoleChange(this.user.role);
     }
 
     // get customer dependent dictionaries Sites and Fleets
     if (this.user.customer && this.user.customer.id > 0) {
-      console.log('this.user.customer', this.user.customer);
       this.onCustomerChange(this.user.customer);
     }
 
     // get fleet Vehicles
     if (this.user.id > 0 && this.user.fleet && this.user.fleet.id > 0) {
-      console.log('this.user.fleet', this.user.fleet);
       this.onFleetChange(this.user.fleet);
     }
 
@@ -124,14 +121,12 @@ export class UserDialogComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.siteService.getSitesById(customer.id)
       .subscribe((res: Array<ISite>) => {
           this.sites = res;
-          console.log('this.sites', this.sites);
         }
       ));
 
     this.subscriptions.push(this.fleetService.getFleetsById(customer.id)
       .subscribe((res: Array<IFleet>) => {
           this.fleets = res;
-          console.log('this.fleets', this.fleets);
         }
       ));
   }
@@ -141,17 +136,19 @@ export class UserDialogComponent implements OnInit, OnDestroy {
     this.vehicleService.getVehiclesForFleetId(fleet.id)
       .subscribe((res: Array<IVehicle>) => {
         this.fleetsVehicles = res;
+
         console.log('this.fleetsVehicles', this.fleetsVehicles);
 
         // some worlkaround to make multiple selction  work
         let tmp: IVehicle[] = [];
-        this.user.vehicles.forEach((userVehicle) => {
-        this.fleetsVehicles.forEach((recivedVehilce: IVehicle) => {
-            if (recivedVehilce.id = userVehicle.id) {
+          this.fleetsVehicles.forEach((recivedVehilce: IVehicle) => {
+            this.user.vehicles.forEach((userVehicle) => {
+            if (recivedVehilce.id === userVehicle.id) {
               tmp.push(recivedVehilce);
             }
           });
         });
+        console.log('tmp', tmp);
         this.userForm.controls['vehicles'].setValue(tmp);
       });
   }
