@@ -257,6 +257,10 @@ namespace TimeSlotting.Controllers
                     user.FirstName = model.Name;
                     user.LastName = model.Surname;
 
+                    user.CustomerId = model.Customer?.Id;
+                    user.FleetId = model.Fleet?.Id;
+                    user.SiteId = model.Site?.Id;
+
                     user.ModificationDate = DateTime.UtcNow;
                     user.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
@@ -303,7 +307,7 @@ namespace TimeSlotting.Controllers
 
             var roles = db.Roles.OrderByDescending(r => r.Id).ToList();
 
-            user = db.WebUsers.Include(c => c.User).SingleOrDefault(u => u.Id == user.Id);
+            user = db.WebUsers.Include(c => c.User).Include(c => c.Fleet).Include(c => c.Customer).Include("VehicleDrivers.Vehicle").Include(c => c.Site).SingleOrDefault(u => u.Id == user.Id);
 
             return Ok(new UserListEntryViewModel(user, roles));
         }
