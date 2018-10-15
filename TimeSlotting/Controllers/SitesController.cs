@@ -102,9 +102,9 @@ namespace TimeSlotting.Controllers
             }
 
             db.SaveChanges();
-
+            
             site = db.Sites.Include(e => e.CreatedBy).Include(e => e.ModifiedBy).Include(e => e.Customer).SingleOrDefault(c => c.Id == site.Id);
-
+            
             return Ok(new SiteListEntryViewModel(site));
         }
 
