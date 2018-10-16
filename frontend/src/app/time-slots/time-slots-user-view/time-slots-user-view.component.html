@@ -62,13 +62,34 @@
 
 
     <mat-list-item *ngFor="let slot of timeSlots; let i = index">
-      <h4 mat-line>{{slot.timeSlot.startTime}} - {{slot.timeSlot.endTime}}</h4>
-      <!--<p mat-line>{{slot.deliveryTimeSlot.driver.name}} {{slot.deliveryTimeSlot.driver.surname}}</p>-->
-      <button mat-button
+
+      <h4 mat-line>{{slot.timeSlot.startTime}} - {{slot.timeSlot.endTime}}
+        <span class="app-margin-left" *ngIf="slot.deliveryTimeSlot">{{slot.deliveryTimeSlot.tons}} tons of {{slot.deliveryTimeSlot.commodity.name}} </span>
+        <span class="app-margin-left" *ngIf="slot.deliveryTimeSlot"></span>
+      </h4>
+
+      <p mat-line>
+        <span *ngIf="slot.deliveryTimeSlot">Vendor:  {{slot.deliveryTimeSlot.vendor.name}} </span>
+        <span *ngIf="slot.deliveryTimeSlot"
+              class="app-margin-left">Supplier: {{slot.deliveryTimeSlot.supplier.name}}  </span>
+      </p>
+
+      <p mat-line>
+        <span *ngIf="slot.deliveryTimeSlot">Driver:  {{slot.deliveryTimeSlot.driver.name}} {{slot.deliveryTimeSlot.driver.surname}} </span>
+        <span *ngIf="slot.deliveryTimeSlot"
+              class="app-margin-left">Contract: {{slot.deliveryTimeSlot.contract.name}}  </span>
+        <span *ngIf="slot.deliveryTimeSlot"
+              class="app-margin-left">Vehicle:  {{slot.deliveryTimeSlot.vehicle.rego}} </span>
+      </p>
+
+      <button mat-raised-button
               matTooltip="Edit Time Slot"
+              [color]="!slot.deliveryTimeSlot? '' : 'accent'"
               (click)="editDeliverySlot(slot, i)">
         <mat-icon mat-list-icon>edit</mat-icon>
-        {{slot.timeSlot.entityStatus}}
+        <span
+          *ngIf="slot.deliveryTimeSlot && slot.deliveryTimeSlot.statusType && slot.deliveryTimeSlot.statusType.name">{{slot.deliveryTimeSlot.statusType.name.toUpperCase()}} </span>
+        <span *ngIf="!slot.deliveryTimeSlot">OPEN</span>
       </button>
 
       <button mat-icon-button

@@ -2,7 +2,7 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {ITimeSlotDelivery} from "../time-slot.model";
-import {IUser} from "../../users/user.model";
+import {IUser, IUserInfo, UserRoleNameEnum} from "../../users/user.model";
 import {DriverService} from "selenium-webdriver/remote";
 import {UserService} from "../../users/user.service";
 import {IVehicle} from "../../vehicles/vehicle.model";
@@ -18,6 +18,7 @@ import {IStatusType} from "../../status-types/status-type.model";
 import {SupplierService} from "../../suppliers/supplier.service";
 import {CommodityService} from "../../commodities/commodity.service";
 import {StatusTypeService} from "../../status-types/status-type.service";
+import {AuthService} from "../../auth/auth.service";
 
 @Component({
   selector: 'app-time-slot-delivery-dialog',
@@ -25,6 +26,9 @@ import {StatusTypeService} from "../../status-types/status-type.service";
   styleUrls: ['./time-slot-delivery-dialog.component.css']
 })
 export class TimeSlotDeliveryDialogComponent implements OnInit, OnDestroy {
+
+  public userInfo: IUserInfo;
+  public USER_ROLES = UserRoleNameEnum;
 
   timeSlotForm: FormGroup;
   drivers: IUser[] = [];
@@ -47,92 +51,106 @@ export class TimeSlotDeliveryDialogComponent implements OnInit, OnDestroy {
               private commodityService: CommodityService,
               private statusTypeService: StatusTypeService,
               private formBuilder: FormBuilder,
+              private auth: AuthService,
               @Inject(MAT_DIALOG_DATA) public timeSlot: ITimeSlotDelivery) {
   }
 
 
   ngOnInit() {
 
-    console.log('input timeSlot', this.timeSlot);
+    this.subscriptions.push(this.auth.currentUser.subscribe((res: IUserInfo) => {
 
-    this.timeSlotForm = this.formBuilder.group({
-      id: this.timeSlot.id,
+      this.userInfo = res;
 
-      driver: [this.timeSlot.driver, [Validators.required]],
-      vehicle: [this.timeSlot.vehicle, [Validators.required]],
-      contract: [this.timeSlot.contract, [Validators.required]],
-      vendor: [this.timeSlot.vendor, [Validators.required]],
-      supplier: [this.timeSlot.supplier, [Validators.required]],
-      commodity: [this.timeSlot.commodity, [Validators.required]],
-      statusType: [this.timeSlot.statusType, [Validators.required]],
-      tons: [this.timeSlot.tons, [Validators.required]],
+      this.timeSlotForm = this.formBuilder.group({
+        id: this.timeSlot.id,
 
-      timeSlot: this.timeSlot.timeSlot,
-      deliveryDate: this.timeSlot.deliveryDate,
-      customer: this.timeSlot.customer,
-      site: this.timeSlot.site,
+        driver: [this.timeSlot.driver, [Validators.required]],
+        vehicle: [this.timeSlot.vehicle, [Validators.required]],
+        contract: [this.timeSlot.contract, [Validators.required]],
+        vendor: [this.timeSlot.vendor, [Validators.required]],
+        supplier: [this.timeSlot.supplier, [Validators.required]],
+        commodity: [this.timeSlot.commodity, [Validators.required]],
+        statusType: [this.timeSlot.statusType, [Validators.required]],
+        tons: [this.timeSlot.tons, [Validators.required]],
 
-      creationDate: this.timeSlot.creationDate,
-      modificationDate: this.timeSlot.modificationDate,
-      createdBy: this.timeSlot.createdBy,
-      modifiedBy: this.timeSlot.modifiedBy,
-      entityStatus: this.timeSlot.entityStatus
-    });
+        timeSlot: this.timeSlot.timeSlot,
+        deliveryDate: this.timeSlot.deliveryDate,
+        customer: this.timeSlot.customer,
+        site: this.timeSlot.site,
 
-    this.subscriptions.push(this.userService.getDriversForCompany(this.timeSlot.customer.id)
-      .subscribe((res: IUser[]) => {
-        this.drivers = res;
-      }));
+        creationDate: this.timeSlot.creationDate,
+        modificationDate: this.timeSlot.modificationDate,
+        createdBy: this.timeSlot.createdBy,
+        modifiedBy: this.timeSlot.modifiedBy,
+        entityStatus: this.timeSlot.entityStatus
+      });
 
-    // invoke Contracts get from db by Admin
-    this.contractService.getContracts();
+      this.subscriptions.push(this.userService.getDriversForCompany(this.timeSlot.customer.id)
+        .subscribe((res: IUser[]) => {
+          this.drivers = res;
+        }));
 
-    // subscribe for Contracts
-    this.subscriptions.push(this.contractService.contractsChanged
-      .subscribe((res: Array<IContract>) => {
-        this.contracts = res;
-      }));
+      // invoke Contracts get from db by Admin
+      this.contractService.getContracts();
 
-    // invoke Vendors get from db by Admin
-    this.vendorService.getVendors();
+      // subscribe for Contracts
+      this.subscriptions.push(this.contractService.contractsChanged
+        .subscribe((res: Array<IContract>) => {
+          this.contracts = res;
+        }));
 
-    // subscribe for Vendors
-    this.subscriptions.push(this.vendorService.vendorsChanged
-      .subscribe((res: Array<IVendor>) => {
-        this.vendors = res;
-      }));
+      // invoke Vendors get from db by Admin
+      this.vendorService.getVendors();
 
-    // invoke Supplies get from db by Admin
-    this.supplierService.getSuppliers();
+      // subscribe for Vendors
+      this.subscriptions.push(this.vendorService.vendorsChanged
+        .subscribe((res: Array<IVendor>) => {
+          this.vendors = res;
+        }));
 
-    // subscribe for Suppliers
-    this.subscriptions.push(this.supplierService.suppliersChanged
-      .subscribe((res: Array<ISupplier>) => {
-        this.suppliers = res;
-      }));
+      // invoke Supplies get from db by Admin
+      this.supplierService.getSuppliers();
 
-    // invoke Commodities get from db by Admin
-    this.commodityService.getCommodities();
+      // subscribe for Suppliers
+      this.subscriptions.push(this.supplierService.suppliersChanged
+        .subscribe((res: Array<ISupplier>) => {
+          this.suppliers = res;
+        }));
 
-    // subscribe for Commodities
-    this.subscriptions.push(this.commodityService.commoditiesChanged
-      .subscribe((res: Array<ICommodity>) => {
-        this.commodities = res;
-      }));
+      // invoke Commodities get from db by Admin
+      this.commodityService.getCommodities();
 
-    // invoke StatusTypes get from db by Admin
-    this.statusTypeService.getStatusTypes();
+      // subscribe for Commodities
+      this.subscriptions.push(this.commodityService.commoditiesChanged
+        .subscribe((res: Array<ICommodity>) => {
+          this.commodities = res;
+        }));
 
-    // subscribe for StatusTypes
-    this.subscriptions.push(this.statusTypeService.statusTypesChanged
-      .subscribe((res: Array<IStatusType>) => {
-        this.statusTypes = res;
-      }));
+      // Depends on user Role get Statuses
+      if (this.userInfo.role.name === this.USER_ROLES.Administrator) {
+        // invoke StatusTypes get from db by Admin
+        this.statusTypeService.getStatusTypes();
+      } else {
+        this.statusTypeService.getStatusTypesList();
+      }
+
+      // subscribe for StatusTypes
+      this.subscriptions.push(this.statusTypeService.statusTypesChanged
+        .subscribe((res: Array<IStatusType>) => {
+          this.statusTypes = res;
+        }));
+
+      if (this.timeSlot.driver && this.timeSlot.driver.id !== 0) {
+        this.onDriverChange(this.timeSlot.driver);
+      }
+
+
+    }));
 
   }
 
   onDriverChange(driver: IUser) {
-    console.log('driver', driver);
     this.getVehicles(driver);
   }
 

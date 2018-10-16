@@ -50,17 +50,93 @@ export class TimeSlotsUserViewComponent implements OnInit {
       modifiedBy: null,
       entityStatus: EntityStatusEnum.NORMAL
     },
-    commodity: null,
-    contract: null,
-    customer: null,
+    commodity: {
+      id: 0,
+      name: null,
+      createdBy: null,
+      creationDate: null,
+      modifiedBy: null,
+      modificationDate: null,
+      entityStatus: EntityStatusEnum.NORMAL
+    },
+    contract: {
+      id: 0,
+      name: null,
+      createdBy: null,
+      creationDate: null,
+      modifiedBy: null,
+      modificationDate: null,
+      entityStatus: EntityStatusEnum.NORMAL
+    },
+    customer: {
+      id: 0,
+      name: null,
+      createdBy: null,
+      creationDate: null,
+      modifiedBy: null,
+      modificationDate: null,
+      entityStatus: EntityStatusEnum.NORMAL
+    },
     deliveryDate: null,
-    driver: null,
-    site: null,
-    statusType: null,
-    supplier: null,
+    driver: {
+      id: 0,
+      name: null,
+      fleet: null,
+      customer: null,
+      surname: null,
+      role: null,
+      vehicles: null,
+      site: null,
+      password: null,
+      email: null,
+      entityStatus: EntityStatusEnum.NORMAL
+    },
+    site: {
+      id: 0, customer: null,
+      name: null,
+      createdBy: null,
+      creationDate: null,
+      modifiedBy: null,
+      modificationDate: null,
+      entityStatus: EntityStatusEnum.NORMAL
+    },
+    statusType: {
+      id: 0,
+      name: null,
+      createdBy: null,
+      creationDate: null,
+      modifiedBy: null,
+      modificationDate: null,
+      entityStatus: EntityStatusEnum.NORMAL
+    },
+    supplier: {
+      id: 0,
+      name: null,
+      createdBy: null,
+      creationDate: null,
+      modifiedBy: null,
+      modificationDate: null,
+      entityStatus: EntityStatusEnum.NORMAL
+    },
     tons: null,
-    vehicle: null,
-    vendor: null
+    vehicle: {
+      id: 0,
+      rego: null, fleet: null,
+      createdBy: null,
+      creationDate: null,
+      modifiedBy: null,
+      modificationDate: null,
+      entityStatus: EntityStatusEnum.NORMAL
+    },
+    vendor: {
+      id: 0,
+      name: null,
+      createdBy: null,
+      creationDate: null,
+      modifiedBy: null,
+      modificationDate: null,
+      entityStatus: EntityStatusEnum.NORMAL
+    },
   };
 
   // subscriptions are only for cleanup after destroy
@@ -85,7 +161,7 @@ export class TimeSlotsUserViewComponent implements OnInit {
 
       // get customers if user Role Admin
       // invoke Customers get from db
-      if (this.userInfo.role.name === this.USER_ROLES.Administrator) {
+      if (this.userInfo && this.userInfo.role.name === this.USER_ROLES.Administrator) {
 
         this.showCustomer = true;
         this.customerService.getCustomers();
@@ -116,6 +192,8 @@ export class TimeSlotsUserViewComponent implements OnInit {
   }
 
   getSites(customer: ICustomer) {
+    this.timeSlots.length = 0;
+
     if (customer) {
       this.subscriptions.push(this.siteService.getSitesById(customer.id)
         .subscribe((res: Array<ISite>) => {
@@ -151,6 +229,8 @@ export class TimeSlotsUserViewComponent implements OnInit {
       timeSlot.deliveryTimeSlot.site = this.site;
       timeSlot.deliveryTimeSlot.deliveryDate = this.date;
     }
+
+    console.log('timeSlot.deliveryTimeSlot', timeSlot.deliveryTimeSlot);
 
     const dialogRef = this.dialog.open(TimeSlotDeliveryDialogComponent, {
       width: '45%',
