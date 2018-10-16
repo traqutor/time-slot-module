@@ -304,6 +304,8 @@
     <Compile Include="Utils\EmailSender.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\assets\dummy.txt" />
+    <Content Include="App_Data\TimeSlotting.xml" />
     <Content Include="Content\angular-moment-picker.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -313,6 +315,7 @@
     </Content>
     <Content Include="Content\ng-table.css" />
     <Content Include="Content\ng-table.min.css" />
+    <Content Include="app\Web.config" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\*** - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
@@ -1205,9 +1208,7 @@
     <Content Include="Views\Admin\Contracts.cshtml" />
     <Content Include="Views\Admin\Vendors.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
   </ItemGroup>

@@ -1,33 +1,31 @@
-﻿using System.Web.Mvc;
+﻿
+
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
 
 namespace TimeSlotting.Controllers
 {
-    [HandleError]
-    public class HomeController : Controller
+    [RoutePrefix("")]
+    public class HomeController : ApiController
     {
-        public ActionResult Index()
+        [Route("")]
+        [HttpGet]
+        public HttpResponseMessage Index()
         {
-            return View();
-        }
+            var response = Request.CreateResponse(HttpStatusCode.Moved);
+            #if DEBUG
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
+            response.Headers.Location = new Uri(Request.RequestUri + "/swagger");
+            return response;
 
-            return View();
-        }
+            #else
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
-        [Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
-        public ActionResult TimeSlot()
-        {
-            return View();
+            response.Headers.Location = new Uri(Request.RequestUri + "/app");
+            return response;
+    
+            #endif
         }
     }
 }
