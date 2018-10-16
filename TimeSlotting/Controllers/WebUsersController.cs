@@ -335,7 +335,7 @@ namespace TimeSlotting.Controllers
         public UserListEntryViewModel GetUserInfo()
         {
             string loggedUserId = User.Identity.GetUserId();
-            var userToReturn = db.WebUsers.Include(u => u.Customer).AsNoTracking().SingleOrDefault(u => u.ASPId == loggedUserId);
+            var userToReturn = db.WebUsers.Include(u => u.Customer).Include(u => u.Site).AsNoTracking().SingleOrDefault(u => u.ASPId == loggedUserId);
 
             if (userToReturn == null)
                 throw new HttpResponseException(HttpStatusCode.Unauthorized);
