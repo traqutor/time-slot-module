@@ -63,7 +63,7 @@
 
     <mat-list-item *ngFor="let slot of timeSlots; let i = index">
 
-      <h4 mat-line>{{slot.timeSlot.startTime}} - {{slot.timeSlot.endTime}}
+      <h4 mat-line>{{slot.timeSlot.startTime | slice:0:5 }} - {{slot.timeSlot.endTime | slice:0:5}}
         <span class="app-margin-left" *ngIf="slot.deliveryTimeSlot">{{slot.deliveryTimeSlot.tons}} tons of {{slot.deliveryTimeSlot.commodity.name}} </span>
         <span class="app-margin-left" *ngIf="slot.deliveryTimeSlot"></span>
       </h4>

@@ -9,13 +9,18 @@
       <mat-label>Start Time</mat-label>
 
       <input matInput
+             #start
              cdkFocusInitial
              type="text"
              placeholder="Start time"
              formControlName="startTime">
+      <button mat-icon-button matSuffix (click)="timePickerOpen(start.value, 'startTime')">
+        <mat-icon>schedule</mat-icon>
+      </button>
       <mat-error
-        *ngIf="timeSlotForm.get('startTime').hasError('required') && timeSlotForm.get('startTime').touched">
-        Start Time is required.
+        *ngIf="(timeSlotForm.get('startTime').hasError('required') ||
+        timeSlotForm.get('startTime').hasError('pattern')) && timeSlotForm.get('startTime').touched">
+        Start Time is required and must be in 00:00 form.
       </mat-error>
 
     </mat-form-field>
@@ -25,13 +30,18 @@
       <mat-label>End Time</mat-label>
 
       <input matInput
+             #end
              cdkFocusInitial
              type="text"
              placeholder="End time"
              formControlName="endTime">
+      <button mat-icon-button matSuffix (click)="timePickerOpen(end.value, 'endTime')">
+        <mat-icon>schedule</mat-icon>
+      </button>
       <mat-error
-        *ngIf="timeSlotForm.get('endTime').hasError('required') && timeSlotForm.get('endTime').touched">
-        End Time is required.
+        *ngIf="(timeSlotForm.get('endTime').hasError('required') ||
+        timeSlotForm.get('endTime').hasError('pattern') ) && timeSlotForm.get('endTime').touched">
+        End Time is required and must be on 00:00 form.
       </mat-error>
 
     </mat-form-field>

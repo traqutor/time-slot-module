@@ -43,6 +43,8 @@ import {UserDialogComponent} from "./users/user-dialog/user-dialog.component";
 import { AdminComponent } from './common/admin/admin.component';
 import { TimeSlotsUserViewComponent } from './time-slots/time-slots-user-view/time-slots-user-view.component';
 import { TimeSlotDeliveryDialogComponent } from './time-slots/time-slot-delivery-dialog/time-slot-delivery-dialog.component';
+import { SlotHourPipe } from './common/slot-hour.pipe';
+import { SlotHourDialogComponent } from './common/slot-hour-dialog/slot-hour-dialog.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +78,8 @@ import { TimeSlotDeliveryDialogComponent } from './time-slots/time-slot-delivery
     AdminComponent,
     TimeSlotsUserViewComponent,
     TimeSlotDeliveryDialogComponent,
+    SlotHourPipe,
+    SlotHourDialogComponent,
 
   ],
   imports: [
@@ -111,6 +115,7 @@ import { TimeSlotDeliveryDialogComponent } from './time-slots/time-slot-delivery
     VehicleDialogComponent,
     UserDialogComponent,
     TimeSlotDeliveryDialogComponent,
+    SlotHourDialogComponent,
   ],
   bootstrap: [AppComponent]
 })
