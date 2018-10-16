@@ -216,18 +216,19 @@ export class TimeSlotsUserViewComponent implements OnInit {
 
   editDeliverySlot(timeSlot: IUniformViewTimeSlot, index: number) {
 
+    let tmpSlot: IUniformViewTimeSlot = Object.assign({}, timeSlot);
     // the object needs to be created somehow ;)
-    if (timeSlot.deliveryTimeSlot) {
-      timeSlot.deliveryTimeSlot.timeSlot = timeSlot.timeSlot;
-      timeSlot.deliveryTimeSlot.customer = this.customer;
-      timeSlot.deliveryTimeSlot.site = this.site;
-      timeSlot.deliveryTimeSlot.deliveryDate = this.date;
+    if (tmpSlot.deliveryTimeSlot) {
+      tmpSlot.deliveryTimeSlot.timeSlot = timeSlot.timeSlot;
+      tmpSlot.deliveryTimeSlot.customer = this.customer;
+      tmpSlot.deliveryTimeSlot.site = this.site;
+      tmpSlot.deliveryTimeSlot.deliveryDate = this.date;
     } else {
-      timeSlot.deliveryTimeSlot = this.voidDeliveryTimeSlot;
-      timeSlot.deliveryTimeSlot.timeSlot = timeSlot.timeSlot;
-      timeSlot.deliveryTimeSlot.customer = this.customer;
-      timeSlot.deliveryTimeSlot.site = this.site;
-      timeSlot.deliveryTimeSlot.deliveryDate = this.date;
+      tmpSlot.deliveryTimeSlot = this.voidDeliveryTimeSlot;
+      tmpSlot.deliveryTimeSlot.timeSlot = timeSlot.timeSlot;
+      tmpSlot.deliveryTimeSlot.customer = this.customer;
+      tmpSlot.deliveryTimeSlot.site = this.site;
+      tmpSlot.deliveryTimeSlot.deliveryDate = this.date;
     }
 
     console.log('timeSlot.deliveryTimeSlot', timeSlot.deliveryTimeSlot);
@@ -235,7 +236,7 @@ export class TimeSlotsUserViewComponent implements OnInit {
     const dialogRef = this.dialog.open(TimeSlotDeliveryDialogComponent, {
       width: '45%',
       disableClose: true,
-      data: timeSlot.deliveryTimeSlot,
+      data: tmpSlot.deliveryTimeSlot,
     });
     this.subscriptions.push(dialogRef.afterClosed()
       .subscribe((resolvedTimeSlot: ITimeSlotDelivery) => {
