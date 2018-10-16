@@ -96,6 +96,7 @@
 
   <span class="app-spacer"></span>
 
+
   <button *ngIf="user"
           mat-button
           matTooltip="User specific actions"
@@ -103,12 +104,20 @@
     <mat-icon>account_circle</mat-icon>
     {{user.name}} {{user.surname}}
   </button>
+
   <mat-menu #userMenu="matMenu">
 
     <button mat-menu-item (click)="logOut()">
       Log out
     </button>
   </mat-menu>
+
+  <button *ngIf="user"
+          mat-button
+          matTooltip="User system role">
+    Role: {{user.role.name}}
+  </button>
+
 
 </mat-toolbar>
 
