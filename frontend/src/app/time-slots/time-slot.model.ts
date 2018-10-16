@@ -40,7 +40,7 @@ export interface ITimeSlotDelivery {
   entityStatus: EntityStatusEnum;
 }
 
-export interface IUniformTimeSlot {
+export interface IUniformViewTimeSlot {
   timeSlot: ITimeSlot;
-  timeSlotDelivery: ITimeSlotDelivery;
+  deliveryTimeSlot: ITimeSlotDelivery;
 }

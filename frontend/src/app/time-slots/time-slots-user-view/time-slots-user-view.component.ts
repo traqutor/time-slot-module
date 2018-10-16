@@ -3,8 +3,8 @@ import {Component, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 
 
-import {ITimeSlotDelivery} from "../time-slot.model";
-import {EntityStatusEnum, ICustomer, IUser, IUserInfo, UserRoleNameEnum} from "../../users/user.model";
+import {ITimeSlotDelivery, IUniformViewTimeSlot} from "../time-slot.model";
+import {EntityStatusEnum, ICustomer, IUserInfo, UserRoleNameEnum} from "../../users/user.model";
 import {TimeSlotService} from "../time-slot.service";
 import {ConfirmDialogService} from "../../common/confirm-dialog/confirm-dialog.service";
 import {CustomerService} from "../../custmer/customer.service";
@@ -23,7 +23,7 @@ export class TimeSlotsUserViewComponent implements OnInit {
   public userInfo: IUserInfo;
   public USER_ROLES = UserRoleNameEnum;
 
-  public timeSlots: Array<ITimeSlotDelivery> = [];
+  public timeSlots: Array<IUniformViewTimeSlot> = [];
   public customers: Array<ICustomer> = [];
   public sites: Array<ISite> = [];
 
@@ -33,13 +33,7 @@ export class TimeSlotsUserViewComponent implements OnInit {
 
   public showCustomer: boolean;
 
-  private voidTimeSlot: ITimeSlotDelivery = {
-    id: 0,
-    creationDate: null,
-    modificationDate: null,
-    createdBy: null,
-    modifiedBy: null,
-    entityStatus: EntityStatusEnum.NORMAL,
+  private voidTimeSlot: IUniformViewTimeSlot = {
     timeSlot: {
       id: 0,
       startTime: '',
@@ -50,17 +44,35 @@ export class TimeSlotsUserViewComponent implements OnInit {
       modifiedBy: null,
       entityStatus: EntityStatusEnum.NORMAL
     },
-    commodity: null,
-    contract: null,
-    customer: null,
-    deliveryDate: null,
-    driver: null,
-    site: null,
-    statusType: null,
-    supplier: null,
-    tons: null,
-    vehicle: null,
-    vendor: null
+    deliveryTimeSlot: {
+      id: 0,
+      creationDate: null,
+      modificationDate: null,
+      createdBy: null,
+      modifiedBy: null,
+      entityStatus: EntityStatusEnum.NORMAL,
+      timeSlot: {
+        id: 0,
+        startTime: '',
+        endTime: '',
+        creationDate: null,
+        modificationDate: null,
+        createdBy: null,
+        modifiedBy: null,
+        entityStatus: EntityStatusEnum.NORMAL
+      },
+      commodity: null,
+      contract: null,
+      customer: null,
+      deliveryDate: null,
+      driver: null,
+      site: null,
+      statusType: null,
+      supplier: null,
+      tons: null,
+      vehicle: null,
+      vendor: null
+    }
   };
 
   // subscriptions are only for cleanup after destroy
@@ -92,7 +104,7 @@ export class TimeSlotsUserViewComponent implements OnInit {
 
         // subscribe for Customers
         this.subscriptions.push(this.timeSlotService.deliveryTimeSlotsChanged
-          .subscribe((res: Array<ITimeSlotDelivery>) => {
+          .subscribe((res: Array<IUniformViewTimeSlot>) => {
             this.timeSlots = res;
           }));
 
@@ -137,21 +149,21 @@ export class TimeSlotsUserViewComponent implements OnInit {
     this.editDeliverySlot(this.voidTimeSlot, -1);
   }
 
-  editDeliverySlot(timeSlot: ITimeSlotDelivery, index: number) {
+  editDeliverySlot(timeSlot: IUniformViewTimeSlot, index: number) {
 
-    timeSlot.customer = this.customer;
-    timeSlot.site = this.site;
+    timeSlot.deliveryTimeSlot.customer = this.customer;
+    timeSlot.deliveryTimeSlot.site = this.site;
 
     const dialogRef = this.dialog.open(TimeSlotDeliveryDialogComponent, {
       width: '45%',
       disableClose: true,
-      data: timeSlot,
+      data: timeSlot.deliveryTimeSlot,
     });
     this.subscriptions.push(dialogRef.afterClosed()
       .subscribe((resolvedTimeSlot: ITimeSlotDelivery) => {
-
         if (resolvedTimeSlot) {
-          this.timeSlotService.putDeliveryTimeSlot(resolvedTimeSlot, index);
+          timeSlot.deliveryTimeSlot = resolvedTimeSlot;
+          this.timeSlotService.putDeliveryTimeSlot(timeSlot, index);
         }
 
       }));
