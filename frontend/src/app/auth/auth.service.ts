@@ -79,11 +79,11 @@ export class AuthService {
   }
 
   forgotPassword(email: string) {
-    return this.http.post(`${this.url}/api/Account/ForgotPassword`, email);
+    return this.http.post(`${this.url}/ForgotPassword`, email);
   }
 
   onPasswordRecovery(token: string, email: string,  password: string, confirmPassword: string) {
-    return this.http.post(`${this.url}/api/Account/ForgotPasswordReset`, {
+    return this.http.post(`${this.url}/ForgotPasswordReset`, {
       token: token,
       email: email,
       password: password,

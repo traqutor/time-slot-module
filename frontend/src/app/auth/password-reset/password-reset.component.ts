@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {SharedService} from "../shared/shared.service";
 import {MatSnackBar} from "@angular/material";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../auth.service";
@@ -18,8 +17,7 @@ export class PasswordResetComponent implements OnInit {
 
 
   constructor(private auth: AuthService,
-              private formBuilder: FormBuilder,
-              private snackBar: MatSnackBar) {
+              private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
