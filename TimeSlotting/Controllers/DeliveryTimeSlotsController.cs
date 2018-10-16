@@ -42,7 +42,7 @@ namespace TimeSlotting.Controllers
         /// <param name="sid">Customer site id</param>
         /// <param name="day">date</param>
         /// <returns></returns>
-        [ResponseType(typeof(List<DeliveryTimeSlotModel>))]
+        [ResponseType(typeof(List<TimeSlotWithDeliveryModel>))]
         public IHttpActionResult GetTimeSlotData(int sid, string day)
         {
             DateTime dayDate = DateTime.Parse(day);
@@ -64,12 +64,19 @@ namespace TimeSlotting.Controllers
             int[] timeslotsArr = timeslots.Select(ts => ts.Id).ToArray();
 
            
-            var timeslot = (from m in db.DeliveryTimeSlots
+            var timesloDeliveries = (from m in db.DeliveryTimeSlots
                             where m.EntityStatus != EntityStatus.DELETED && timeslotsArr.Contains(m.TimeSlotId)
                             && m.SiteId == sid && m.DeliveryDate == DbFunctions.TruncateTime(dayDate.Date)
                             select m).ToList();
 
-            return Ok(timeslot.Select(el => new DeliveryTimeSlotModel(el)));
+            List<TimeSlotWithDeliveryModel> tswd = new List<TimeSlotWithDeliveryModel>();
+
+            foreach (TimeSlot ts in timeslots)
+            {
+                tswd.Add(new TimeSlotWithDeliveryModel(ts, timesloDeliveries.SingleOrDefault(td => td.TimeSlotId == ts.Id)));
+            }
+
+            return Ok(tswd);
         }
 
         [ResponseType(typeof(DeliveryTimeSlotModel))]
