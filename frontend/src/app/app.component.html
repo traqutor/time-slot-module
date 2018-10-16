@@ -112,7 +112,7 @@
     </button>
   </mat-menu>
 
-  <button *ngIf="user"
+  <button *ngIf="user && user.role"
           mat-button
           matTooltip="User system role">
     Role: {{user.role.name}}

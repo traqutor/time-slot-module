@@ -7,6 +7,7 @@
     <mat-list-item *ngFor="let user of users; let i = index">
       <h4 mat-line>{{user.name?user.name: 'Name'}} {{user.surname ? user.surname: 'Surname'}} - {{user.role.name}}</h4>
       <p mat-line>{{user.email}}</p>
+      <p mat-line *ngIf="user.customer">Customer:   {{user.customer.name}}</p>
       <button mat-icon-button
               matTooltip="Edit User"
               (click)="editUser(user, i)">
