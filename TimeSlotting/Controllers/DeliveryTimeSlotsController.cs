@@ -106,9 +106,8 @@ namespace TimeSlotting.Controllers
 
             if (model.Id == 0)
             {
-
                 timeslot.Tons = model.Tons;
-                timeslot.DeliveryDate = model.DeliveryDate;
+                timeslot.DeliveryDate = model.DeliveryDate.Date;
 
                 timeslot.TimeSlotId = model.TimeSlot.Id;
                 
@@ -160,7 +159,18 @@ namespace TimeSlotting.Controllers
             db.SaveChanges();
 
             //have to make a new query with something included so it doest use the cached one -- need a better solution for that
-            timeslot = db.DeliveryTimeSlots.Include(dts => dts.Customer).SingleOrDefault(dts => dts.Id == timeslot.Id);
+            timeslot = db.DeliveryTimeSlots
+                .Include(dts => dts.Customer)
+                .Include(dts => dts.Site)
+                .Include(dts => dts.Vendor)
+                .Include(dts => dts.Commodity)
+                .Include(dts => dts.Supplier)
+                .Include(dts => dts.TimeSlot)
+                .Include(dts => dts.StatusType)
+                .Include(dts => dts.Contract)
+                .Include(dts => dts.Vehicle)
+                .Include(dts => dts.WebUser)
+                .SingleOrDefault(dts => dts.Id == timeslot.Id);
             //db.Entry(site).Reload(); -nope
             //db.Entry(site).GetDatabaseValues(); -nope
 
