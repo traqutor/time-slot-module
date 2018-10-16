@@ -63,12 +63,10 @@ namespace TimeSlotting.Controllers
 
             int[] timeslotsArr = timeslots.Select(ts => ts.Id).ToArray();
 
-           
-            var timesloDeliveries = (from m in db.DeliveryTimeSlots
-                            where m.EntityStatus != EntityStatus.DELETED && timeslotsArr.Contains(m.TimeSlotId)
-                            && m.SiteId == sid && m.DeliveryDate == DbFunctions.TruncateTime(dayDate.Date)
-                            select m).ToList();
 
+            var timesloDeliveries = db.DeliveryTimeSlots.Where(m => m.EntityStatus != EntityStatus.DELETED && timeslotsArr.Contains(m.TimeSlotId)
+                            && m.SiteId == sid && m.DeliveryDate == DbFunctions.TruncateTime(dayDate.Date)).ToList();
+                            
             List<TimeSlotWithDeliveryModel> tswd = new List<TimeSlotWithDeliveryModel>();
 
             foreach (TimeSlot ts in timeslots)

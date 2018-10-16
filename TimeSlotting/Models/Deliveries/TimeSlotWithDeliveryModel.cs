@@ -19,7 +19,9 @@ namespace TimeSlotting.Models.Deliveries
         public TimeSlotWithDeliveryModel(TimeSlot ts, DeliveryTimeSlot deliveryTimeSlot)
         {
             TimeSlot = new TimeSlotListEntryViewModel(ts);
-            DeliveryTimeSlot = new DeliveryTimeSlotModel(deliveryTimeSlot);
+
+            if(deliveryTimeSlot != null)
+                DeliveryTimeSlot = new DeliveryTimeSlotModel(deliveryTimeSlot);
         }
     }
 }
