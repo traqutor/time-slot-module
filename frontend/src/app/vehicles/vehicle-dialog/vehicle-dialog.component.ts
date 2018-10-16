@@ -4,10 +4,11 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {Subscription} from "rxjs";
 
 import {CustomerService} from "../../custmer/customer.service";
-import {ICustomer} from "../../users/user.model";
+import {ICustomer, IUserInfo, UserRoleNameEnum} from "../../users/user.model";
 import {FleetService} from "../../fleets/fleet.service";
 import {IVehicle} from "../vehicle.model";
 import {IFleet} from "../../fleets/fleet.model";
+import {AuthService} from "../../auth/auth.service";
 
 @Component({
   selector: 'app-vehicle-dialog',
@@ -15,6 +16,10 @@ import {IFleet} from "../../fleets/fleet.model";
   styleUrls: ['./vehicle-dialog.component.css']
 })
 export class VehicleDialogComponent implements OnInit, OnDestroy {
+
+  public userInfo: IUserInfo;
+  public USER_ROLES = UserRoleNameEnum;
+  public showCustomer: boolean;
 
   vehicleForm: FormGroup;
   customers: Array<ICustomer> = [];
@@ -26,39 +31,70 @@ export class VehicleDialogComponent implements OnInit, OnDestroy {
               private formBuilder: FormBuilder,
               private customerService: CustomerService,
               private fleetService: FleetService,
+              private auth: AuthService,
               @Inject(MAT_DIALOG_DATA) public vehicle: IVehicle) {
   }
 
 
   ngOnInit() {
 
-    // invoke Customers and fleet get from db
-    this.customerService.getCustomers();
+    this.subscriptions.push(this.auth.currentUser.subscribe((res: IUserInfo) => {
+      this.userInfo = res;
 
-    // subscribe for Customers
-    this.subscriptions.push(this.customerService.customersChanged
-      .subscribe((res: Array<ICustomer>) => {
-        this.customers = res;
+      // get customers if user Role Admin
+      // invoke Customers get from db
+      if (this.userInfo.role.name === this.USER_ROLES.Administrator) {
 
-        // after customers resolves the form needs to be filed with Customer related to customer in fleet
-        // then selected customer related fleets needs to be fetched
-        if (this.customers.length > 0 && this.vehicle.fleet.id > 0) {
-          this.onCustomerChange(this.vehicle.fleet.customer);
-        }
-      }));
+        // invoke Customers and fleet get from db
+        this.customerService.getCustomers();
+
+        // subscribe for Customers
+        this.subscriptions.push(this.customerService.customersChanged
+          .subscribe((res: Array<ICustomer>) => {
+            this.customers = res;
+
+            this.showCustomer = true;
+
+            // after customers resolves the form needs to be filed with Customer related to customer in fleet
+            // then selected customer related fleets needs to be fetched
+            if (this.customers.length > 0 && this.vehicle.fleet.id > 0) {
+              this.onCustomerChange(this.vehicle.fleet.customer);
+            }
+          }));
+
+        this.vehicleForm = this.formBuilder.group({
+          id: this.vehicle.id,
+          rego: [this.vehicle.rego, [Validators.required,]],
+          customer: [this.vehicle.fleet.customer, [Validators.required]],
+          fleet: [this.vehicle.fleet, [Validators.required]],
+          creationDate: this.vehicle.creationDate,
+          modificationDate: this.vehicle.modificationDate,
+          createdBy: this.vehicle.createdBy,
+          modifiedBy: this.vehicle.modifiedBy,
+          entityStatus: this.vehicle.entityStatus
+        });
 
 
-    this.vehicleForm = this.formBuilder.group({
-      id: this.vehicle.id,
-      rego: [this.vehicle.rego, [Validators.required,]],
-      customer: [this.vehicle.fleet.customer, [Validators.required]],
-      fleet: [this.vehicle.fleet, [Validators.required]],
-      creationDate: this.vehicle.creationDate,
-      modificationDate: this.vehicle.modificationDate,
-      createdBy: this.vehicle.createdBy,
-      modifiedBy: this.vehicle.modifiedBy,
-      entityStatus: this.vehicle.entityStatus
-    });
+      } else if (this.userInfo.role.name === this.USER_ROLES.CustomerAdmin) {
+
+        this.showCustomer = false;
+
+        this.vehicleForm = this.formBuilder.group({
+          id: this.vehicle.id,
+          rego: [this.vehicle.rego, [Validators.required,]],
+          customer: this.userInfo.customer,
+          fleet: [this.vehicle.fleet, [Validators.required]],
+          creationDate: this.vehicle.creationDate,
+          modificationDate: this.vehicle.modificationDate,
+          createdBy: this.vehicle.createdBy,
+          modifiedBy: this.vehicle.modifiedBy,
+          entityStatus: this.vehicle.entityStatus
+        });
+
+        this.onCustomerChange(this.userInfo.customer)
+
+      }
+    }));
 
 
   }

@@ -47,8 +47,11 @@ export class SiteDialogComponent implements OnInit, OnDestroy {
         // subscribe for Customers
         this.subscriptions.push(this.customerService.customersChanged
           .subscribe((res: Array<ICustomer>) => {
+
             this.customers = res;
+
             this.showCustomer = true;
+
           }));
 
 
@@ -62,6 +65,7 @@ export class SiteDialogComponent implements OnInit, OnDestroy {
           modifiedBy: this.site.modifiedBy,
           entityStatus: this.site.entityStatus
         });
+
       } else if (this.userInfo.role.name === this.USER_ROLES.CustomerAdmin) {
 
         this.showCustomer = false;
