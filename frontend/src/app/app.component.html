@@ -10,7 +10,7 @@
   </button>
 
   <button mat-button
-          *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"
+          *ngIf="user && user.role && (user.role.name === USER_ROLES.Administrator || user.role.name === USER_ROLES.CustomerAdmin)"
           [matMenuTriggerFor]="menu">
     <mat-icon>settings</mat-icon>
     Admin
@@ -18,50 +18,70 @@
 
   <mat-menu #menu="matMenu">
 
-    <button mat-menu-item routerLink="/admin/customers">
+    <button *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"
+            mat-menu-item
+            routerLink="/admin/customers">
       <mat-icon>group</mat-icon>
       Customers
     </button>
 
-    <mat-divider></mat-divider>
-    <button mat-menu-item routerLink="/admin/vendors">
+    <mat-divider *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"></mat-divider>
+    <button *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"
+            mat-menu-item
+            routerLink="/admin/vendors">
       <mat-icon>group</mat-icon>
       Vendors
     </button>
-    <button mat-menu-item routerLink="/admin/suppliers">
+    <button *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"
+            mat-menu-item
+            routerLink="/admin/suppliers">
       <mat-icon>group</mat-icon>
       Suppliers
     </button>
-    <button mat-menu-item routerLink="/admin/commodities">
+    <button *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"
+            mat-menu-item
+            routerLink="/admin/commodities">
       <mat-icon>group</mat-icon>
       Commodities
     </button>
-    <button mat-menu-item routerLink="/admin/contracts">
+    <button *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"
+            mat-menu-item
+            routerLink="/admin/contracts">
       <mat-icon>group</mat-icon>
       Contracts
     </button>
 
-    <mat-divider></mat-divider>
-    <button mat-menu-item routerLink="/admin/timeSlots">
+    <mat-divider *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"></mat-divider>
+    <button *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"
+            mat-menu-item
+            routerLink="/admin/timeSlots">
       <mat-icon>group</mat-icon>
       Time Slots
     </button>
-    <button mat-menu-item routerLink="/admin/statusTypes">
+    <button *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"
+            mat-menu-item
+            routerLink="/admin/statusTypes">
       <mat-icon>group</mat-icon>
       Status Types
     </button>
 
-    <mat-divider></mat-divider>
-    <button mat-menu-item routerLink="/admin/sites">
+    <mat-divider *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"></mat-divider>
+    <button
+      mat-menu-item
+      routerLink="/admin/sites">
       <mat-icon>group</mat-icon>
       Sites
     </button>
 
-    <button mat-menu-item routerLink="/admin/fleets">
+    <button
+      mat-menu-item
+      routerLink="/admin/fleets">
       <mat-icon>group</mat-icon>
       Fleets
     </button>
-    <button mat-menu-item routerLink="/admin/vehicles">
+    <button
+      mat-menu-item
+      routerLink="/admin/vehicles">
       <mat-icon>group</mat-icon>
       Vehicles
     </button>
