@@ -40,7 +40,7 @@ export class VendorsComponent implements OnInit, OnDestroy {
 
   editVendor(vendor: IVendor, index: number) {
     const dialogRef = this.dialog.open(VendorDialogComponent, {
-      width: '45%',
+      width: '65%',
       disableClose: true,
       data: vendor,
     });

@@ -40,7 +40,7 @@ export class ContractsComponent implements OnInit {
 
   editContract(contract: IContract, index: number) {
     const dialogRef = this.dialog.open(ContractDialogComponent, {
-      width: '45%',
+      width: '65%',
       disableClose: true,
       data: contract,
     });

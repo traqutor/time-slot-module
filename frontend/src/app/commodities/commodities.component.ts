@@ -40,7 +40,7 @@ export class CommoditiesComponent implements OnInit, OnDestroy {
 
   editCommodity(commodity: ICommodity, index: number) {
     const dialogRef = this.dialog.open(CommodityDialogComponent, {
-      width: '45%',
+      width: '65%',
       disableClose: true,
       data: commodity,
     });

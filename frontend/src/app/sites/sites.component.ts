@@ -52,7 +52,7 @@ export class SitesComponent implements OnInit , OnDestroy {
 
   editSite(site: ISite, index: number) {
     const dialogRef = this.dialog.open(SiteDialogComponent, {
-      width: '45%',
+      width: '65%',
       disableClose: true,
       data: site,
     });

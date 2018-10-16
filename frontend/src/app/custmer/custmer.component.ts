@@ -37,7 +37,7 @@ export class CustmerComponent implements OnInit, OnDestroy {
 
   editCustomer(customer: ICustomer, index: number) {
     const dialogRef = this.dialog.open(CustomerDialogComponent, {
-      width: '45%',
+      width: '65%',
       disableClose: true,
       data: customer,
     });

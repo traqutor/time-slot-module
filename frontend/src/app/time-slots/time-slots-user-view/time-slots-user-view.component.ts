@@ -234,7 +234,7 @@ export class TimeSlotsUserViewComponent implements OnInit {
     console.log('timeSlot.deliveryTimeSlot', timeSlot.deliveryTimeSlot);
 
     const dialogRef = this.dialog.open(TimeSlotDeliveryDialogComponent, {
-      width: '45%',
+      width: '80%',
       disableClose: true,
       data: tmpSlot.deliveryTimeSlot,
     });

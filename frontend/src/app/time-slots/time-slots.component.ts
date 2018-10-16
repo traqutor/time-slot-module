@@ -41,7 +41,7 @@ export class TimeSlotsComponent implements OnInit, OnDestroy {
 
   editTimeSlot(timeSlot: ITimeSlot, index: number) {
     const dialogRef = this.dialog.open(TimeSlotDialogComponent, {
-      width: '45%',
+      width: '65%',
       disableClose: true,
       data: timeSlot,
     });

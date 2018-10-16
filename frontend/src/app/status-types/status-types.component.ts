@@ -43,7 +43,7 @@ export class StatusTypesComponent implements OnInit {
 
   editStatusType(statusType: IStatusType, index: number) {
     const dialogRef = this.dialog.open(StatusTypeDialogComponent, {
-      width: '45%',
+      width: '65%',
       disableClose: true,
       data: statusType,
     });

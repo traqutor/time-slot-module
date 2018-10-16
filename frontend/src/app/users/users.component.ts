@@ -89,7 +89,7 @@ export class UsersComponent implements OnInit {
 
   editUser(user: IUser, index: number) {
     const dialogRef = this.dialog.open(UserDialogComponent, {
-      width: '45%',
+      width: '65%',
       disableClose: true,
       data: user,
     });

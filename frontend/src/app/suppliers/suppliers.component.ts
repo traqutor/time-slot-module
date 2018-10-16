@@ -40,7 +40,7 @@ export class SuppliersComponent implements OnInit, OnDestroy {
 
   editSupplier(supplier: ISupplier, index: number) {
     const dialogRef = this.dialog.open(SupplierDialogComponent, {
-      width: '45%',
+      width: '65%',
       disableClose: true,
       data: supplier,
     });

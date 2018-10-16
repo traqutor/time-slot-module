@@ -57,7 +57,7 @@ export class VehiclesComponent implements OnInit {
 
   editVehicle(vehicle: IVehicle, index: number) {
     const dialogRef = this.dialog.open(VehicleDialogComponent, {
-      width: '45%',
+      width: '65%',
       disableClose: true,
       data: vehicle,
     });

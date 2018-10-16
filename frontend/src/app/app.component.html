@@ -1,6 +1,6 @@
 <mat-toolbar color="primary">
 
-  Genius Time Slot Module
+  <span fxHide.lt-sm="true">Genius Time Slot Module</span>
 
   <div style="width: 48px"></div>
 
@@ -102,7 +102,7 @@
           matTooltip="User specific actions"
           [matMenuTriggerFor]="userMenu">
     <mat-icon>account_circle</mat-icon>
-    {{user.name}} {{user.surname}}
+    <span fxHide.lt-sm="true">{{user.name}} {{user.surname}}</span>
   </button>
 
   <mat-menu #userMenu="matMenu">
@@ -112,7 +112,8 @@
     </button>
   </mat-menu>
 
-  <button *ngIf="user && user.role"
+  <button fxHide.lt-sm="true"
+          *ngIf="user && user.role"
           mat-button
           matTooltip="User system role">
     Role: {{user.role.name}}

@@ -52,7 +52,7 @@ export class FleetsComponent implements OnInit {
 
   editFleet(fleet: IFleet, index: number) {
     const dialogRef = this.dialog.open(FleetDialogComponent, {
-      width: '45%',
+      width: '65%',
       disableClose: true,
       data: fleet,
     });

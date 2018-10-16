@@ -2,7 +2,7 @@
 
   <mat-list fxFlex="60" fxFlex.lt-md="100">
 
-    <div fxLayout="row" fxLayoutAlign="start start">
+    <div fxLayout.lt-md="column" fxLayout="row" fxLayoutAlign="start start">
 
       <div mat-subheader>
         TIME SLOTS
@@ -69,33 +69,34 @@
       </h4>
 
       <p mat-line>
-        <span *ngIf="slot.deliveryTimeSlot">Vendor:  {{slot.deliveryTimeSlot.vendor.name}} </span>
+        <span *ngIf="slot.deliveryTimeSlot"> <span class="app-label">Vendor:</span>  {{slot.deliveryTimeSlot.vendor.name}} </span>
         <span *ngIf="slot.deliveryTimeSlot"
-              class="app-margin-left">Supplier: {{slot.deliveryTimeSlot.supplier.name}}  </span>
+              class="app-margin-left"> <span class="app-label">Supplier:</span>  {{slot.deliveryTimeSlot.supplier.name}}  </span>
       </p>
 
       <p mat-line>
-        <span *ngIf="slot.deliveryTimeSlot">Driver:  {{slot.deliveryTimeSlot.driver.name}} {{slot.deliveryTimeSlot.driver.surname}} </span>
+        <span *ngIf="slot.deliveryTimeSlot"> <span class="app-label">Driver:</span>  {{slot.deliveryTimeSlot.driver.name}} {{slot.deliveryTimeSlot.driver.surname}} </span>
         <span *ngIf="slot.deliveryTimeSlot"
-              class="app-margin-left">Contract: {{slot.deliveryTimeSlot.contract.name}}  </span>
+              class="app-margin-left"> <span class="app-label">Contract:</span>  {{slot.deliveryTimeSlot.contract.name}}  </span>
         <span *ngIf="slot.deliveryTimeSlot"
-              class="app-margin-left">Vehicle:  {{slot.deliveryTimeSlot.vehicle.rego}} </span>
+              class="app-margin-left"> <span class="app-label">Vehicle:</span>  {{slot.deliveryTimeSlot.vehicle.rego}} </span>
       </p>
 
       <button mat-raised-button
+
               matTooltip="Edit Time Slot"
               [color]="!slot.deliveryTimeSlot? '' : 'accent'"
               (click)="editDeliverySlot(slot, i)">
-        <mat-icon mat-list-icon>edit</mat-icon>
+        <!--<mat-icon mat-list-icon>edit</mat-icon>-->
         <span
           *ngIf="slot.deliveryTimeSlot && slot.deliveryTimeSlot.statusType && slot.deliveryTimeSlot.statusType.name">{{slot.deliveryTimeSlot.statusType.name.toUpperCase()}} </span>
         <span *ngIf="!slot.deliveryTimeSlot">OPEN</span>
       </button>
 
       <!--<button mat-icon-button-->
-              <!--matTooltip="Delete Time Slot"-->
-              <!--(click)="deleteDeliverySlot(slot, i)">-->
-        <!--<mat-icon>delete</mat-icon>-->
+      <!--matTooltip="Delete Time Slot"-->
+      <!--(click)="deleteDeliverySlot(slot, i)">-->
+      <!--<mat-icon>delete</mat-icon>-->
       <!--</button>-->
 
       <mat-divider></mat-divider>
