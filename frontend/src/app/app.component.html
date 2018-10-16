@@ -4,7 +4,9 @@
 
   <div style="width: 48px"></div>
 
-  <button mat-button routerLink="/frame/timeSlots">
+  <button *ngIf="user"
+          mat-button
+          routerLink="/frame/timeSlots">
     <mat-icon>event</mat-icon>
     Book Time Slots
   </button>

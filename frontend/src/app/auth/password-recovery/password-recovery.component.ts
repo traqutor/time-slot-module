@@ -78,7 +78,7 @@ export class PasswordRecoveryComponent implements OnInit {
           this.router.navigateByUrl('/login');
         }, (error) => {
           this.isError = true;
-          this.errorMessage = error.error;
+          this.errorMessage = JSON.stringify(error.error);
           console.error('Password change ERROR: ', error.error);
         });
     }
