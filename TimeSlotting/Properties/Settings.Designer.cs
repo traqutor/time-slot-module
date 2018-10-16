@@ -12,7 +12,7 @@ namespace TimeSlotting.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.5.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.8.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -25,28 +25,28 @@ namespace TimeSlotting.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("mail.internode.on.net")]
-        public string SMTP_Host {
+        [global::System.Configuration.DefaultSettingValueAttribute("smtp.office365.com")]
+        public string SMTP_host {
             get {
-                return ((string)(this["SMTP_Host"]));
+                return ((string)(this["SMTP_host"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("remy@internode.on.net")]
-        public string SMTP_Username {
+        [global::System.Configuration.DefaultSettingValueAttribute("bfarbas@***.com")]
+        public string SMTP_email {
             get {
-                return ((string)(this["SMTP_Username"]));
+                return ((string)(this["SMTP_email"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("remy123")]
-        public string SMTP_Password {
+        [global::System.Configuration.DefaultSettingValueAttribute("Artemi$201809")]
+        public string SMTP_password {
             get {
-                return ((string)(this["SMTP_Password"]));
+                return ((string)(this["SMTP_password"]));
             }
         }
     }

@@ -20,6 +20,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Net.Http;
 using System.Net;
 using System.Web.Http.Description;
+using System.Threading.Tasks;
+using System.Web;
+using TimeSlotting.Utils;
 
 namespace TimeSlotting.Controllers
 {
@@ -342,6 +345,80 @@ namespace TimeSlotting.Controllers
 
             var possibleRoles = _roleManager.Roles.ToList();
             return new UserListEntryViewModel(userToReturn, possibleRoles);
+        }
+
+        [System.Web.Http.AllowAnonymous]
+        [System.Web.Http.Route("ForgotPassword")]
+        public async Task<IHttpActionResult> ForgotPassword(ForgotPassword model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var userManager = Common.GetUserManager();
+            var user = await userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+                return BadRequest();
+
+            string token = await userManager.GeneratePasswordResetTokenAsync(user.Id);
+            string baseUrl = HttpContext.Current.Request.Url.Host + ":" + HttpContext.Current.Request.Url.Port;
+
+            bool isSent = EmailSender.SendPasswordRecoveryEmail(user.Email, "Password reset", baseUrl, token);
+
+            return Ok();
+        }
+
+        [System.Web.Http.AllowAnonymous]
+        [System.Web.Http.Route("ForgotPasswordReset")]
+        public async Task<IHttpActionResult> ResetPassword(ResetPasswordBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var userManager = Common.GetUserManager();
+            var user = await userManager.FindByEmailAsync(model.Email);
+
+            var result = await userManager.ResetPasswordAsync(user.Id, model.Token, model.Password);
+
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+
+            //LOGGER.Info("Failed to reset password: " + string.Concat(result.Errors));
+
+            return GetErrorResult(result);
+        }
+
+        private IHttpActionResult GetErrorResult(IdentityResult result)
+        {
+            if (result == null)
+            {
+                return InternalServerError();
+            }
+
+            if (!result.Succeeded)
+            {
+                if (result.Errors != null)
+                {
+                    foreach (string error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error);
+                    }
+                }
+
+                if (ModelState.IsValid)
+                {
+                    // No ModelState errors are available to send, so just return an empty BadRequest.
+                    return BadRequest();
+                }
+
+                return BadRequest(ModelState);
+            }
+
+            return null;
         }
 
         protected override void Dispose(bool disposing)
