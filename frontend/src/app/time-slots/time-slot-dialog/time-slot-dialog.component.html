@@ -35,9 +35,11 @@
              type="text"
              placeholder="End time"
              formControlName="endTime">
+
       <button mat-icon-button matSuffix (click)="timePickerOpen(end.value, 'endTime')">
         <mat-icon>schedule</mat-icon>
       </button>
+
       <mat-error
         *ngIf="(timeSlotForm.get('endTime').hasError('required') ||
         timeSlotForm.get('endTime').hasError('pattern') ) && timeSlotForm.get('endTime').touched">

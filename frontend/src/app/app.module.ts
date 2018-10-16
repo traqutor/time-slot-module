@@ -45,6 +45,8 @@ import { TimeSlotsUserViewComponent } from './time-slots/time-slots-user-view/ti
 import { TimeSlotDeliveryDialogComponent } from './time-slots/time-slot-delivery-dialog/time-slot-delivery-dialog.component';
 import { SlotHourPipe } from './common/slot-hour.pipe';
 import { SlotHourDialogComponent } from './common/slot-hour-dialog/slot-hour-dialog.component';
+import {PasswordResetComponent} from "./auth/password-reset/password-reset.component";
+import {PasswordRecoveryComponent} from "./auth/password-recovery/password-recovery.component";
 
 @NgModule({
   declarations: [
@@ -80,6 +82,8 @@ import { SlotHourDialogComponent } from './common/slot-hour-dialog/slot-hour-dia
     TimeSlotDeliveryDialogComponent,
     SlotHourPipe,
     SlotHourDialogComponent,
+    PasswordResetComponent,
+    PasswordRecoveryComponent,
 
   ],
   imports: [

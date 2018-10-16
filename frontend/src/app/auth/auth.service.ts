@@ -78,4 +78,17 @@ export class AuthService {
     return this.http.get<IUserInfo>(`${this.url}/api/WebUsers/GetUserInfo`);
   }
 
+  forgotPassword(email: string) {
+    return this.http.post(`${this.url}/api/Account/ForgotPassword`, email);
+  }
+
+  onPasswordRecovery(token: string, email: string,  password: string, confirmPassword: string) {
+    return this.http.post(`${this.url}/api/Account/ForgotPasswordReset`, {
+      token: token,
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword
+    });
+  }
+
 }

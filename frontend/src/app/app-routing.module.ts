@@ -18,6 +18,8 @@ import {UsersComponent} from "./users/users.component";
 import {AdminComponent} from "./common/admin/admin.component";
 import {TimeSlotsUserViewComponent} from "./time-slots/time-slots-user-view/time-slots-user-view.component";
 import {AuthGuard} from "./auth/auth-guard.service";
+import {PasswordResetComponent} from "./auth/password-reset/password-reset.component";
+import {PasswordRecoveryComponent} from "./auth/password-recovery/password-recovery.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -44,7 +46,9 @@ const routes: Routes = [
     path: 'frame', component: FrameComponent, canActivate: [AuthGuard], children: [
       {path: 'timeSlots', component: TimeSlotsUserViewComponent},
     ],
-  }
+  },
+  {path: 'passwordReset', component: PasswordResetComponent},
+  {path: 'passwordRecovery', component: PasswordRecoveryComponent},
 ];
 
 @NgModule({
