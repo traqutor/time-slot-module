@@ -9,13 +9,13 @@
     <mat-list-item *ngFor="let commodity of commodities; let i = index">
       <h4 mat-line>{{commodity.name}}</h4>
       <p mat-line>
-        <b>Created:</b>
+        <span class="app-label">Created:</span>
         {{commodity.createdBy.name}}
         {{commodity.createdBy.surname}} |
         {{commodity.creationDate | date :
         'dd/MMM/yyyy - HH:mm'}}
 
-        <b style="padding-left: 24px">Modified:</b>
+        <span class="app-label app-margin-left ">Modified:</span>
         {{commodity.modifiedBy.name}}
         {{commodity.modifiedBy.surname}} |
         {{commodity.modificationDate| date :

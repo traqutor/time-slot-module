@@ -9,13 +9,13 @@
     <mat-list-item *ngFor="let slot of timeSlots; let i = index">
       <h4 mat-line>{{slot.startTime}} - {{slot.endTime}}</h4>
       <p mat-line>
-        <b>Created:</b>
+        <span class="app-label">Created:</span>
         {{slot.createdBy.name}}
         {{slot.createdBy.surname}} |
         {{slot.creationDate | date :
         'dd/MMM/yyyy - HH:mm'}}
 
-        <b style="padding-left: 24px">Modified:</b>
+        <span class="app-label app-margin-left ">Modified:</span>
         {{slot.modifiedBy.name}}
         {{slot.modifiedBy.surname}} |
         {{slot.modificationDate| date :

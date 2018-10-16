@@ -9,13 +9,13 @@
     <mat-list-item *ngFor="let contract of contracts; let i = index">
       <h4 mat-line>{{contract.name}}</h4>
       <p mat-line>
-        <b>Created:</b>
+        <span class="app-label">Created:</span>
         {{contract.createdBy.name}}
         {{contract.createdBy.surname}} |
         {{contract.creationDate | date :
         'dd/MMM/yyyy - HH:mm'}}
 
-        <b style="padding-left: 24px">Modified:</b>
+        <span class="app-label app-margin-left ">Modified:</span>
         {{contract.modifiedBy.name}}
         {{contract.modifiedBy.surname}} |
         {{contract.modificationDate| date :

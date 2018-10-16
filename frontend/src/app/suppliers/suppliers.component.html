@@ -9,13 +9,13 @@
     <mat-list-item *ngFor="let supplier of suppliers; let i = index">
       <h4 mat-line>{{supplier.name}}</h4>
       <p mat-line>
-        <b>Created:</b>
+        <span class="app-label">Created:</span>
         {{supplier.createdBy.name}}
         {{supplier.createdBy.surname}} |
         {{supplier.creationDate | date :
         'dd/MMM/yyyy - HH:mm'}}
 
-        <b style="padding-left: 24px">Modified:</b>
+        <span class="app-label app-margin-left ">Modified:</span>
         {{supplier.modifiedBy.name}}
         {{supplier.modifiedBy.surname}} |
         {{supplier.modificationDate| date :
