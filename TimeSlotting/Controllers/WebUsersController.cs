@@ -31,11 +31,26 @@ namespace TimeSlotting.Controllers
     {
         private TimeSlottingDBContext db = new TimeSlottingDBContext();
         private readonly RoleManager<IdentityRole> _roleManager;
-        
+        private ApplicationUserManager _userManager;
+
+
         public WebUsersController()
         {
             _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
         }
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.Current.GetOwinContext().Get<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+
 
         [System.Web.Mvc.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
         [System.Web.Http.Authorize(Roles = "Administrator, CustomerAdmin, CustomerUser, SiteUser, Driver")]
@@ -355,7 +370,7 @@ namespace TimeSlotting.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var userManager = Common.GetUserManager();
+            var userManager = UserManager;
             var user = await userManager.FindByEmailAsync(model.Email);
 
             if (user == null)
@@ -377,7 +392,7 @@ namespace TimeSlotting.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var userManager = Common.GetUserManager();
+            var userManager = UserManager;
             var user = await userManager.FindByEmailAsync(model.Email);
 
             var result = await userManager.ResetPasswordAsync(user.Id, model.Token, model.Password);
