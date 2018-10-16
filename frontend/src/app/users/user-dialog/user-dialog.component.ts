@@ -2,7 +2,7 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import {Subscription} from "rxjs";
 
-import {ICustomer, IRole, IRoleResult, IUser, UserRoleNameEnum} from "../user.model";
+import {ICustomer, IRole, IRoleResult, IUser, IUserInfo, UserRoleNameEnum} from "../user.model";
 import {IFleet} from "../../fleets/fleet.model";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {CustomerService} from "../../custmer/customer.service";
@@ -12,6 +12,7 @@ import {IVehicle} from "../../vehicles/vehicle.model";
 import {VehicleService} from "../../vehicles/vehicle.service";
 import {SiteService} from "../../sites/site.service";
 import {ISite} from "../../sites/site.model";
+import {AuthService} from "../../auth/auth.service";
 
 @Component({
   selector: 'app-user-dialog',
@@ -20,13 +21,16 @@ import {ISite} from "../../sites/site.model";
 })
 export class UserDialogComponent implements OnInit, OnDestroy {
 
+  public userInfo: IUserInfo;
+  public USER_ROLES = UserRoleNameEnum;
+  public showCustomer: boolean;
+
   userForm: FormGroup;
   customers: Array<ICustomer> = [];
   sites: Array<ISite> = [];
   fleets: Array<IFleet> = [];
   roles: Array<IRole> = [];
   fleetsVehicles: Array<IVehicle> = [];
-  USER_ROLES = UserRoleNameEnum;
 
   // dynamic validations variables
   isCustomerValidationRequired = false;
@@ -43,43 +47,89 @@ export class UserDialogComponent implements OnInit, OnDestroy {
               private siteService: SiteService,
               private fleetService: FleetService,
               private vehicleService: VehicleService,
+              private auth: AuthService,
               @Inject(MAT_DIALOG_DATA) public user: IUser) {
   }
 
 
   ngOnInit() {
 
-    console.log('this.user', this.user);
 
-    // invoke Customers and fleet get from db
-    this.customerService.getCustomers();
+    this.subscriptions.push(this.auth.currentUser.subscribe((res: IUserInfo) => {
+      this.userInfo = res;
 
-    // subscribe for Customers
-    this.subscriptions.push(this.customerService.customersChanged
-      .subscribe((res: Array<ICustomer>) => {
-        this.customers = res;
-      }));
+      // get customers if user Role Admin
+      // invoke Customers get from db
+      if (this.userInfo.role.name === this.USER_ROLES.Administrator) {
 
-    // take roles
-    this.subscriptions.push(this.userService.getRoles()
-      .subscribe((res: IRoleResult) => {
-        this.roles = res.results;
-      }));
+        // invoke Customers and fleet get from db
+        this.customerService.getCustomers();
 
-    // Reactive form
-    this.userForm = this.formBuilder.group({
-      id: this.user.id,
-      email: [this.user.email, [Validators.required, Validators.email]],
-      password: this.user.password,
-      name: [this.user.name, [Validators.required]],
-      surname: [this.user.surname, [Validators.required]],
-      role: [this.user.role, [Validators.required]],
-      customer: this.user.customer,
-      site: this.user.site,
-      fleet: this.user.fleet,
-      vehicles: [],
-      entityStatus: this.user.entityStatus
-    });
+        // subscribe for Customers
+        this.subscriptions.push(this.customerService.customersChanged
+          .subscribe((res: Array<ICustomer>) => {
+
+            this.customers = res;
+
+            this.showCustomer = true;
+
+          }));
+
+        // take roles
+        this.subscriptions.push(this.userService.getRoles()
+          .subscribe((res: IRoleResult) => {
+            this.roles = res.results;
+          }));
+
+        // Reactive form
+        this.userForm = this.formBuilder.group({
+          id: this.user.id,
+          email: [this.user.email, [Validators.required, Validators.email]],
+          password: this.user.password,
+          name: [this.user.name, [Validators.required]],
+          surname: [this.user.surname, [Validators.required]],
+          role: [this.user.role, [Validators.required]],
+          customer: this.user.customer,
+          site: this.user.site,
+          fleet: this.user.fleet,
+          vehicles: [],
+          entityStatus: this.user.entityStatus
+        });
+
+
+      } else if (this.userInfo.role.name === this.USER_ROLES.CustomerAdmin) {
+
+        this.showCustomer = true;
+
+        // take roles
+        this.subscriptions.push(this.userService.getRoles()
+          .subscribe((res: IRoleResult) => {
+            this.roles = res.results;
+            this.roles.splice(this.arrayObjectIndexOf(this.roles, this.USER_ROLES.Administrator), 1);
+
+            console.log('this.roles', this.roles);
+          }));
+
+        // Reactive form
+        this.userForm = this.formBuilder.group({
+          id: this.user.id,
+          email: [this.user.email, [Validators.required, Validators.email]],
+          password: this.user.password,
+          name: [this.user.name, [Validators.required]],
+          surname: [this.user.surname, [Validators.required]],
+          role: [this.user.role, [Validators.required]],
+          customer: this.userInfo.customer,
+          site: this.user.site,
+          fleet: this.user.fleet,
+          vehicles: [],
+          entityStatus: this.user.entityStatus
+        });
+
+        this.user.customer = this.userInfo.customer;
+      }
+
+    }));
+
 
     // depends on the User role select related properties to display in mat-select options
     // get role dependent settings Customer,
@@ -97,6 +147,15 @@ export class UserDialogComponent implements OnInit, OnDestroy {
       this.onFleetChange(this.user.fleet);
     }
 
+  }
+
+  arrayObjectIndexOf(arr: IRole[], obj) {
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i].name === obj) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   // todo conditional validation of form required fielsd
