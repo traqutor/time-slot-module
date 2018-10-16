@@ -33,7 +33,13 @@ export class TimeSlotsUserViewComponent implements OnInit {
 
   public showCustomer: boolean;
 
-  private voidTimeSlot: IUniformViewTimeSlot = {
+  private voidDeliveryTimeSlot: ITimeSlotDelivery = {
+    id: 0,
+    creationDate: null,
+    modificationDate: null,
+    createdBy: null,
+    modifiedBy: null,
+    entityStatus: EntityStatusEnum.NORMAL,
     timeSlot: {
       id: 0,
       startTime: '',
@@ -44,35 +50,17 @@ export class TimeSlotsUserViewComponent implements OnInit {
       modifiedBy: null,
       entityStatus: EntityStatusEnum.NORMAL
     },
-    deliveryTimeSlot: {
-      id: 0,
-      creationDate: null,
-      modificationDate: null,
-      createdBy: null,
-      modifiedBy: null,
-      entityStatus: EntityStatusEnum.NORMAL,
-      timeSlot: {
-        id: 0,
-        startTime: '',
-        endTime: '',
-        creationDate: null,
-        modificationDate: null,
-        createdBy: null,
-        modifiedBy: null,
-        entityStatus: EntityStatusEnum.NORMAL
-      },
-      commodity: null,
-      contract: null,
-      customer: null,
-      deliveryDate: null,
-      driver: null,
-      site: null,
-      statusType: null,
-      supplier: null,
-      tons: null,
-      vehicle: null,
-      vendor: null
-    }
+    commodity: null,
+    contract: null,
+    customer: null,
+    deliveryDate: null,
+    driver: null,
+    site: null,
+    statusType: null,
+    supplier: null,
+    tons: null,
+    vehicle: null,
+    vendor: null
   };
 
   // subscriptions are only for cleanup after destroy
@@ -145,14 +133,15 @@ export class TimeSlotsUserViewComponent implements OnInit {
     return val1 && val2 ? val1.id === val2.id : val1 === val2;
   }
 
-  addTimseSlot() {
-    this.editDeliverySlot(this.voidTimeSlot, -1);
-  }
-
   editDeliverySlot(timeSlot: IUniformViewTimeSlot, index: number) {
-
-    timeSlot.deliveryTimeSlot.customer = this.customer;
-    timeSlot.deliveryTimeSlot.site = this.site;
+    if (timeSlot.deliveryTimeSlot) {
+      timeSlot.deliveryTimeSlot.customer = this.customer;
+      timeSlot.deliveryTimeSlot.site = this.site;
+    } else {
+      timeSlot.deliveryTimeSlot = this.voidDeliveryTimeSlot;
+      timeSlot.deliveryTimeSlot.customer = this.customer;
+      timeSlot.deliveryTimeSlot.site = this.site;
+    }
 
     const dialogRef = this.dialog.open(TimeSlotDeliveryDialogComponent, {
       width: '45%',
@@ -169,11 +158,11 @@ export class TimeSlotsUserViewComponent implements OnInit {
       }));
   }
 
-  deleteDeliverySlot(timeSlot: ITimeSlotDelivery, index: number) {
+  deleteDeliverySlot(timeSlot: IUniformViewTimeSlot, index: number) {
     this.subscriptions.push(this.confirm.confirm('Delete TimeSlot', 'Are you sure you would like to delete the TimeSlot?')
       .subscribe((res: boolean) => {
         if (res) {
-          this.timeSlotService.deleteDeliveryTimseSlot(timeSlot.id, index);
+          this.timeSlotService.deleteDeliveryTimseSlot(timeSlot.timeSlot.id, index);
         }
       }));
   }

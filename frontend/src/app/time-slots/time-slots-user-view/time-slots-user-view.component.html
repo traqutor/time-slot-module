@@ -2,7 +2,7 @@
 
   <mat-list fxFlex="60" fxFlex.lt-md="100">
 
-    <div fxLayout="row" fxLayoutAlign="start center">
+    <div fxLayout="row" fxLayoutAlign="start start">
 
       <div mat-subheader>
         TIME SLOTS
@@ -57,20 +57,13 @@
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
 
-      <button mat-button
-              matTooltip="Add Time Slot"
-              (click)="addTimseSlot()">
-        <mat-icon mat-list-icon>add</mat-icon>
-        Add time slot tmp
-      </button>
-
 
     </div>
 
 
     <mat-list-item *ngFor="let slot of timeSlots; let i = index">
       <h4 mat-line>{{slot.timeSlot.startTime}} - {{slot.timeSlot.endTime}}</h4>
-      <p mat-line>{{slot.creationDate}}</p>
+      <!--<p mat-line>{{slot.deliveryTimeSlot.driver.name}} {{slot.deliveryTimeSlot.driver.surname}}</p>-->
       <button mat-button
               matTooltip="Edit Time Slot"
               (click)="editDeliverySlot(slot, i)">
