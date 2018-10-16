@@ -9,7 +9,9 @@
       </div>
 
       <!--customer-->
-      <mat-form-field appearance="outline" class="app-padding-right">
+      <mat-form-field *ngIf="showCustomer"
+                      appearance="outline"
+                      class="app-padding-right">
 
         <mat-label>Customer</mat-label>
 

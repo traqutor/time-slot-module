@@ -4,13 +4,14 @@ import {Subscription} from "rxjs";
 
 
 import {ITimeSlotDelivery} from "../time-slot.model";
-import {EntityStatusEnum, ICustomer} from "../../users/user.model";
+import {EntityStatusEnum, ICustomer, IUser, IUserInfo, UserRoleNameEnum} from "../../users/user.model";
 import {TimeSlotService} from "../time-slot.service";
 import {ConfirmDialogService} from "../../common/confirm-dialog/confirm-dialog.service";
 import {CustomerService} from "../../custmer/customer.service";
 import {ISite} from "../../sites/site.model";
 import {SiteService} from "../../sites/site.service";
 import {TimeSlotDeliveryDialogComponent} from "../time-slot-delivery-dialog/time-slot-delivery-dialog.component";
+import {AuthService} from "../../auth/auth.service";
 
 @Component({
   selector: 'app-time-slots-user-view',
@@ -19,6 +20,9 @@ import {TimeSlotDeliveryDialogComponent} from "../time-slot-delivery-dialog/time
 })
 export class TimeSlotsUserViewComponent implements OnInit {
 
+  public userInfo: IUserInfo;
+  public USER_ROLES = UserRoleNameEnum;
+
   public timeSlots: Array<ITimeSlotDelivery> = [];
   public customers: Array<ICustomer> = [];
   public sites: Array<ISite> = [];
@@ -26,6 +30,8 @@ export class TimeSlotsUserViewComponent implements OnInit {
   public customer: ICustomer;
   public site: ISite;
   public date: Date;
+
+  public showCustomer: boolean;
 
   private voidTimeSlot: ITimeSlotDelivery = {
     id: 0,
@@ -60,9 +66,11 @@ export class TimeSlotsUserViewComponent implements OnInit {
   // subscriptions are only for cleanup after destroy
   private subscriptions = [];
 
+
   constructor(private timeSlotService: TimeSlotService,
               private customerService: CustomerService,
               private siteService: SiteService,
+              private auth: AuthService,
               private confirm: ConfirmDialogService,
               private dialog: MatDialog) {
   }
@@ -71,18 +79,36 @@ export class TimeSlotsUserViewComponent implements OnInit {
 
     this.date = new Date();
 
-    // get customers
-    // invoke Customers get from db
-    this.customerService.getCustomers();
 
-    // subscribe for Customers
-    this.subscriptions.push(this.customerService.customersChanged
-      .subscribe((res: Array<ICustomer>) => {
-        this.customers = res;
-      }));
+    this.subscriptions.push(this.auth.currentUser.subscribe((res: IUserInfo) => {
+      this.userInfo = res;
 
-    // get sites
-    // get slots
+      // get customers if user Role Admin
+      // invoke Customers get from db
+      if (this.userInfo.role.name === this.USER_ROLES.Administrator) {
+
+        this.showCustomer = true;
+        this.customerService.getCustomers();
+
+        // subscribe for Customers
+        this.subscriptions.push(this.timeSlotService.deliveryTimeSlotsChanged
+          .subscribe((res: Array<ITimeSlotDelivery>) => {
+            this.timeSlots = res;
+          }));
+
+        // subscribe for Customers
+        this.subscriptions.push(this.customerService.customersChanged
+          .subscribe((res: Array<ICustomer>) => {
+            this.customers = res;
+          }));
+
+      } else {
+        this.showCustomer = false;
+        this.getSites(this.userInfo.customer);
+      }
+
+    }));
+
 
   }
 
@@ -98,11 +124,8 @@ export class TimeSlotsUserViewComponent implements OnInit {
 
   getSlots(site: ISite) {
     if (site) {
-      const tmpDate = this.date.toISOString()
-      this.subscriptions.push(this.timeSlotService.getTimeSlotData(site.id, tmpDate)
-        .subscribe((res: Array<ITimeSlotDelivery>) => {
-          this.timeSlots = res;
-        }));
+      const tmpDate = this.date.toISOString();
+      this.timeSlotService.getTimeSlotDeliveryData(site.id, tmpDate);
     }
   }
 
@@ -128,7 +151,7 @@ export class TimeSlotsUserViewComponent implements OnInit {
       .subscribe((resolvedTimeSlot: ITimeSlotDelivery) => {
 
         if (resolvedTimeSlot) {
-          this.timeSlotService.putTimeSlot(resolvedTimeSlot, index);
+          this.timeSlotService.putDeliveryTimeSlot(resolvedTimeSlot, index);
         }
 
       }));
@@ -138,7 +161,7 @@ export class TimeSlotsUserViewComponent implements OnInit {
     this.subscriptions.push(this.confirm.confirm('Delete TimeSlot', 'Are you sure you would like to delete the TimeSlot?')
       .subscribe((res: boolean) => {
         if (res) {
-          this.timeSlotService.deleteTimseSlot(timeSlot.id, index);
+          this.timeSlotService.deleteDeliveryTimseSlot(timeSlot.id, index);
         }
       }));
   }

@@ -7,7 +7,7 @@ import {IVendor} from "../vendors/vendor.model";
 import {ISite} from "../sites/site.model";
 import {IVehicle} from "../vehicles/vehicle.model";
 
-interface ITimeSlot {
+export interface ITimeSlot {
   id: number;
   startTime: string;
   endTime: string;
@@ -40,3 +40,7 @@ export interface ITimeSlotDelivery {
   entityStatus: EntityStatusEnum;
 }
 
+export interface IUniformTimeSlot {
+  timeSlot: ITimeSlot;
+  timeSlotDelivery: ITimeSlotDelivery;
+}

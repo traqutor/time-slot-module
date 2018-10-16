@@ -67,10 +67,11 @@ export enum EntityStatusEnum {
   NORMAL = 0, DELETED = 1, DISABLED = 2
 }
 
+// User roles
 export enum UserRoleNameEnum {
-  Administrator = 'Administrator',
-  CustomerAdmin = 'CustomerAdmin',
-  CustomerUser = 'CustomerUser',
-  Driver = 'Driver',
-  SiteUser = 'SiteUser'
+  Administrator = 'Administrator', // see menu, can select Customer on main page
+  CustomerAdmin = 'CustomerAdmin', // see menu,
+  CustomerUser = 'CustomerUser', //
+  Driver = 'Driver', // see all sites related to linked to customer One customer
+  SiteUser = 'SiteUser' // see the same as driver
 }
