@@ -137,10 +137,12 @@ export class TimeSlotsUserViewComponent implements OnInit {
     if (timeSlot.deliveryTimeSlot) {
       timeSlot.deliveryTimeSlot.customer = this.customer;
       timeSlot.deliveryTimeSlot.site = this.site;
+      timeSlot.deliveryTimeSlot.deliveryDate = this.date;
     } else {
       timeSlot.deliveryTimeSlot = this.voidDeliveryTimeSlot;
       timeSlot.deliveryTimeSlot.customer = this.customer;
       timeSlot.deliveryTimeSlot.site = this.site;
+      timeSlot.deliveryTimeSlot.deliveryDate = this.date;
     }
 
     const dialogRef = this.dialog.open(TimeSlotDeliveryDialogComponent, {
