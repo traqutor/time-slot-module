@@ -90,11 +90,6 @@ export class TimeSlotsUserViewComponent implements OnInit {
         this.showCustomer = true;
         this.customerService.getCustomers();
 
-        // subscribe for Customers
-        this.subscriptions.push(this.timeSlotService.deliveryTimeSlotsChanged
-          .subscribe((res: Array<IUniformViewTimeSlot>) => {
-            this.timeSlots = res;
-          }));
 
         // subscribe for Customers
         this.subscriptions.push(this.customerService.customersChanged
@@ -104,8 +99,16 @@ export class TimeSlotsUserViewComponent implements OnInit {
 
       } else {
         this.showCustomer = false;
+        this.customer = this.userInfo.customer;
         this.getSites(this.userInfo.customer);
       }
+
+      // subscribe for TimeSlots
+      this.subscriptions.push(this.timeSlotService.deliveryTimeSlotsChanged
+        .subscribe((res: Array<IUniformViewTimeSlot>) => {
+          this.timeSlots = res;
+        }));
+
 
     }));
 
@@ -134,12 +137,16 @@ export class TimeSlotsUserViewComponent implements OnInit {
   }
 
   editDeliverySlot(timeSlot: IUniformViewTimeSlot, index: number) {
+
+    // the object needs to be created somehow ;)
     if (timeSlot.deliveryTimeSlot) {
+      timeSlot.deliveryTimeSlot.timeSlot = timeSlot.timeSlot;
       timeSlot.deliveryTimeSlot.customer = this.customer;
       timeSlot.deliveryTimeSlot.site = this.site;
       timeSlot.deliveryTimeSlot.deliveryDate = this.date;
     } else {
       timeSlot.deliveryTimeSlot = this.voidDeliveryTimeSlot;
+      timeSlot.deliveryTimeSlot.timeSlot = timeSlot.timeSlot;
       timeSlot.deliveryTimeSlot.customer = this.customer;
       timeSlot.deliveryTimeSlot.site = this.site;
       timeSlot.deliveryTimeSlot.deliveryDate = this.date;
