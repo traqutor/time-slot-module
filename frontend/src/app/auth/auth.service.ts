@@ -48,7 +48,7 @@ export class AuthService {
   }
 
 
-  isUserAuthenticated() {
+  isUserAuthenticated(): boolean {
     const token: string = this.getTokenFromStorage();
     if (token) {
       const userInfo: IUserInfo = this.getUserFromStorage();

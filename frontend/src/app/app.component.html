@@ -4,7 +4,7 @@
 
   <div style="width: 48px"></div>
 
-  <button *ngIf="user"
+  <button *ngIf="this.isAuthenticated && user"
           mat-button
           routerLink="/frame/timeSlots">
     <mat-icon>event</mat-icon>
@@ -99,7 +99,7 @@
   <span class="app-spacer"></span>
 
 
-  <button *ngIf="user"
+  <button *ngIf="this.isAuthenticated && user"
           mat-button
           matTooltip="User specific actions"
           [matMenuTriggerFor]="userMenu">

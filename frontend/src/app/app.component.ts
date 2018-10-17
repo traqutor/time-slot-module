@@ -9,6 +9,8 @@ import {Subscription} from "rxjs";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, OnDestroy {
+
+  isAuthenticated: boolean;
   user: IUserInfo;
   USER_ROLES = UserRoleNameEnum;
 
@@ -22,6 +24,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.isAuthenticated = this.auth.isUserAuthenticated();
+
     this.subscriptions.push(this.auth.currentUser.subscribe((res: IUserInfo) => {
       this.user = res;
     }));
