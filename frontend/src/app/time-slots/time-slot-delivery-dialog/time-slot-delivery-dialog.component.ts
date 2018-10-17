@@ -72,7 +72,7 @@ export class TimeSlotDeliveryDialogComponent implements OnInit, OnDestroy {
         supplier: [this.timeSlot.supplier, [Validators.required]],
         commodity: [this.timeSlot.commodity, [Validators.required]],
         statusType: [this.timeSlot.statusType, [Validators.required]],
-        tons: [this.timeSlot.tons, [Validators.required]],
+        tons: [this.timeSlot.tons, [Validators.required], ],
 
         timeSlot: this.timeSlot.timeSlot,
         deliveryDate: this.timeSlot.deliveryDate,
