@@ -136,7 +136,7 @@ namespace TimeSlotting.Controllers
                 timeslot = db.DeliveryTimeSlots.Find(model.Id);
 
                 timeslot.Tons = model.Tons;
-                timeslot.DeliveryDate = model.DeliveryDate;
+                timeslot.DeliveryDate = model.DeliveryDate.Date;
 
                 timeslot.TimeSlotId = model.TimeSlot.Id;
 
