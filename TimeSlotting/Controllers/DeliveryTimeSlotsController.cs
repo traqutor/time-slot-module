@@ -102,7 +102,7 @@ namespace TimeSlotting.Controllers
         /// <param name="day">date</param>
         /// <returns></returns>
         [ResponseType(typeof(UsedCommodityModel))]
-        public IHttpActionResult GetUserdCommodityAmount(int cid, int sid, DateTime day)
+        public IHttpActionResult GetUsedCommodityAmount(int cid, int sid, DateTime day)
         {
             var normalizeDate = day.Date;
 
