@@ -57,8 +57,8 @@ export class ContractDialogComponent implements OnInit {
     });
 
     this.commodityService.getCommodities();
-    this.commodityService.commoditiesChanged.subscribe((res: ISupplier[]) => {
-      this.suppliers = res;
+    this.commodityService.commoditiesChanged.subscribe((res: ICommodity[]) => {
+      this.commodities = res;
     });
 
   }

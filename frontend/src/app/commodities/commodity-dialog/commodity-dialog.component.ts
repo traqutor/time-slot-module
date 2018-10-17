@@ -23,6 +23,7 @@ export class CommodityDialogComponent implements OnInit {
     this.commodityForm = this.formBuilder.group({
       id: this.commodity.id,
       name: [this.commodity.name, [Validators.required,]],
+      maxTonsPerDay: [this.commodity.maxTonsPerDay, [Validators.required,]],
       creationDate: this.commodity.creationDate,
       modificationDate: this.commodity.modificationDate,
       createdBy: this.commodity.createdBy,

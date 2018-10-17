@@ -2,7 +2,7 @@
 
 <div mat-dialog-content>
 
-  <form [formGroup]="commodityForm" fxLayout="column">
+  <form [formGroup]="commodityForm" fxLayout="row" fxLayout.lt-md="column" >
 
     <mat-form-field fxFlex appearance="outline">
 
@@ -16,6 +16,21 @@
       <mat-error
         *ngIf="commodityForm.get('name').hasError('required') && commodityForm.get('name').touched">
         Name is required.
+      </mat-error>
+
+    </mat-form-field>
+
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Max Tons Per Day</mat-label>
+
+      <input matInput
+             type="text"
+             placeholder="Max Tons Per Day"
+             formControlName="maxTonsPerDay">
+      <mat-error
+        *ngIf="commodityForm.get('maxTonsPerDay').hasError('required') && commodityForm.get('maxTonsPerDay').touched">
+        Max Tons Per Day is required.
       </mat-error>
 
     </mat-form-field>

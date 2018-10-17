@@ -19,6 +19,9 @@ export class ContractsComponent implements OnInit {
   private voidContract: IContract = {
     id: 0,
     name: '',
+    vendor: null,
+    supplier: null,
+    commodity: null,
     creationDate: null,
     modificationDate: null,
     createdBy: null,

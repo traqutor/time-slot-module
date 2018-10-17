@@ -19,6 +19,7 @@ export class CommoditiesComponent implements OnInit, OnDestroy {
   private voidCommodity: ICommodity = {
     id: 0,
     name: '',
+    maxTonsPerDay: null,
     creationDate: null,
     modificationDate: null,
     createdBy: null,
