@@ -160,6 +160,8 @@ export class TimeSlotsUserViewComponent implements OnInit {
   ngOnInit() {
 
     this.date = new Date();
+
+
     this.maxDate = new Date;
     this.maxDate.setDate(this.maxDate.getDate() + 7);
 

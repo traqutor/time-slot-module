@@ -6,6 +6,7 @@ import {ISupplier} from "../suppliers/supplier.model";
 import {IVendor} from "../vendors/vendor.model";
 import {ISite} from "../sites/site.model";
 import {IVehicle} from "../vehicles/vehicle.model";
+import {Moment} from "moment";
 
 export interface ITimeSlot {
   id: number;
@@ -23,7 +24,7 @@ export interface ITimeSlotDelivery {
   id: number;
   tons: number;
   timeSlot: ITimeSlot;
-  deliveryDate: Date;
+  deliveryDate: Date | Moment;
   statusType: IStatusType;
   contract: IContract,
   commodity: ICommodity,

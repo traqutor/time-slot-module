@@ -65,7 +65,6 @@ export class TimeSlotDeliveryDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    console.log('timeSlot', this.timeSlot);
 
     this.subscriptions.push(this.auth.currentUser.subscribe((res: IUserInfo) => {
 
@@ -195,7 +194,6 @@ export class TimeSlotDeliveryDialogComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-    console.log('to idzie do requestu', this.timeSlotForm.value);
     this.dialogRef.close(this.timeSlotForm.value);
   }
 

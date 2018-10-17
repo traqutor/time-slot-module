@@ -4,7 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {MatSnackBar} from "@angular/material";
 import {environment} from "../../environments/environment";
 import {ITimeSlot, ITimeSlotDelivery, IUniformViewTimeSlot} from "./time-slot.model";
-import * as moment from 'moment';
+import {Moment} from "moment";
 
 @Injectable({
   providedIn: 'root'
@@ -41,8 +41,8 @@ export class TimeSlotService {
       });
   }
 
-  getUsedCommodityAmount(commodityId: number, siteId: number, date: string): Observable<{usedAmount: number}> {
-    return this.http.get<{usedAmount: number}>(`${this.url}/api/DeliveryTimeSlots/GetUsedCommodityAmount?cid=${commodityId}&sid=${siteId}&day=${date}`);
+  getUsedCommodityAmount(commodityId: number, siteId: number, date: string): Observable<{ usedAmount: number }> {
+    return this.http.get<{ usedAmount: number }>(`${this.url}/api/DeliveryTimeSlots/GetUsedCommodityAmount?cid=${commodityId}&sid=${siteId}&day=${date}`);
   }
 
 
@@ -80,15 +80,16 @@ export class TimeSlotService {
 
   putDeliveryTimeSlot(timeSlot: IUniformViewTimeSlot, index: number) {
 
-    let tmpString = moment(timeSlot.deliveryTimeSlot.deliveryDate).format('MMM/DD/YYYY');
+    console.log('timeSlot.deliveryTimeSlot.deliveryDate', timeSlot.deliveryTimeSlot.deliveryDate);
 
-    console.log('tmpString', tmpString);
+    if (timeSlot.deliveryTimeSlot.deliveryDate instanceof Date) {
 
-    let tmpDate: Date = new Date(tmpString);
-    console.log('tmpDate', tmpDate);
-
-    timeSlot.deliveryTimeSlot.deliveryDate = tmpDate;
-    console.log('timeSlot.deliveryTimeSlot', timeSlot.deliveryTimeSlot);
+    }
+    else {
+      let tmpMoment: Moment = <Moment>timeSlot.deliveryTimeSlot.deliveryDate;
+      let tmpDate: Date = new Date(Date.UTC(tmpMoment.year(), tmpMoment.month(), tmpMoment.date()));
+      timeSlot.deliveryTimeSlot.deliveryDate = tmpDate;
+    }
 
     this.http.put(`${this.url}/api/DeliveryTimeSlots/PutTimeSlot`, timeSlot.deliveryTimeSlot)
       .subscribe((res: ITimeSlotDelivery) => {
