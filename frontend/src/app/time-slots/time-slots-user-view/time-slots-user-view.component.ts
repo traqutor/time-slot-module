@@ -1,7 +1,7 @@
 import {MatDialog} from "@angular/material";
 import {Component, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
-
+import * as moment from 'moment';
 
 import {ITimeSlotDelivery, IUniformViewTimeSlot} from "../time-slot.model";
 import {EntityStatusEnum, ICustomer, IUserInfo, UserRoleNameEnum} from "../../users/user.model";
@@ -12,6 +12,7 @@ import {ISite} from "../../sites/site.model";
 import {SiteService} from "../../sites/site.service";
 import {TimeSlotDeliveryDialogComponent} from "../time-slot-delivery-dialog/time-slot-delivery-dialog.component";
 import {AuthService} from "../../auth/auth.service";
+
 
 @Component({
   selector: 'app-time-slots-user-view',
@@ -211,7 +212,7 @@ export class TimeSlotsUserViewComponent implements OnInit {
 
   getSlots(site: ISite) {
     if (site) {
-      const tmpDate = this.date.toISOString();
+      const tmpDate: string = moment(this.date).format('YYYY-MM-DD');
       this.timeSlotService.getTimeSlotDeliveryData(site.id, tmpDate);
     }
   }
@@ -236,8 +237,6 @@ export class TimeSlotsUserViewComponent implements OnInit {
       tmpSlot.deliveryTimeSlot.site = this.site;
       tmpSlot.deliveryTimeSlot.deliveryDate = this.date;
     }
-
-    console.log('timeSlot.deliveryTimeSlot', timeSlot.deliveryTimeSlot);
 
     const dialogRef = this.dialog.open(TimeSlotDeliveryDialogComponent, {
       width: '80%',

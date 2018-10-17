@@ -73,57 +73,63 @@
 
     </mat-form-field>
 
-    <mat-form-field fxFlex appearance="outline">
+    <div fxLayout="row" fxLayout.lt-sm="column">
 
-      <mat-label>Vendor</mat-label>
+      <mat-form-field fxFlex appearance="outline">
 
-      <mat-select placeholder="Select Vendor"
-                  formControlName="vendor"
-                  [compareWith]="compare">
+        <mat-label>Vendor</mat-label>
 
-        <mat-option *ngFor="let item of vendors" [value]="item">
-          {{item.name}}
-        </mat-option>
-      </mat-select>
+        <mat-select placeholder="Select Vendor"
+                    formControlName="vendor"
+                    [compareWith]="compare">
 
-      <mat-error
-        *ngIf="timeSlotForm.get('vendor').hasError('required') && timeSlotForm.get('vendor').touched">
-        Contract is required.
-      </mat-error>
+          <mat-option *ngFor="let item of vendors" [value]="item">
+            {{item.name}}
+          </mat-option>
+        </mat-select>
 
-    </mat-form-field>
+        <mat-error
+          *ngIf="timeSlotForm.get('vendor').hasError('required') && timeSlotForm.get('vendor').touched">
+          Contract is required.
+        </mat-error>
 
-    <mat-form-field fxFlex appearance="outline">
+      </mat-form-field>
 
-      <mat-label>Supplier</mat-label>
+      <mat-form-field fxFlex appearance="outline">
 
-      <mat-select placeholder="Select Supplier"
-                  formControlName="supplier"
-                  [compareWith]="compare">
+        <mat-label>Supplier</mat-label>
 
-        <mat-option *ngFor="let item of suppliers" [value]="item">
-          {{item.name}}
-        </mat-option>
-      </mat-select>
+        <mat-select placeholder="Select Supplier"
+                    formControlName="supplier"
+                    [compareWith]="compare">
 
-      <mat-error
-        *ngIf="timeSlotForm.get('supplier').hasError('required') && timeSlotForm.get('supplier').touched">
-        Supplier is required.
-      </mat-error>
+          <mat-option *ngFor="let item of suppliers" [value]="item">
+            {{item.name}}
+          </mat-option>
+        </mat-select>
 
-    </mat-form-field>
+        <mat-error
+          *ngIf="timeSlotForm.get('supplier').hasError('required') && timeSlotForm.get('supplier').touched">
+          Supplier is required.
+        </mat-error>
+
+      </mat-form-field>
+
+    </div>
 
 
     <mat-form-field fxFlex appearance="outline">
 
       <mat-label>Commodity</mat-label>
 
-      <mat-select placeholder="Select Commodity"
+      <mat-select #commodityOption
+                  placeholder="Select Commodity"
+                  (valueChange)="getUsedCommodityAmount(commodityOption.value)"
                   formControlName="commodity"
                   [compareWith]="compare">
 
         <mat-option *ngFor="let item of commodities" [value]="item">
-          {{item.name}}
+          {{item.name}} - Max Tons Per Day {{item.maxTonsPerDay}}
         </mat-option>
       </mat-select>
 
@@ -155,23 +161,36 @@
 
     </mat-form-field>
 
-    <mat-form-field fxFlex appearance="outline">
+    <div fxLayout="row" fxLayout.lt-sm="column">
 
-      <mat-label>Tons</mat-label>
 
-      <input matInput
-             type="number"
-             placeholder="Tons"
-             formControlName="tons">
-      <mat-error
-        *ngIf="timeSlotForm.get('tons').hasError('required') && timeSlotForm.get('tons').touched">
-        Tonnage is required.
-      </mat-error>
+      <mat-form-field fxFlex appearance="outline">
 
-    </mat-form-field>
+        <mat-label>Tons</mat-label>
 
+        <input matInput
+               type="number"
+               placeholder="Tons"
+               formControlName="tons">
+        <mat-error
+          *ngIf="timeSlotForm.get('tons').hasError('required') && timeSlotForm.get('tons').touched">
+          Tonnage is required.
+        </mat-error>
+
+      </mat-form-field>
+      <mat-form-field fxFlex="20" appearance="outline">
+        <mat-label>Daily commodity used amount</mat-label>
+        <input matInput placeholder="Daily commodity used amount" disabled [value]="dailyCommodityUsedAmount">
+      </mat-form-field>
+
+    </div>
 
   </form>
+
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <span *ngIf="timeSlot && timeSlot.createdBy"><span class="app-label">Created: </span> {{timeSlot.createdBy.name}} {{timeSlot.createdBy.surname}} - {{timeSlot.creationDate | date: 'dd/MMM/yyyy - HH:mm'}}</span>
+    <span *ngIf="timeSlot && timeSlot.modifiedBy"> <span class="app-label app-margin-right">Modified: </span> {{timeSlot.modifiedBy.name}} {{timeSlot.modificationDate | date: 'dd/MMM/yyyy - HH:mm'}}</span>
+  </div>
 
 </div>
 

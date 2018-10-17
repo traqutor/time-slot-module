@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {MatSnackBar} from "@angular/material";
 import {environment} from "../../environments/environment";
 import {ITimeSlot, ITimeSlotDelivery, IUniformViewTimeSlot} from "./time-slot.model";
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +39,10 @@ export class TimeSlotService {
         this.deliveryTimeSlots = res;
         this.deliveryTimeSlotsChanged.next(this.deliveryTimeSlots);
       });
+  }
+
+  getUsedCommodityAmount(commodityId: number, siteId: number, date: string): Observable<{usedAmount: number}> {
+    return this.http.get<{usedAmount: number}>(`${this.url}/api/DeliveryTimeSlots/GetUsedCommodityAmount?cid=${commodityId}&sid=${siteId}&day=${date}`);
   }
 
 
@@ -75,6 +80,16 @@ export class TimeSlotService {
 
   putDeliveryTimeSlot(timeSlot: IUniformViewTimeSlot, index: number) {
 
+    let tmpString = moment(timeSlot.deliveryTimeSlot.deliveryDate).format('MMM/DD/YYYY');
+
+    console.log('tmpString', tmpString);
+
+    let tmpDate: Date = new Date(tmpString);
+    console.log('tmpDate', tmpDate);
+
+    timeSlot.deliveryTimeSlot.deliveryDate = tmpDate;
+    console.log('timeSlot.deliveryTimeSlot', timeSlot.deliveryTimeSlot);
+
     this.http.put(`${this.url}/api/DeliveryTimeSlots/PutTimeSlot`, timeSlot.deliveryTimeSlot)
       .subscribe((res: ITimeSlotDelivery) => {
 
@@ -93,12 +108,7 @@ export class TimeSlotService {
   }
 
 
-  deleteTimseSlot(timeSlotId
-                    :
-                    number, index
-                    :
-                    number
-  ) {
+  deleteTimseSlot(timeSlotId: number, index: number) {
     this.http.delete(`${this.url}/api/TimeSlots/DeleteTimeSlot/${timeSlotId}`)
       .subscribe(() => {
         this.timeSlots.splice(index, 1);
@@ -109,12 +119,7 @@ export class TimeSlotService {
       });
   }
 
-  deleteDeliveryTimseSlot(timeSlotId
-                            :
-                            number, index
-                            :
-                            number
-  ) {
+  deleteDeliveryTimseSlot(timeSlotId: number, index: number) {
     this.http.delete(`${this.url}/api/DeliveryTimeSlots/DeleteTimeSlot/${timeSlotId}`)
       .subscribe(() => {
         this.timeSlots.splice(index, 1);

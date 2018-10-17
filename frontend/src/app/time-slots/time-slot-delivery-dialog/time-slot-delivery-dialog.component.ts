@@ -1,13 +1,15 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
+import {Subscription} from "rxjs";
+import * as moment from "moment";
+
+
 import {ITimeSlotDelivery} from "../time-slot.model";
 import {IUser, IUserInfo, UserRoleNameEnum} from "../../users/user.model";
-import {DriverService} from "selenium-webdriver/remote";
 import {UserService} from "../../users/user.service";
 import {IVehicle} from "../../vehicles/vehicle.model";
 import {VehicleService} from "../../vehicles/vehicle.service";
-import {Subscription} from "rxjs";
 import {IContract} from "../../contracts/contract.model";
 import {ContractService} from "../../contracts/contract.service";
 import {IVendor} from "../../vendors/vendor.model";
@@ -19,6 +21,8 @@ import {SupplierService} from "../../suppliers/supplier.service";
 import {CommodityService} from "../../commodities/commodity.service";
 import {StatusTypeService} from "../../status-types/status-type.service";
 import {AuthService} from "../../auth/auth.service";
+import {TimeSlotService} from "../time-slot.service";
+import {ISite} from "../../sites/site.model";
 
 @Component({
   selector: 'app-time-slot-delivery-dialog',
@@ -39,10 +43,13 @@ export class TimeSlotDeliveryDialogComponent implements OnInit, OnDestroy {
   commodities: ICommodity[] = [];
   statusTypes: IStatusType[] = [];
 
+  dailyCommodityUsedAmount: number = null;
+
   // subscriptions are only for cleanup after destroy
   private subscriptions = [];
 
   constructor(public dialogRef: MatDialogRef<TimeSlotDeliveryDialogComponent>,
+              private timeSlotService: TimeSlotService,
               private userService: UserService,
               private vehicleService: VehicleService,
               private contractService: ContractService,
@@ -58,6 +65,8 @@ export class TimeSlotDeliveryDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    console.log('timeSlot', this.timeSlot);
+
     this.subscriptions.push(this.auth.currentUser.subscribe((res: IUserInfo) => {
 
       this.userInfo = res;
@@ -72,7 +81,7 @@ export class TimeSlotDeliveryDialogComponent implements OnInit, OnDestroy {
         supplier: [this.timeSlot.supplier, [Validators.required]],
         commodity: [this.timeSlot.commodity, [Validators.required]],
         statusType: [this.timeSlot.statusType, [Validators.required]],
-        tons: [this.timeSlot.tons, [Validators.required], ],
+        tons: [this.timeSlot.tons, [Validators.required],],
 
         timeSlot: this.timeSlot.timeSlot,
         deliveryDate: this.timeSlot.deliveryDate,
@@ -145,10 +154,22 @@ export class TimeSlotDeliveryDialogComponent implements OnInit, OnDestroy {
         this.onDriverChange(this.timeSlot.driver);
       }
 
+      if (this.timeSlot.commodity && this.timeSlot.commodity.id !== 0) {
+        this.getUsedCommodityAmount(this.timeSlot.commodity);
+      }
 
     }));
 
   }
+
+  getUsedCommodityAmount(commodity: ICommodity) {
+    const tmpDate: string = moment(this.timeSlot.deliveryDate).format('YYYY-MM-DD');
+    this.timeSlotService.getUsedCommodityAmount(commodity.id, this.timeSlot.site.id, tmpDate)
+      .subscribe((res: { usedAmount: number }) => {
+        this.dailyCommodityUsedAmount = res.usedAmount;
+      })
+  }
+
 
   onContractSelect(contract: IContract) {
     this.timeSlotForm.controls['vendor'].setValue(contract.vendor);
@@ -174,6 +195,7 @@ export class TimeSlotDeliveryDialogComponent implements OnInit, OnDestroy {
   }
 
   submit() {
+    console.log('to idzie do requestu', this.timeSlotForm.value);
     this.dialogRef.close(this.timeSlotForm.value);
   }
 
