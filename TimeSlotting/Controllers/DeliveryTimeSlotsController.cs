@@ -95,6 +95,23 @@ namespace TimeSlotting.Controllers
         }
 
         /// <summary>
+        /// returns tonnage of commodity used on a given site on a given day
+        /// </summary>
+        /// <param name="cid">commodity id</param>
+        ///<param name="sid">site id</param>
+        /// <param name="day">date</param>
+        /// <returns></returns>
+        [ResponseType(typeof(UsedCommodityModel))]
+        public IHttpActionResult GetUserdCommodityAmount(int cid, int sid, DateTime day)
+        {
+            var normalizeDate = day.Date;
+
+            int? sum = db.DeliveryTimeSlots.Where(x => x.EntityStatus != EntityStatus.DELETED && x.SiteId == sid && x.CommodityId == cid && x.DeliveryDate == day.Date).Sum(dts => dts.Tons);
+            
+            return Ok(new UsedCommodityModel(sum));
+        }
+
+        /// <summary>
         /// For DelivetyTimeslot creation/edition
         /// </summary>
         /// <param name="model">provide: deliveryDate, TimeSlot.Id, Customer.Id, Site.Id, StatusType.Id, Contract.Id, Supplier.Id, Vendor.Id, Commodity.Id, Vehicle.Id, Driver.Id </param>

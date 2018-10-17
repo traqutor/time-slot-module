@@ -291,6 +291,7 @@
     <Compile Include="Models\Deliveries\SupplierListEntryViewModel.cs" />
     <Compile Include="Models\Deliveries\TimeSlotListEntryViewModel.cs" />
     <Compile Include="Models\Deliveries\TimeSlotWithDeliveryModel.cs" />
+    <Compile Include="Models\Deliveries\UsedCommodityModel.cs" />
     <Compile Include="Models\Deliveries\VendorListEntryViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\SearchResults.cs" />

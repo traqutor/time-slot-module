@@ -36,6 +36,15 @@
             <param name="day">date</param>
             <returns></returns>
         </member>
+        <member name="M:TimeSlotting.Controllers.DeliveryTimeSlotsController.GetUserdCommodityAmount(System.Int32,System.Int32,System.DateTime)">
+             <summary>
+             returns tonnage of commodity used on a given site on a given day
+             </summary>
+             <param name="cid">commodity id</param>
+            <param name="sid">site id</param>
+             <param name="day">date</param>
+             <returns></returns>
+        </member>
         <member name="M:TimeSlotting.Controllers.DeliveryTimeSlotsController.PutTimeSlot(TimeSlotting.Models.Deliveries.DeliveryTimeSlotModel)">
             <summary>
             For DelivetyTimeslot creation/edition
