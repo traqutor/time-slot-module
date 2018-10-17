@@ -49,6 +49,7 @@
 
       <mat-form-field appearance="outline" class="app-padding-right">
         <input matInput
+               [max]="maxDate"
                [matDatepicker]="picker"
                [(ngModel)]="date"
                (dateChange)="getSlots(site)"

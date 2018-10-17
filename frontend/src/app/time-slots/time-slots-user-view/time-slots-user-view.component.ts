@@ -30,6 +30,7 @@ export class TimeSlotsUserViewComponent implements OnInit {
   public customer: ICustomer;
   public site: ISite;
   public date: Date;
+  public maxDate: Date;
 
   public showCustomer: boolean;
 
@@ -53,6 +54,7 @@ export class TimeSlotsUserViewComponent implements OnInit {
     commodity: {
       id: 0,
       name: null,
+      maxTonsPerDay: null,
       createdBy: null,
       creationDate: null,
       modifiedBy: null,
@@ -62,6 +64,9 @@ export class TimeSlotsUserViewComponent implements OnInit {
     contract: {
       id: 0,
       name: null,
+      vendor: null,
+      supplier: null,
+      commodity: null,
       createdBy: null,
       creationDate: null,
       modifiedBy: null,
@@ -154,7 +159,8 @@ export class TimeSlotsUserViewComponent implements OnInit {
   ngOnInit() {
 
     this.date = new Date();
-
+    this.maxDate = new Date;
+    this.maxDate.setDate(this.maxDate.getDate() + 7);
 
     this.subscriptions.push(this.auth.currentUser.subscribe((res: IUserInfo) => {
       this.userInfo = res;
