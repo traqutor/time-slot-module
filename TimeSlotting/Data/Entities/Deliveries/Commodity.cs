@@ -15,7 +15,9 @@ namespace TimeSlotting.Data.Entities.Deliveries
 
         public int Id { get; set; }
         public string Name { get; set; }
-   
+
+        public int MaxTonsPerDay { get; set; }
+
         public virtual ICollection<DeliveryTimeSlot> DeliveryTimeSlots { get; set; }
 
         public EntityStatus EntityStatus { get; set; }

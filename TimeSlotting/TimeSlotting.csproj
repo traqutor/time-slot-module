@@ -274,6 +274,10 @@
     <Compile Include="Migrations\201810121207206_DatabaseForeignKeysForCreatedBy.Designer.cs">
       <DependentUpon>201810121207206_DatabaseForeignKeysForCreatedBy.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810170849484_ForeginKeysForContract.cs" />
+    <Compile Include="Migrations\201810170849484_ForeginKeysForContract.Designer.cs">
+      <DependentUpon>201810170849484_ForeginKeysForContract.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Customers\CustomerListEntryViewModel.cs" />
@@ -1231,6 +1235,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810121207206_DatabaseForeignKeysForCreatedBy.resx">
       <DependentUpon>201810121207206_DatabaseForeignKeysForCreatedBy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810170849484_ForeginKeysForContract.resx">
+      <DependentUpon>201810170849484_ForeginKeysForContract.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

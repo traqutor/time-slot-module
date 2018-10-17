@@ -32,8 +32,10 @@ namespace TimeSlotting.Models.Deliveries
 
             EntityStatus = entity.EntityStatus;
 
-            CreatedBy = new UserListEntryViewModel(entity.CreatedBy);
-            ModifiedBy = new UserListEntryViewModel(entity.ModifiedBy);
+            if(entity.CreatedBy !=null)
+                CreatedBy = new UserListEntryViewModel(entity.CreatedBy);
+            if (entity.ModifiedBy != null)
+                ModifiedBy = new UserListEntryViewModel(entity.ModifiedBy);
 
             CreationDate = entity.CreationDate;
             ModificationDate = entity.ModificationDate;

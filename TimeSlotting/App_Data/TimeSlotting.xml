@@ -173,6 +173,11 @@
             </param>
             <returns></returns>
         </member>
+        <member name="P:TimeSlotting.Data.Entities.Deliveries.Contract.DeliveryTimeSlots">
+            <summary>
+            binding to delivery, navigation property only
+            </summary>
+        </member>
         <member name="F:TimeSlotting.Data.Entities.UserSystemRoles.PossibleRoles">
             <summary>
             used for database initialization, if adding new roles, please assign it here so the initializer will create all roles properly

@@ -15,7 +15,22 @@ namespace TimeSlotting.Data.Entities.Deliveries
 
         public int Id { get; set; }
         public string Name { get; set; }
-       
+
+        public int VendorId { get; set; }
+        [ForeignKey("VendorId")]
+        public virtual Vendor Vendor { get; set; }
+
+        public int SupplierId { get; set; }
+        [ForeignKey("SupplierId")]
+        public virtual Supplier Supplier { get; set; }
+
+        public int CommodityId { get; set; }
+        [ForeignKey("CommodityId")]
+        public virtual Commodity Commodity { get; set; }
+
+        /// <summary>
+        /// binding to delivery, navigation property only
+        /// </summary>
         public virtual ICollection<DeliveryTimeSlot> DeliveryTimeSlots { get; set; }
 
 

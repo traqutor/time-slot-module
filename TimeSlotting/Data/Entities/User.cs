@@ -11,7 +11,6 @@ namespace TimeSlotting.Data.Entities
 {
     public class User : IdentityUser
     {
-    
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager userManager, UserManager<User> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
