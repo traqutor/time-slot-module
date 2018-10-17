@@ -9,6 +9,12 @@
     <mat-list-item *ngFor="let contract of contracts; let i = index">
       <h4 mat-line>{{contract.name}}</h4>
       <p mat-line>
+        <span> <span class="app-label">Commodity:</span>  {{contract.commodity.name}} </span>
+        <span class="app-margin-left"> <span class="app-label">Vendor:</span>  {{contract.vendor.name}} </span>
+        <span class="app-margin-left"> <span class="app-label">Supplier:</span>  {{contract.supplier.name}}  </span>
+      </p>
+
+      <p mat-line>
         <span class="app-label">Created:</span>
         {{contract.createdBy.name}}
         {{contract.createdBy.surname}} |
