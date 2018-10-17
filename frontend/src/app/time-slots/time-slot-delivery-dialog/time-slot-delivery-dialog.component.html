@@ -55,8 +55,10 @@
 
       <mat-label>Contracts</mat-label>
 
-      <mat-select placeholder="Select Contract"
+      <mat-select #contractOpition
+                  placeholder="Select Contract"
                   formControlName="contract"
+                  (valueChange)="onContractSelect(contractOpition.value)"
                   [compareWith]="compare">
 
         <mat-option *ngFor="let item of contracts" [value]="item">
