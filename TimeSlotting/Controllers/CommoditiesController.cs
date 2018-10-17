@@ -69,6 +69,8 @@ namespace TimeSlotting.Controllers
             if (model.Id == 0)
             {
                 commodity.Name = model.Name;
+                commodity.MaxTonsPerDay = model.MaxTonsPerDay;
+
                 commodity.EntityStatus = model.EntityStatus;
                 commodity.CreationDate = DateTime.UtcNow;
                 commodity.ModificationDate = DateTime.UtcNow;
@@ -82,6 +84,8 @@ namespace TimeSlotting.Controllers
                 commodity = db.Commodities.Find(model.Id);
 
                 commodity.Name = model.Name;
+                commodity.MaxTonsPerDay = model.MaxTonsPerDay;
+
                 commodity.EntityStatus = model.EntityStatus;
 
                 commodity.ModificationDate = DateTime.UtcNow;

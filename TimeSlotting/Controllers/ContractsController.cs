@@ -60,6 +60,11 @@ namespace TimeSlotting.Controllers
             if (model.Id == 0)
             {
                 contract.Name = model.Name;
+
+                contract.VendorId = model.Vendor.Id;
+                contract.SupplierId = model.Supplier.Id;
+                contract.CommodityId = model.Commodity.Id;
+
                 contract.EntityStatus = model.EntityStatus;
                 contract.CreationDate = DateTime.UtcNow;
                 contract.ModificationDate = DateTime.UtcNow;
@@ -73,6 +78,11 @@ namespace TimeSlotting.Controllers
                 contract = db.Contracts.Find(model.Id);
 
                 contract.Name = model.Name;
+
+                contract.VendorId = model.Vendor.Id;
+                contract.SupplierId = model.Supplier.Id;
+                contract.CommodityId = model.Commodity.Id;
+
                 contract.EntityStatus = model.EntityStatus;
                 contract.ModificationDate = DateTime.UtcNow;
                 contract.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
@@ -80,7 +90,7 @@ namespace TimeSlotting.Controllers
 
             db.SaveChanges();
 
-            contract = db.Contracts.Include(e => e.CreatedBy).Include(e => e.ModifiedBy).SingleOrDefault(c => c.Id == contract.Id);
+            contract = db.Contracts.Include(e => e.Vendor).Include(e => e.Supplier).Include(e => e.Commodity).Include(e => e.CreatedBy).Include(e => e.ModifiedBy).SingleOrDefault(c => c.Id == contract.Id);
 
             return Ok(contract);
         }

@@ -13,6 +13,8 @@ namespace TimeSlotting.Models.Deliveries
         public int Id { get; set; }
         public string Name { get; set; }
 
+        public int MaxTonsPerDay { get; set; }
+
         public DateTime CreationDate { get; set; }
         public DateTime ModificationDate { get; set; }
         public UserListEntryViewModel CreatedBy { get; set; }
@@ -29,6 +31,8 @@ namespace TimeSlotting.Models.Deliveries
         {
             Id = entity.Id;
             Name = entity.Name;
+
+            MaxTonsPerDay = entity.MaxTonsPerDay;
 
             EntityStatus = entity.EntityStatus;
 

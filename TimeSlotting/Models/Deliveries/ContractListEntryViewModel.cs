@@ -13,6 +13,10 @@ namespace TimeSlotting.Models.Deliveries
         public int Id { get; set; }
         public string Name { get; set; }
 
+        public VendorListEntryViewModel Vendor { get; set; }
+        public SupplierListEntryViewModel Supplier { get; set; }
+        public CommodityListEntryViewModel Commodity { get; set; }
+
         public DateTime CreationDate { get; set; }
         public DateTime ModificationDate { get; set; }
         public UserListEntryViewModel CreatedBy { get; set; }
@@ -31,6 +35,10 @@ namespace TimeSlotting.Models.Deliveries
             Name = entity.Name;
 
             EntityStatus = entity.EntityStatus;
+
+            Vendor = new VendorListEntryViewModel(entity.Vendor);
+            Supplier = new SupplierListEntryViewModel(entity.Supplier);
+            Commodity = new CommodityListEntryViewModel(entity.Commodity);
 
             CreatedBy = new UserListEntryViewModel(entity.CreatedBy);
             ModifiedBy = new UserListEntryViewModel(entity.ModifiedBy);
