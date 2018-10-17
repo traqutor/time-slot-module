@@ -25,6 +25,7 @@ namespace TimeSlotting.Data
         {
             return new TimeSlottingDBContext();
         }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
