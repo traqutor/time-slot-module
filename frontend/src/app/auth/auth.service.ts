@@ -68,9 +68,9 @@ export class AuthService {
   }
 
   logout() {
+    this.router.navigateByUrl('/login');
     this.removeCredentialsFromStorage();
     this.saveUserInfoToStorage({} as IUserInfo);
-    this.router.navigateByUrl('/login');
     this.currentUserSubject.next(null);
   }
 

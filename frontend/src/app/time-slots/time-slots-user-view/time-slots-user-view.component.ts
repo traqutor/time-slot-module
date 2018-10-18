@@ -170,22 +170,26 @@ export class TimeSlotsUserViewComponent implements OnInit {
 
       // get customers if user Role Admin
       // invoke Customers get from db
-      if (this.userInfo && this.userInfo.role.name === this.USER_ROLES.Administrator) {
+      if (this.userInfo) {
+        if (this.userInfo.role && this.userInfo.role.name === this.USER_ROLES.Administrator) {
 
-        this.showCustomer = true;
-        this.customerService.getCustomers();
+          this.showCustomer = true;
+          this.customerService.getCustomers();
 
+          // subscribe for Customers
+          this.subscriptions.push(this.customerService.customersChanged
+            .subscribe((res: Array<ICustomer>) => {
+              this.customers = res;
+            }));
 
-        // subscribe for Customers
-        this.subscriptions.push(this.customerService.customersChanged
-          .subscribe((res: Array<ICustomer>) => {
-            this.customers = res;
-          }));
+        } else {
 
-      } else {
-        this.showCustomer = false;
-        this.customer = this.userInfo.customer;
-        this.getSites(this.userInfo.customer);
+          this.showCustomer = false;
+          this.customer = this.userInfo.customer;
+          this.getSites(this.userInfo.customer);
+
+        }
+
       }
 
       // subscribe for TimeSlots
