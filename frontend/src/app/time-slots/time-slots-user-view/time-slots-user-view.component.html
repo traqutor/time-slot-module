@@ -1,66 +1,65 @@
-<div class="app-padding-default" fxLayout="row" fxLayoutAlign="center center" >
+<div class="app-padding-default" fxLayout="column">
 
-  <mat-list fxFlex="60" fxFlex.lt-md="100">
+  <div fxLayout.lt-md="column" fxLayout="row" fxLayoutAlign="center center">
 
-    <div fxLayout.lt-md="column" fxLayout="row" fxLayoutAlign="center center">
+    <div mat-subheader>
+      TIME SLOTS
+    </div>
 
-      <div mat-subheader>
-        TIME SLOTS
-      </div>
+    <!--customer-->
+    <mat-form-field *ngIf="showCustomer"
+                    appearance="outline"
+                    class="app-padding-right">
 
-      <!--customer-->
-      <mat-form-field *ngIf="showCustomer"
-                      appearance="outline"
-                      class="app-padding-right">
+      <mat-label>Customer</mat-label>
 
-        <mat-label>Customer</mat-label>
+      <mat-select placeholder="Select Customer"
+                  [(ngModel)]="customer"
+                  (selectionChange)="getSites(customer)"
+                  [compareWith]="compare">
 
-        <mat-select placeholder="Select Customer"
-                    [(ngModel)]="customer"
-                    (selectionChange)="getSites(customer)"
-                    [compareWith]="compare">
+        <mat-option *ngFor="let cust of customers" [value]="cust">
+          {{cust.name}}
+        </mat-option>
 
-          <mat-option *ngFor="let cust of customers" [value]="cust">
-            {{cust.name}}
-          </mat-option>
+      </mat-select>
 
-        </mat-select>
+    </mat-form-field>
 
-      </mat-form-field>
+    <!--site-->
+    <mat-form-field appearance="outline" class="app-padding-right">
 
-      <!--site-->
-      <mat-form-field appearance="outline" class="app-padding-right">
+      <mat-label>Site</mat-label>
 
-        <mat-label>Site</mat-label>
+      <mat-select placeholder="Select Site"
+                  (selectionChange)="getSlots(site)"
+                  [(ngModel)]="site">
 
-        <mat-select placeholder="Select Site"
-                    (selectionChange)="getSlots(site)"
-                    [(ngModel)]="site">
+        <mat-option *ngFor="let sit of sites" [value]="sit">
+          {{sit.name}}
+        </mat-option>
 
-          <mat-option *ngFor="let sit of sites" [value]="sit">
-            {{sit.name}}
-          </mat-option>
+      </mat-select>
 
-        </mat-select>
+    </mat-form-field>
 
-      </mat-form-field>
+    <!--date-->
 
-      <!--date-->
-
-      <mat-form-field appearance="outline" class="app-padding-right">
-        <input matInput
-               [matDatepicker]="picker"
-               [(ngModel)]="date"
-               (dateChange)="getSlots(site)"
-               placeholder="Choose a date">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
+    <mat-form-field appearance="outline" class="app-padding-right">
+      <input matInput
+             [matDatepicker]="picker"
+             [(ngModel)]="date"
+             (dateChange)="getSlots(site)"
+             placeholder="Choose a date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
 
     <div mat-subheader  *ngIf="date>maxDate">Bookings further than 1 week in the future was disabled.</div>
 
-    </div>
+  </div>
 
+  <mat-list fxFlex="60" fxFlex.lt-md="100">
 
     <mat-list-item *ngFor="let slot of timeSlots; let i = index">
 
