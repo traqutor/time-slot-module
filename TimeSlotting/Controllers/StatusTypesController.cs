@@ -78,16 +78,13 @@ namespace TimeSlotting.Controllers
                 statusType.ModificationDate = DateTime.UtcNow;
                 statusType.ModifiedById = Common.GetUserId(User.Identity.GetUserId());
 
-                db.Entry(statusType).State = EntityState.Modified;
-                db.Entry(statusType).Property(x => x.CreationDate).IsModified = false;
-                db.Entry(statusType).Property(x => x.CreatedBy).IsModified = false;
             }
 
             db.SaveChanges();
 
             statusType = db.StatusTypes.Include(e => e.CreatedBy).Include(e => e.ModifiedBy).SingleOrDefault(c => c.Id == statusType.Id);
 
-            return Ok(statusType);
+            return Ok(new StatusTypeListEntryViewModel(statusType));
         }
 
         [System.Web.Mvc.Authorize(Roles = "Administrator")]

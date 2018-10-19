@@ -121,6 +121,15 @@ namespace TimeSlotting.Controllers
         {
             DeliveryTimeSlot timeslot = new DeliveryTimeSlot();
 
+            var normalizeDate = model.DeliveryDate.Date;
+            var Commodity = db.Commodities.SingleOrDefault(c => c.Id == model.Commodity.Id);
+            int? sum = db.DeliveryTimeSlots.Where(x => x.EntityStatus != EntityStatus.DELETED && x.SiteId == model.Site.Id && x.CommodityId == model.Commodity.Id && x.DeliveryDate == normalizeDate && x.Id != model.Id).Sum(dts => dts.Tons);
+
+            if(Commodity.MaxTonsPerDay < (sum + model.Tons))
+            {
+                return BadRequest("Can not allocate more of this commodity on this day.");
+            }
+
             if (model.Id == 0)
             {
                 timeslot.Tons = model.Tons;
