@@ -175,6 +175,7 @@ export class TimeSlotDeliveryDialogComponent implements OnInit, OnDestroy {
     this.timeSlotForm.controls['vendor'].setValue(contract.vendor);
     this.timeSlotForm.controls['supplier'].setValue(contract.supplier);
     this.timeSlotForm.controls['commodity'].setValue(contract.commodity);
+    this.getUsedCommodityAmount(contract.commodity);
   }
 
   onDriverChange(driver: IUser) {
