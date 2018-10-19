@@ -33,6 +33,7 @@ export class TimeSlotDeliveryDialogComponent implements OnInit, OnDestroy {
 
   public userInfo: IUserInfo;
   public USER_ROLES = UserRoleNameEnum;
+  public errorMessage = null;
 
   timeSlotForm: FormGroup;
   drivers: IUser[] = [];
@@ -194,7 +195,14 @@ export class TimeSlotDeliveryDialogComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-    this.dialogRef.close(this.timeSlotForm.value);
+    this.errorMessage = null;
+    this.subscriptions.push(this.timeSlotService.directputDeliveryTimeSlot(this.timeSlotForm.value)
+      .subscribe((res: ITimeSlotDelivery) => {
+        this.dialogRef.close(res);
+      }, error => {
+        this.errorMessage = error.error.message;
+      }));
+
   }
 
   ngOnDestroy() {

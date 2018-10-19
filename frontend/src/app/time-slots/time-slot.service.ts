@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {BehaviorSubject, observable, Observable} from "rxjs";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {MatSnackBar} from "@angular/material";
 import {environment} from "../../environments/environment";
 import {ITimeSlot, ITimeSlotDelivery, IUniformViewTimeSlot} from "./time-slot.model";
@@ -78,34 +78,46 @@ export class TimeSlotService {
       });
   }
 
-  putDeliveryTimeSlot(timeSlot: IUniformViewTimeSlot, index: number) {
+  putDeliveryTimeSlot(deliveryTimeSlot: ITimeSlotDelivery, index: number): Observable<any> {
 
-    console.log('timeSlot.deliveryTimeSlot.deliveryDate', timeSlot.deliveryTimeSlot.deliveryDate);
+    const slotObservable = new Observable((observer) => {
 
-    if (timeSlot.deliveryTimeSlot.deliveryDate instanceof Date) {
+      if (deliveryTimeSlot.deliveryDate instanceof Date) {
 
-    }
-    else {
-      let tmpMoment: Moment = <Moment>timeSlot.deliveryTimeSlot.deliveryDate;
-      let tmpDate: Date = new Date(Date.UTC(tmpMoment.year(), tmpMoment.month(), tmpMoment.date()));
-      timeSlot.deliveryTimeSlot.deliveryDate = tmpDate;
-    }
+      }
+      else {
+        let tmpMoment: Moment = <Moment>deliveryTimeSlot.deliveryDate;
+        let tmpDate: Date = new Date(Date.UTC(tmpMoment.year(), tmpMoment.month(), tmpMoment.date()));
+        deliveryTimeSlot.deliveryDate = tmpDate;
+      }
 
-    this.http.put(`${this.url}/api/DeliveryTimeSlots/PutTimeSlot`, timeSlot.deliveryTimeSlot)
-      .subscribe((res: ITimeSlotDelivery) => {
+      this.http.put(`${this.url}/api/DeliveryTimeSlots/PutTimeSlot`, deliveryTimeSlot)
+        .subscribe((res: ITimeSlotDelivery) => {
 
-        // there is only is Edit so the object needs to be replaced in array
+          // there is only Edit so the object needs to be replaced in array
 
-        timeSlot.deliveryTimeSlot = res;
+          deliveryTimeSlot = res;
 
-        this.deliveryTimeSlots[index] = timeSlot;
-        this.snackBar.open('TimeSlot Defined', '', {
-          duration: 2000,
-        });
+          this.deliveryTimeSlots[index].deliveryTimeSlot = deliveryTimeSlot;
+          this.snackBar.open('TimeSlot Defined', '', {
+            duration: 2000,
+          });
 
-        this.deliveryTimeSlotsChanged.next(this.deliveryTimeSlots);
+          this.deliveryTimeSlotsChanged.next(this.deliveryTimeSlots);
 
-      });
+          observer.next('');
+        }, error => {
+          observer.error(error.error.message);
+    });
+      observer.complete();
+
+    });
+
+    return slotObservable;
+  }
+
+  directputDeliveryTimeSlot(deliveryTimeSlot: ITimeSlotDelivery): Observable<ITimeSlotDelivery> {
+    return this.http.put<ITimeSlotDelivery>(`${this.url}/api/DeliveryTimeSlots/PutTimeSlot`, deliveryTimeSlot);
   }
 
 

@@ -187,6 +187,12 @@
 
   </form>
 
+  <mat-error
+    *ngIf="errorMessage">
+    {{errorMessage}}
+  </mat-error>
+
+
   <div fxLayout="row" fxLayoutAlign="center center">
     <span *ngIf="timeSlot && timeSlot.createdBy"><span class="app-label">Created: </span> {{timeSlot.createdBy.name}} {{timeSlot.createdBy.surname}} - {{timeSlot.creationDate | date: 'dd/MMM/yyyy - HH:mm'}}</span>
     <span *ngIf="timeSlot && timeSlot.modifiedBy"> <span class="app-label app-margin-right">Modified: </span> {{timeSlot.modifiedBy.name}} {{timeSlot.modificationDate | date: 'dd/MMM/yyyy - HH:mm'}}</span>

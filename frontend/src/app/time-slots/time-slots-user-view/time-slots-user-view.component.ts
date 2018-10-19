@@ -1,4 +1,4 @@
-import {MatDialog} from "@angular/material";
+import {MatDialog, MatSnackBar} from "@angular/material";
 import {Component, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 import * as moment from 'moment';
@@ -153,6 +153,7 @@ export class TimeSlotsUserViewComponent implements OnInit {
               private customerService: CustomerService,
               private siteService: SiteService,
               private auth: AuthService,
+              private snackBar: MatSnackBar,
               private confirm: ConfirmDialogService,
               private dialog: MatDialog) {
   }
@@ -160,7 +161,6 @@ export class TimeSlotsUserViewComponent implements OnInit {
   ngOnInit() {
 
     this.date = new Date();
-
 
     this.maxDate = new Date;
     this.maxDate.setDate(this.maxDate.getDate() + 7);
@@ -192,10 +192,15 @@ export class TimeSlotsUserViewComponent implements OnInit {
 
       }
 
+
       // subscribe for TimeSlots
       this.subscriptions.push(this.timeSlotService.deliveryTimeSlotsChanged
         .subscribe((res: Array<IUniformViewTimeSlot>) => {
-          this.timeSlots = res;
+          if (this.site) {
+            this.timeSlots = res;
+          } else {
+            this.timeSlots.length = 0;
+          }
         }));
 
 
@@ -253,9 +258,7 @@ export class TimeSlotsUserViewComponent implements OnInit {
       .subscribe((resolvedTimeSlot: ITimeSlotDelivery) => {
         if (resolvedTimeSlot) {
           timeSlot.deliveryTimeSlot = resolvedTimeSlot;
-          this.timeSlotService.putDeliveryTimeSlot(timeSlot, index);
         }
-
       }));
   }
 
