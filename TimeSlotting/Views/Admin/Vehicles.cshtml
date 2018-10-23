@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "Vehicles";
+}
+
+<div ng-app="ts" ng-controller="vehiclesController">
+
+    <div style="overflow: hidden">
+        <h2 class="page-heading">@ViewBag.Title</h2>
+        <button class="btn btn-default add-button" onclick="OpenDialog('#modalVehicle',this)" ng-click="addVehicle()">Add Vehicle <i class="fas fa-plus"></i></button>
+    </div>
+
+    <div class="main-body">
+        <div>
+            <table ng-table="tableParams" class="table table-bordered table-striped table-condensed" show-filter="true">
+                <tr ng-repeat="c in $data">
+                    <td class="list-edit" ng-click="getVehicle(c.Id)">
+                        <i class="fas fa-pen-alt cursor" onclick="OpenDialog('#modalVehicle',this)"></i>
+                    </td>
+                    <td title="'Rego'" filter="{ Rego: 'text'}" sortable="'Rego'">
+                        <span class="ng-cloak">{{c.Rego}}</span>
+                    </td>
+                    <td title="'Customer'" filter="{ 'Customer.Name': 'text'}" sortable="'Customer.Name'" ng-if="admin == true">
+                        <span class="ng-cloak">{{c.Customer.Name}}</span>
+                    </td>
+                    <td title="'Fleet'" filter="{ 'Fleet.Name': 'text'}" sortable="'Fleet.Name'">
+                        <span class="ng-cloak">{{c.Fleet.Name}}</span>
+                    </td>
+                    <td title="'Enabled'" filter="{ IsEnabled: 'text'}" sortable="'IsEnabled'" class="list-date">
+                        <span class="ng-cloak">{{c.IsEnabled ? 'Yes' : 'No'}}</span>
+                    </td>
+                    <td title="'Created'" filter="{ CreatedDate: 'text'}" sortable="'CreatedDate'" class="list-date">
+                        <span class="ng-cloak">{{c.CreatedDate  | date:'dd-MMM-yyyy'}}</span>
+                    </td>
+                    <td class="list-delete">
+                        <div class="glyphicon glyphicon-trash delete-button cursor" ng-click="prepareDelete(c.Id)"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div id="modalVehicle" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="text-align:center">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 id="dialog-link-header" class="modal-title heading"><span class="ng-cloak">{{modalHeader}}</span></h2>
+                </div>
+                <form name="form" id="form">
+                    <div class="modal-body">
+                        <div class="row form-row">
+                            <div class="col-md-3">
+                                <div class="form-label">Rego</div>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="text" name="Rego" class="form-control" maxlength="200" ng-model="vehicle.Rego" value="{{vehicle.Rego}}" required />
+                                <div ng-show="(invalid || form.Rego.$dirty || (form.Rego.$pristine && form.Rego.$touched)) && form.Rego.$error.required" class="form-required">Required</div>
+                            </div>
+                        </div>
+                        <div class="row form-row" ng-if="admin == true">
+                            <div class="col-md-3">
+                                <div class="form-label">Customer</div>
+                            </div>
+                            <div class="col-md-9">
+                                <select name="CustomerId" class="form-control form-select" ng-model="vehicle.CustomerId" ng-options="x.Id as x.Name for x in customers" ng-change="getFleets(vehicle.CustomerId)" ng-required="admin == true"></select>
+                                <div ng-show="(invalid || form.Name.$dirty || (form.Name.$pristine && form.Name.$touched)) && form.CustomerId.$error.required" class="form-required">Required</div>
+                            </div>
+                        </div>
+                        <div class="row form-row">
+                            <div class="col-md-3">
+                                <div class="form-label">Fleet</div>
+                            </div>
+                            <div class="col-md-9">
+                                <select name="FleetId" class="form-control form-select" ng-model="vehicle.FleetId" ng-options="x.Id as x.Name for x in fleets" required></select>
+                                <div ng-show="(invalid || form.Name.$dirty || (form.Name.$pristine && form.Name.$touched)) && form.FleetId.$error.required" class="form-required">Required</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-label">Enabled</div>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="checkbox" class="form-control form-checkbox" ng-model="vehicle.IsEnabled" />
+                            </div>
+                        </div>
+                        <div class="row form-error">
+                            <span class="ng-cloak">{{modalError}}</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align:center;padding:10px;margin-top:0px">
+                        <button type="button" class="btn btn-primary" ng-click="saveVehicle()">Save</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+
+                <div ng-show="createdBy != ''">
+                    <hr class="audit-hr" />
+
+                    <div class="audit-div">
+                        <div>
+                            <div class="audit-label">
+                                Created:
+                            </div>
+                            <div class="audit-value">
+                                {{vehicle.CreatedDate | date:'dd-MMM-yyyy hh:mm a'}} | {{createdBy}}
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="audit-label">
+                                Modified:
+                            </div>
+                            <div class="audit-value">
+                                {{vehicle.ModifiedDate | date:'dd-MMM-yyyy hh:mm a'}} | {{modifiedBy}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="popover-delete">
+        <div class="popover popover-delete">
+            <div class="arrow"></div>
+            <h3 class="popover-title">Delete</h3>
+            <div id="popover-content" class="popover-content"></div>
+        </div>
+    </div>
+
+    <div id="popover-delete-body" class="hide">
+        <div style="display:flex;margin-bottom:5px">Delete this Vehicle?</div>
+        <div style="display:flex;justify-content:center;">
+            <button id="btnOk" type="button" class="btn btn-default quote-item-delete glyphicon glyphicon-ok" style="margin-right:5px" ng-click="deleteVehicle()"></button>
+            <button id="btnCancel" type="button" class="btn btn-default quote-item-delete glyphicon glyphicon-remove" quoteId="" onclick="PopOverClose('.list-delete');"></button>
+        </div>
+    </div>
+
+</div>

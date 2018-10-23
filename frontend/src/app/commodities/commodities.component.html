@@ -1,0 +1,50 @@
+
+
+<div class="app-padding-default">
+
+  <mat-list fxFlex="60" fxFlex.lt-md="100" >
+
+    <h3 mat-subheader>COMMODITIES</h3>
+
+    <mat-list-item *ngFor="let commodity of commodities; let i = index">
+      <h4 mat-line>{{commodity.name}}</h4>
+      <p mat-line>
+        <span class="app-label">Created:</span>
+        {{commodity.createdBy.name}}
+        {{commodity.createdBy.surname}} |
+        {{commodity.creationDate | date :
+        'dd/MMM/yyyy - HH:mm'}}
+
+        <span class="app-label app-margin-left ">Modified:</span>
+        {{commodity.modifiedBy.name}}
+        {{commodity.modifiedBy.surname}} |
+        {{commodity.modificationDate| date :
+        'dd/MMM/yyyy - HH:mm'}}
+      </p>
+
+      <button mat-icon-button
+              matTooltip="Edit commodity"
+              (click)="editCommodity(commodity, i)">
+        <mat-icon mat-list-icon>edit</mat-icon>
+      </button>
+
+      <button mat-icon-button
+              matTooltip="Delete commodity"
+              (click)="deleteCommodity(commodity, i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+  </mat-list>
+
+  <div class="app-padding-default">
+
+    <button mat-raised-button
+            matTooltip="Add commodity"
+            (click)="addCommodity()">
+      <mat-icon>add</mat-icon>
+    </button>
+
+  </div>
+</div>
+

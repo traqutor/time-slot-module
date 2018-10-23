@@ -1,0 +1,129 @@
+<mat-toolbar color="primary">
+
+  <span fxHide.lt-sm="true">Time Slot Module</span>
+  <!--<span fxHide.lt-sm="true">Genius Time Slot Module</span>-->
+
+  <div style="width: 48px"></div>
+
+  <button *ngIf="this.isAuthenticated && user"
+          mat-button
+          routerLink="/frame/timeSlots">
+    <mat-icon>event</mat-icon>
+    Book Time Slots
+  </button>
+
+  <button mat-button
+          *ngIf="user && user.role && (user.role.name === USER_ROLES.Administrator || user.role.name === USER_ROLES.CustomerAdmin)"
+          [matMenuTriggerFor]="menu">
+    <mat-icon>settings</mat-icon>
+    Admin
+  </button>
+
+  <mat-menu #menu="matMenu">
+
+    <button *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"
+            mat-menu-item
+            routerLink="/admin/customers">
+      <mat-icon>group</mat-icon>
+      Customers
+    </button>
+
+    <mat-divider *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"></mat-divider>
+    <button *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"
+            mat-menu-item
+            routerLink="/admin/vendors">
+      <mat-icon>group</mat-icon>
+      Vendors
+    </button>
+    <button *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"
+            mat-menu-item
+            routerLink="/admin/suppliers">
+      <mat-icon>group</mat-icon>
+      Suppliers
+    </button>
+    <button *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"
+            mat-menu-item
+            routerLink="/admin/commodities">
+      <mat-icon>group</mat-icon>
+      Commodities
+    </button>
+    <button *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"
+            mat-menu-item
+            routerLink="/admin/contracts">
+      <mat-icon>group</mat-icon>
+      Contracts
+    </button>
+
+    <mat-divider *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"></mat-divider>
+    <button *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"
+            mat-menu-item
+            routerLink="/admin/timeSlots">
+      <mat-icon>group</mat-icon>
+      Time Slots
+    </button>
+    <button *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"
+            mat-menu-item
+            routerLink="/admin/statusTypes">
+      <mat-icon>group</mat-icon>
+      Status Types
+    </button>
+
+    <mat-divider *ngIf="user && user.role && user.role.name === USER_ROLES.Administrator"></mat-divider>
+    <button
+      mat-menu-item
+      routerLink="/admin/sites">
+      <mat-icon>group</mat-icon>
+      Sites
+    </button>
+
+    <button
+      mat-menu-item
+      routerLink="/admin/fleets">
+      <mat-icon>group</mat-icon>
+      Fleets
+    </button>
+    <button
+      mat-menu-item
+      routerLink="/admin/vehicles">
+      <mat-icon>group</mat-icon>
+      Vehicles
+    </button>
+
+    <mat-divider></mat-divider>
+    <button mat-menu-item routerLink="/admin/users">
+      <mat-icon>group</mat-icon>
+      Users
+    </button>
+
+  </mat-menu>
+
+  <span class="app-spacer"></span>
+
+
+  <button *ngIf="this.isAuthenticated && user"
+          mat-button
+          matTooltip="User specific actions"
+          [matMenuTriggerFor]="userMenu">
+    <mat-icon>power_settings_new</mat-icon>
+    <span fxHide.lt-sm="true">{{user.name}} {{user.surname}}</span>
+  </button>
+
+  <mat-menu #userMenu="matMenu">
+
+    <button mat-menu-item (click)="logOut()">
+      Log out
+    </button>
+  </mat-menu>
+
+  <button fxHide.lt-sm="true"
+          *ngIf="user && user.role"
+          mat-button
+          matTooltip="User system role">
+    Role: {{user.role.name}}
+  </button>
+
+
+</mat-toolbar>
+
+<router-outlet></router-outlet>
+

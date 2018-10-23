@@ -1,0 +1,297 @@
+﻿@{
+    ViewBag.Title = "Time Slots";
+}
+
+<div ng-app="ts" ng-controller="deliveryTimeslotsController">
+    <div style="overflow: hidden">
+        <h2 class="page-heading">@ViewBag.Title</h2>
+    </div>
+
+    <div class="main-body">
+        <div class="timeslot">
+            <div class="row">
+                <div class="col-md-12 ng-cloak timeslot-select-div">
+                    <div ng-show="role == 'Administrator'">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fas fa-users"></i>
+                            </span>
+                            <ol class="nya-bs-select timeslot-select" ng-model="customer" title="Select Customer" data-live-search="true" ng-change="getSites(customer.Id);getDrivers(customer.Id);">
+                                <li nya-bs-option="x in customers">
+                                    <a>
+                                        <span>{{ x.Name }}</span>
+                                        <span class="glyphicon glyphicon-ok check-mark"></span>
+                                    </a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fas fa-sitemap"></i>
+                            </span>
+                            <ol class="nya-bs-select timeslot-select" ng-model="site" title="Select Site" data-live-search="true" ng-change="getTimeSlotData(site.Id);">
+                                <li nya-bs-option="y in sites">
+                                    <a>
+                                        <span>{{ y.Name }}</span>
+                                        <span class="glyphicon glyphicon-ok check-mark"></span>
+                                    </a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="input-group"
+                             moment-picker="day"
+                             locale="en-au"
+                             format="DD-MMM-YYYY"
+                             min-view="month"
+                             max-view="month"
+                             today="true"
+                             keyboard="false"
+                             change="getTimeSlotData(site.Id)"
+                             set-on-select="true">
+                            <span class="input-group-addon">
+                                <i class="far fa-calendar-alt" style="cursor: pointer"></i>
+                            </span>
+                            <input id="timeslot-date" class="form-control timeslot-date" placeholder="Select a date" ng-model="day" ng-model-options="{ updateOn: 'blur' }">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <table ng-table="tableParams" class="table table-bordered table-striped table-condensed timeslot-table" show-filter="true">
+                <tr ng-repeat="c in $data" class="ng-cloak">
+                    <td class="timeslot-cell" filter="{ 'c.m_Item2.StatusType': 'text'}" ng-if="c.m_Item2.StatusTypeId == 0">
+                        <div class="timeslot-details">
+                            <div class="timeslot-time">{{c.m_Item1.StartTime | formatTime}} - {{c.m_Item1.EndTime | formatTime}}</div>
+                        </div>
+
+                        <button class="btn btn-default timeslot-status" ng-click="addTimeSlot(c.m_Item1.Id)">OPEN<i class="fas fa-car timeslot-car"></i></button>
+                    </td>
+                    <td class="timeslot-cell" filter="{ 'c.m_Item2.StatusType': 'text'}" ng-if="c.m_Item2.StatusTypeId == 2">
+                        <div class="timeslot-details" style="width: 150px">
+                            <div class="timeslot-time">{{c.m_Item1.StartTime | formatTime}} - {{c.m_Item1.EndTime | formatTime}}</div>
+                            <div><span class="timeslot-time">Driver:</span> <b>{{c.m_Item2.WebUser.FirstName}} {{c.m_Item2.WebUser.LastName}}</b></div>
+                            <div><span class="timeslot-time">Vehicle:</span> <b>{{c.m_Item2.Vehicle.Rego}}</b></div>
+                        </div>
+                        <div class="delivery-details">
+                            <div style="width: 150px">
+                                <div><span class="timeslot-time">Fleet:</span> <b>{{c.m_Item2.WebUser.Fleet.Name}}</b></div>
+                                <div><span class="timeslot-time">Contract:</span> <b>{{c.m_Item2.Contract.Name}}</b></div>
+                            </div>
+                            <div style="width: 150px">
+                                <div><span class="timeslot-time">Vendor:</span> <b>{{c.m_Item2.Vendor.Name}}</b></div>
+                                <div><span class="timeslot-time">Supplier:</span> <b>{{c.m_Item2.Supplier.Name}}</b></div>
+                            </div>
+                            <div style="width: 150px">
+                                <div><span class="timeslot-time">Commodity:</span> <b>{{c.m_Item2.Commodity.Name}}</b></div>
+                                <div><span class="timeslot-time">Tons:</span> <b>{{c.m_Item2.Tons}}</b></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-warning timeslot-status" ng-click="getTimeSlot(c.m_Item2.Id)"><i class="fas fa-pen-alt timeslot-edit" ng-if="role == 'Administrator' || role == 'CustomerAdmin' || role == 'CustomerUser' || (role == 'Driver' && c.m_Item2.DriverId == uid && c.m_Item2.StatusTypeId == 2)"></i>{{c.m_Item2.StatusType.Name}}<i class="fas fa-car timeslot-car"></i></button>
+                        <button id="btnInfo-{{c.m_Item2.Id}}" class="btn btn-info timeslot-info cursor" ng-click="prepareInfo(c.m_Item2.Id)"><i class="fas fa-info"></i></button>
+                    </td>
+                    <td class="timeslot-cell" filter="{ 'c.m_Item2.StatusType': 'text'}" ng-if="c.m_Item2.StatusTypeId == 4">
+                        <div class="timeslot-details" style="width: 150px">
+                            <div class="timeslot-time">{{c.m_Item1.StartTime | formatTime}} - {{c.m_Item1.EndTime | formatTime}}</div>
+                            <div><span class="timeslot-time">Driver:</span> <b>{{c.m_Item2.WebUser.FirstName}} {{c.m_Item2.WebUser.LastName}}</b></div>
+                            <div><span class="timeslot-time">Vehicle:</span> <b>{{c.m_Item2.Vehicle.Rego}}</b></div>
+                        </div>
+                        <div class="delivery-details">
+                            <div style="width: 150px">
+                                <div><span class="timeslot-time">Fleet:</span> <b>{{c.m_Item2.WebUser.Fleet.Name}}</b></div>
+                                <div><span class="timeslot-time">Contract:</span> <b>{{c.m_Item2.Contract.Name}}</b></div>
+                            </div>
+                            <div style="width: 150px">
+                                <div><span class="timeslot-time">Vendor:</span> <b>{{c.m_Item2.Vendor.Name}}</b></div>
+                                <div><span class="timeslot-time">Supplier:</span> <b>{{c.m_Item2.Supplier.Name}}</b></div>
+                            </div>
+                            <div style="width: 150px">
+                                <div><span class="timeslot-time">Commodity:</span> <b>{{c.m_Item2.Commodity.Name}}</b></div>
+                                <div><span class="timeslot-time">Tons:</span> <b>{{c.m_Item2.Tons}}</b></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-success timeslot-status" ng-click="getTimeSlot(c.m_Item2.Id)"><i class="fas fa-pen-alt timeslot-edit" ng-if="role == 'Administrator' || role == 'CustomerAdmin' || role == 'CustomerUser' || (role == 'Driver' && c.m_Item2.DriverId == uid && c.m_Item2.StatusTypeId == 2)"></i>{{c.m_Item2.StatusType.Name}}<i class="fas fa-car timeslot-car"></i></button>
+                        <button id="btnInfo-{{c.m_Item2.Id}}" class="btn btn-info timeslot-info cursor" ng-click="prepareInfo(c.m_Item2.Id)"><i class="fas fa-info"></i></button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div id="modalTimeSlot" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="text-align:center">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 id="dialog-link-header" class="modal-title heading"><span class="ng-cloak">{{modalHeader}}</span></h2>
+                </div>
+                <form name="form" id="form">
+                    <div class="modal-body">
+                        <div class="row form-row" ng-if="role != 'Driver'">
+                            <div class="col-md-3">
+                                <div class="form-label">Driver</div>
+                            </div>
+                            <div class="col-md-9">
+                                <select name="DriverId" class="form-control form-select" ng-model="timeslot.DriverId" ng-options="x.Id as x.FirstName for x in drivers" ng-change="getVehicles(timeslot.DriverId)" required></select>
+                                <div ng-show="(invalid || form.Name.$dirty || (form.Name.$pristine && form.Name.$touched)) && form.DriverId.$error.required" class="form-required">Required</div>
+                            </div>
+                        </div>
+                        <div class="row form-row">
+                            <div class="col-md-3">
+                                <div class="form-label">Vehicle</div>
+                            </div>
+                            <div class="col-md-9">
+                                <select name="VehicleId" class="form-control form-select" ng-model="timeslot.VehicleId" ng-options="x.Id as x.Rego for x in vehicles" required></select>
+                                <div ng-show="(invalid || form.Name.$dirty || (form.Name.$pristine && form.Name.$touched)) && form.VehicleId.$error.required" class="form-required">Required</div>
+                            </div>
+                        </div>
+                        <div class="row form-row">
+                            <div class="col-md-3">
+                                <div class="form-label">Contract</div>
+                            </div>
+                            <div class="col-md-9">
+                                <select name="ContractId" class="form-control form-select" ng-model="timeslot.ContractId" ng-options="x.Id as x.Name for x in contracts" required></select>
+                                <div ng-show="(invalid || form.Name.$dirty || (form.Name.$pristine && form.Name.$touched)) && form.ContractId.$error.required" class="form-required">Required</div>
+                            </div>
+                        </div>
+                        <div class="row form-row">
+                            <div class="col-md-3">
+                                <div class="form-label">Vendor</div>
+                            </div>
+                            <div class="col-md-9">
+                                <select name="VendorId" class="form-control form-select" ng-model="timeslot.VendorId" ng-options="x.Id as x.Name for x in vendors" required></select>
+                                <div ng-show="(invalid || form.Name.$dirty || (form.Name.$pristine && form.Name.$touched)) && form.VendorId.$error.required" class="form-required">Required</div>
+                            </div>
+                        </div>
+                        <div class="row form-row">
+                            <div class="col-md-3">
+                                <div class="form-label">Supplier</div>
+                            </div>
+                            <div class="col-md-9">
+                                <select name="SupplierId" class="form-control form-select" ng-model="timeslot.SupplierId" ng-options="x.Id as x.Name for x in suppliers" required></select>
+                                <div ng-show="(invalid || form.Name.$dirty || (form.Name.$pristine && form.Name.$touched)) && form.SupplierId.$error.required" class="form-required">Required</div>
+                            </div>
+                        </div>
+                        <div class="row form-row">
+                            <div class="col-md-3">
+                                <div class="form-label">Commodity</div>
+                            </div>
+                            <div class="col-md-9">
+                                <select name="CommodityId" class="form-control form-select" ng-model="timeslot.CommodityId" ng-options="x.Id as x.Name for x in commodities" required></select>
+                                <div ng-show="(invalid || form.Name.$dirty || (form.Name.$pristine && form.Name.$touched)) && form.CommodityId.$error.required" class="form-required">Required</div>
+                            </div>
+                        </div>
+                        <div class="row form-row" ng-if="role != 'Driver'">
+                            <div class="col-md-3">
+                                <div class="form-label">Status</div>
+                            </div>
+                            <div class="col-md-9">
+                                <select name="StatusTypeId" class="form-control form-select" ng-model="timeslot.StatusTypeId" ng-options="x.Id as x.Name for x in statusTypes" required></select>
+                                <div ng-show="(invalid || form.Name.$dirty || (form.Name.$pristine && form.Name.$touched)) && form.StatusTypeId.$error.required" class="form-required">Required</div>
+                            </div>
+                        </div>
+                        <div class="row form-row">
+                            <div class="col-md-3">
+                                <div class="form-label">Tons</div>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="number" name="Tons" class="form-control" ng-model="timeslot.Tons" value="{{timeslot.Tons}}" required />
+                                <div ng-show="(invalid || form.Name.$dirty || (form.Name.$pristine && form.Name.$touched)) && form.Name.$error.required" class="form-required">Required</div>
+                            </div>
+                        </div>
+                        <div class="row form-error">
+                            <span class="ng-cloak">{{modalError}}</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align:center;padding:10px;margin-top:0px">
+                        <button type="button" class="btn btn-default timeslot-delete" ng-click="prepareDelete(timeslot.Id)" ng-if="timeslot.Id != 0 && (role == 'Administrator' || role == 'CustomerAdmin' || role == 'CustomerUser' || (role == 'Driver' && timeslot.DriverId == uid && timeslot.StatusTypeId == 2))">Delete</button>
+                        <button type="button" class="btn btn-primary" ng-click="saveTimeSlot()">Save</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+
+                <div ng-show="createdBy != ''">
+                    <hr class="audit-hr" />
+
+                    <div class="audit-div">
+                        <div>
+                            <div class="audit-label">
+                                Created:
+                            </div>
+                            <div class="audit-value">
+                                {{timeslot.CreatedDate | date:'dd-MMM-yyyy hh:mm a'}} | {{createdBy}}
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="audit-label">
+                                Modified:
+                            </div>
+                            <div class="audit-value">
+                                {{timeslot.ModifiedDate | date:'dd-MMM-yyyy hh:mm a'}} | {{modifiedBy}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="popover-delete">
+        <div class="popover popover-delete">
+            <div class="arrow"></div>
+            <h3 class="popover-title">Delete</h3>
+            <div id="popover-content" class="popover-content"></div>
+        </div>
+    </div>
+
+    <div id="popover-delete-body" class="hide">
+        <div style="display:flex;margin-bottom:5px">Delete this Delivery?</div>
+        <div style="display:flex;justify-content:center;">
+            <button id="btnOk" type="button" class="btn btn-default quote-item-delete glyphicon glyphicon-ok" style="margin-right:5px" ng-click="deleteTimeSlot()"></button>
+            <button id="btnCancel" type="button" class="btn btn-default quote-item-delete glyphicon glyphicon-remove" quoteId="" onclick="PopOverClose('.timeslot-delete');"></button>
+        </div>
+    </div>
+
+    <div id="popover-info">
+        <div class="popover popover-info">
+            <div class="arrow"></div>
+            <h3 id="popover-title" class="popover-title">Delivery Information<button class="btn btn-sm timeslot-info-close" onclick="PopOverClose('.timeslot-info');"><i class="fas fa-times"></i></button></h3>
+            <div id="popover-content" class="popover-content"></div>
+        </div>
+    </div>
+
+    <div id="popover-info-body" class="hide">
+        <table class="table-striped ng-cloak" style="width:270px;border:1px solid #ddd">
+            <tbody>
+                <tr>
+                    <td style="width:50px">Fleet</td>
+                    <td style="width:150px">{{info.WebUser.Fleet.Name}}</td>
+                </tr>
+                <tr>
+                    <td>Contract</td>
+                    <td>{{info.Contract.Name}}</td>
+                </tr>
+                <tr>
+                    <td>Vendor</td>
+                    <td>{{info.Vendor.Name}}</td>
+                </tr>
+                <tr>
+                    <td>Supplier</td>
+                    <td>{{info.Supplier.Name}}</td>
+                </tr>
+                <tr>
+                    <td>Commodity</td>
+                    <td>{{info.Commodity.Name}}</td>
+                </tr>
+                <tr>
+                    <td>Tons</td>
+                    <td>{{info.Tons}}</td>
+                </tr>
+            </tbody>
+        </table>        
+    </div>
+</div>

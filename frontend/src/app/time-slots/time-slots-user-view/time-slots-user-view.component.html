@@ -1,0 +1,107 @@
+<div class="app-padding-default" fxLayout="column">
+
+  <div fxLayout.lt-md="column" fxLayout="row" fxLayoutAlign="center center">
+
+    <div mat-subheader>
+      TIME SLOTS
+    </div>
+
+    <!--customer-->
+    <mat-form-field *ngIf="showCustomer"
+                    appearance="outline"
+                    class="app-padding-right">
+
+      <mat-label>Customer</mat-label>
+
+      <mat-select placeholder="Select Customer"
+                  [(ngModel)]="customer"
+                  (selectionChange)="getSites(customer)"
+                  [compareWith]="compare">
+
+        <mat-option *ngFor="let cust of customers" [value]="cust">
+          {{cust.name}}
+        </mat-option>
+
+      </mat-select>
+
+    </mat-form-field>
+
+    <!--site-->
+    <mat-form-field appearance="outline" class="app-padding-right">
+
+      <mat-label>Site</mat-label>
+
+      <mat-select placeholder="Select Site"
+                  (selectionChange)="getSlots(site)"
+                  [(ngModel)]="site">
+
+        <mat-option *ngFor="let sit of sites" [value]="sit">
+          {{sit.name}}
+        </mat-option>
+
+      </mat-select>
+
+    </mat-form-field>
+
+    <!--date-->
+
+    <mat-form-field appearance="outline" class="app-padding-right">
+      <input matInput
+             [matDatepicker]="picker"
+             [(ngModel)]="date"
+             (dateChange)="getSlots(site)"
+             placeholder="Choose a date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div mat-subheader  *ngIf="date>maxDate">Bookings further than 1 week in the future was disabled.</div>
+
+  </div>
+
+  <mat-list fxFlex="60" fxFlex.lt-md="100">
+
+    <mat-list-item *ngFor="let slot of timeSlots; let i = index">
+
+      <h4 mat-line>{{slot.timeSlot.startTime | slice:0:5 }} - {{slot.timeSlot.endTime | slice:0:5}}
+        <span class="app-margin-left" *ngIf="slot.deliveryTimeSlot">{{slot.deliveryTimeSlot.tons}} tons of {{slot.deliveryTimeSlot.commodity.name}} </span>
+        <span class="app-margin-left" *ngIf="slot.deliveryTimeSlot"></span>
+      </h4>
+
+      <p mat-line>
+        <span *ngIf="slot.deliveryTimeSlot"> <span class="app-label">Vendor:</span>  {{slot.deliveryTimeSlot.vendor.name}} </span>
+        <span *ngIf="slot.deliveryTimeSlot"
+              class="app-margin-left"> <span class="app-label">Supplier:</span>  {{slot.deliveryTimeSlot.supplier.name}}  </span>
+      </p>
+
+      <p mat-line>
+        <span *ngIf="slot.deliveryTimeSlot"> <span class="app-label">Driver:</span>  {{slot.deliveryTimeSlot.driver.name}} {{slot.deliveryTimeSlot.driver.surname}} </span>
+        <span *ngIf="slot.deliveryTimeSlot"
+              class="app-margin-left"> <span class="app-label">Contract:</span>  {{slot.deliveryTimeSlot.contract.name}}  </span>
+        <span *ngIf="slot.deliveryTimeSlot"
+              class="app-margin-left"> <span class="app-label">Vehicle:</span>  {{slot.deliveryTimeSlot.vehicle.rego}} </span>
+      </p>
+
+      <button mat-raised-button
+              [disabled]="date>maxDate"
+              matTooltip="Edit Time Slot"
+              [color]="!slot.deliveryTimeSlot? '' : 'accent'"
+              (click)="editDeliverySlot(slot, i)">
+        <!--<mat-icon mat-list-icon>edit</mat-icon>-->
+        <span
+          *ngIf="slot.deliveryTimeSlot && slot.deliveryTimeSlot.statusType && slot.deliveryTimeSlot.statusType.name">{{slot.deliveryTimeSlot.statusType.name.toUpperCase()}} </span>
+        <span *ngIf="!slot.deliveryTimeSlot">OPEN</span>
+      </button>
+
+      <!--<button mat-icon-button-->
+      <!--matTooltip="Delete Time Slot"-->
+      <!--(click)="deleteDeliverySlot(slot, i)">-->
+      <!--<mat-icon>delete</mat-icon>-->
+      <!--</button>-->
+
+      <mat-divider></mat-divider>
+    </mat-list-item>
+  </mat-list>
+
+</div>
+

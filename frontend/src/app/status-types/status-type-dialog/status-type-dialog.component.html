@@ -1,0 +1,42 @@
+<h1 mat-dialog-title>Status Type</h1>
+
+<div mat-dialog-content>
+
+  <form [formGroup]="statusTypeForm" fxLayout="column">
+
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Status Type Name</mat-label>
+
+      <input matInput
+             cdkFocusInitial
+             type="text"
+             placeholder="Status Type Name"
+             formControlName="name">
+      <mat-error
+        *ngIf="statusTypeForm.get('name').hasError('required') && statusTypeForm.get('name').touched">
+        Name is required.
+      </mat-error>
+
+    </mat-form-field>
+
+  </form>
+
+</div>
+
+<div mat-dialog-actions>
+
+  <button mat-raised-button
+          color="primary"
+          [disabled]="!statusTypeForm.valid"
+          type="button"
+          (click)="submit()">OK
+  </button>
+
+  <button mat-raised-button
+          type="button"
+          mat-dialog-close>Cancel
+  </button>
+
+</div>
+

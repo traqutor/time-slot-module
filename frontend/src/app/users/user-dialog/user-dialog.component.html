@@ -1,0 +1,220 @@
+<h1 mat-dialog-title>User</h1>
+
+<div mat-dialog-content>
+
+  <form [formGroup]="userForm" fxLayout="column">
+
+    <!--email-->
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Email</mat-label>
+
+      <input matInput
+             cdkFocusInitial
+             type="email"
+             placeholder="Email"
+             formControlName="email">
+      <mat-error
+        *ngIf="(userForm.get('email').hasError('required') || userForm.get('email').hasError('email')) && userForm.get('email').touched">
+        Valid email is required.
+      </mat-error>
+
+    </mat-form-field>
+
+    <!--name-->
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Name</mat-label>
+
+      <input matInput
+             type="text"
+             placeholder="Name"
+             formControlName="name">
+      <mat-error
+        *ngIf="userForm.get('name').hasError('required') && userForm.get('name').touched">
+        Name is required.
+      </mat-error>
+
+    </mat-form-field>
+
+    <!--surname-->
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Surname</mat-label>
+
+      <input matInput
+             type="text"
+             placeholder="Surname"
+             formControlName="surname">
+      <mat-error
+        *ngIf="userForm.get('surname').hasError('required') && userForm.get('surname').touched">
+        Surname is required.
+      </mat-error>
+
+    </mat-form-field>
+
+
+    <mat-form-field *ngIf="roles" fxFlex appearance="outline">
+
+      <mat-label>Role</mat-label>
+
+      <mat-select #option
+                  placeholder="Select Role"
+                  formControlName="role"
+                  (valueChange)="onRoleChange(option.value)"
+                  [compareWith]="compare">
+
+        <mat-option *ngFor="let role of roles" [value]="role">
+          {{role.name}}
+        </mat-option>
+
+      </mat-select>
+
+      <mat-error
+        *ngIf="userForm.get('role').hasError('required') && userForm.get('role').touched">
+        Role is required.
+      </mat-error>
+
+    </mat-form-field>
+
+
+    <!--Customer-->
+    <mat-form-field *ngIf="customers.length > 0 && isCustomerValidationRequired"
+                    fxFlex
+                    appearance="outline">
+
+      <mat-label>Customer</mat-label>
+
+      <mat-select #option
+                  placeholder="Select Customer"
+                  formControlName="customer"
+                  (valueChange)="onCustomerChange(option.value)"
+                  [compareWith]="compare">
+
+        <mat-option *ngFor="let cus of customers" [value]="cus">
+          {{cus.name}}
+        </mat-option>
+
+      </mat-select>
+
+      <mat-error
+        *ngIf="userForm.get('customer').hasError('required') && userForm.get('customer').touched">
+        Customer is required.
+      </mat-error>
+
+    </mat-form-field>
+
+    <!--site-->
+    <mat-form-field *ngIf="sites.length > 0 && this.isSiteValidationRequired"
+                    fxFlex
+                    appearance="outline">
+
+      <mat-label>Site</mat-label>
+
+      <mat-select #option
+                  placeholder="Select Site"
+                  formControlName="site"
+                  [compareWith]="compare">
+
+        <mat-option *ngFor="let sit of sites" [value]="sit">
+          {{sit.name}}
+        </mat-option>
+
+      </mat-select>
+
+      <mat-error
+        *ngIf="userForm.get('site').hasError('required') && userForm.get('site').touched">
+        Site is required.
+      </mat-error>
+
+    </mat-form-field>
+
+
+    <!--fleet-->
+    <mat-form-field *ngIf="fleets.length > 0 && this.isFleetValidationRequired"
+                    fxFlex
+                    appearance="outline">
+
+      <mat-label>Fleet</mat-label>
+
+      <mat-select #option
+                  placeholder="Select Fleet"
+                  formControlName="fleet"
+                  (valueChange)="onFleetChange(option.value)"
+                  [compareWith]="compare">
+
+        <mat-option *ngFor="let fle of fleets" [value]="fle">
+          {{fle.name}}
+        </mat-option>
+
+      </mat-select>
+
+      <mat-error
+        *ngIf="userForm.get('fleet').hasError('required') && userForm.get('fleet').touched">
+        Fleet is required.
+      </mat-error>
+
+    </mat-form-field>
+
+
+    <!--vehicles-->
+    <mat-form-field *ngIf="fleetsVehicles.length > 0 && isvehicleValidationRequired" fxFlex appearance="outline">
+
+      <mat-label>Vehicles</mat-label>
+
+      <mat-select #option
+                  placeholder="Select Vehicles"
+                  formControlName="vehicles"
+                  [compareWith]="compareArray"
+                  multiple>
+
+        <mat-option *ngFor="let vehicle of fleetsVehicles" [value]="vehicle">
+          {{vehicle.rego}}
+        </mat-option>
+
+      </mat-select>
+
+      <mat-error
+        *ngIf="userForm.get('vehicles').hasError('required') && userForm.get('vehicles').touched">
+        At least one vehicle is required.
+      </mat-error>
+
+    </mat-form-field>
+
+    <!--password-->
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Password</mat-label>
+
+      <input matInput
+             type="password"
+             placeholder="Password"
+             formControlName="password">
+      <mat-error
+        *ngIf="userForm.get('password').hasError('required') && userForm.get('password').touched">
+        Password is required.
+      </mat-error>
+
+    </mat-form-field>
+
+
+  </form>
+
+</div>
+
+<div mat-dialog-actions>
+
+  <button mat-raised-button
+          color="primary"
+          [disabled]="!userForm.valid"
+          type="button"
+          (click)="submit()">OK
+  </button>
+
+  <button mat-raised-button
+          type="button"
+          mat-dialog-close>Cancel
+  </button>
+
+</div>
+

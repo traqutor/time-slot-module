@@ -1,0 +1,113 @@
+<h1 mat-dialog-title>Contract</h1>
+
+<div mat-dialog-content>
+
+  <form [formGroup]="contractForm" fxLayout="column">
+
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Contract Name</mat-label>
+
+      <input matInput
+             cdkFocusInitial
+             type="text"
+             placeholder="Contract Name"
+             formControlName="name">
+      <mat-error
+        *ngIf="contractForm.get('name').hasError('required') && contractForm.get('name').touched">
+        Name is required.
+      </mat-error>
+
+    </mat-form-field>
+
+    <!--vendor-->
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Vendor</mat-label>
+
+      <mat-select #vendorOption
+                  placeholder="Select Vendor"
+                  formControlName="vendor"
+                  [compareWith]="compare">
+
+        <mat-option *ngFor="let item of vendors" [value]="item">
+          {{item.name}}
+        </mat-option>
+
+      </mat-select>
+
+      <mat-error
+        *ngIf="contractForm.get('vendor').hasError('required') && contractForm.get('vendor').touched">
+        Vendor is required.
+      </mat-error>
+
+    </mat-form-field>
+
+
+    <!--supplier-->
+    <mat-form-field fxFlex appearance="outline">
+
+      <mat-label>Supplier</mat-label>
+
+      <mat-select #supplierOption
+                  placeholder="Select Supplier"
+                  formControlName="supplier"
+                  [compareWith]="compare">
+
+        <mat-option *ngFor="let item of suppliers" [value]="item">
+          {{item.name}}
+        </mat-option>
+
+      </mat-select>
+
+      <mat-error
+        *ngIf="contractForm.get('supplier').hasError('required') && contractForm.get('supplier').touched">
+        Supplier is required.
+      </mat-error>
+
+    </mat-form-field>
+
+
+    <!--commodity-->
+    <mat-form-field  fxFlex appearance="outline">
+
+      <mat-label>Commodity</mat-label>
+
+      <mat-select #commodityOption
+                  placeholder="Select Commodity"
+                  formControlName="commodity"
+                  [compareWith]="compare">
+
+        <mat-option *ngFor="let item of commodities" [value]="item">
+          {{item.name}}
+        </mat-option>
+
+      </mat-select>
+
+      <mat-error
+        *ngIf="contractForm.get('commodity').hasError('required') && contractForm.get('commodity').touched">
+        Commodity is required.
+      </mat-error>
+
+    </mat-form-field>
+
+  </form>
+
+</div>
+
+<div mat-dialog-actions>
+
+  <button mat-raised-button
+          color="primary"
+          [disabled]="!contractForm.valid"
+          type="button"
+          (click)="submit()">OK
+  </button>
+
+  <button mat-raised-button
+          type="button"
+          mat-dialog-close>Cancel
+  </button>
+
+</div>
+

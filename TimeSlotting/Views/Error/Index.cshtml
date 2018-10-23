@@ -1,0 +1,27 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@{
+    ViewBag.Title = "Server Error";
+}
+
+<h2>@Response.StatusDescription</h2>
+
+@if (Context.Error != null && Context.Error.Message != null)
+{
+    <p>@Context.Error.Message</p>
+}
+
+@if (Model != null)
+{
+    <div>
+        <p>
+            <b>Exception:</b> @Model.Exception.Message<br />
+            <b>Controller:</b> @Model.ControllerName<br />
+            <b>Action:</b> @Model.ActionName
+        </p>
+        <div style="overflow:scroll">
+            <pre>
+                    @Model.Exception.StackTrace
+            </pre>
+        </div>
+    </div>
+}

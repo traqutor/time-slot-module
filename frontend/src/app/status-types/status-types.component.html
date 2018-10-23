@@ -1,0 +1,49 @@
+
+
+<div class="app-padding-default">
+
+  <mat-list fxFlex="60" fxFlex.lt-md="100" >
+
+    <h3 mat-subheader>STATUS TYPES</h3>
+
+    <mat-list-item *ngFor="let status of statusTypes; let i = index">
+      <h4 mat-line>{{status.name}}</h4>
+      <p mat-line>
+        <span class="app-label">Created:</span>
+        {{status.createdBy.name}}
+        {{status.createdBy.surname}} |
+        {{status.creationDate | date :
+        'dd/MMM/yyyy - HH:mm'}}
+
+        <span class="app-label app-margin-left ">Modified:</span>
+        {{status.modifiedBy.name}}
+        {{status.modifiedBy.surname}} |
+        {{status.modificationDate| date :
+        'dd/MMM/yyyy - HH:mm'}}
+      </p>
+      <button mat-icon-button
+              matTooltip="Edit Status Type"
+              (click)="editStatusType(status, i)">
+        <mat-icon mat-list-icon>edit</mat-icon>
+      </button>
+
+      <button mat-icon-button
+              matTooltip="Delete Status Type"
+              (click)="deleteStatusType(status, i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+  </mat-list>
+
+  <div class="app-padding-default">
+
+    <button mat-raised-button
+            matTooltip="Add contract"
+            (click)="addStatusType()">
+      <mat-icon>add</mat-icon>
+    </button>
+
+  </div>
+</div>
+

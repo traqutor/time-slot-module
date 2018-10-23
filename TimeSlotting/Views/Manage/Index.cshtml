@@ -1,0 +1,13 @@
+﻿@model TimeSlotting.Models.IndexViewModel
+@{
+    ViewBag.Title = "Manage Your Account";
+}
+
+<div style="overflow: hidden">
+    <h2 class="page-heading">@ViewBag.Title</h2>
+</div>
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+    @Html.ActionLink("Change your password", "ChangePassword", null, new { @class = "btn btn-info btn-md" })
+</div>

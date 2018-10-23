@@ -1,0 +1,44 @@
+<div class="app-padding-default">
+
+  <mat-list fxFlex="60" fxFlex.lt-md="100">
+
+    <h3 mat-subheader>VENDORS</h3>
+
+    <mat-list-item *ngFor="let vendor of vendors; let i = index">
+      <h3 mat-line>{{vendor.name}} </h3>
+      <p mat-line>
+        <span class="app-label">Created:</span>
+        {{vendor.createdBy.name}}
+        {{vendor.createdBy.surname}} |
+        {{vendor.creationDate | date :
+        'dd/MMM/yyyy - HH:mm'}}
+
+        <span class="app-label app-margin-left ">Modified:</span>
+        {{vendor.modifiedBy.name}}
+        {{vendor.modifiedBy.surname}} |
+        {{vendor.modificationDate| date :
+        'dd/MMM/yyyy - HH:mm'}}
+      </p>
+      <button mat-icon-button
+              matTooltip="Edit Vendor"
+              (click)="editVendor(vendor, i)">
+        <mat-icon mat-list-icon>edit</mat-icon>
+      </button>
+
+      <button mat-icon-button
+              matTooltip="Delete Vendor"
+              (click)="deleteVendor(vendor, i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+  </mat-list>
+  <div class="app-padding-default">
+
+    <button mat-raised-button
+            matTooltip="Add Vendor"
+            (click)="addVendor()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>
